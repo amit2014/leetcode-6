@@ -1,24 +1,60 @@
-def addSemicolonsToSchema(query):
-    """
-    This program takes the SQL Schema as input and adds semicolons to the end of the lines.
-    This lets your run the commands in terminal in one go.
-    """
-    query_lines = query.split('\n')
-    for line in query_lines:
-        if line == '':
-            query_lines.remove('')
-    i = 0
-    for line in query_lines:    
-        query_lines[i] = line + ';' + '\n'
-        i += 1
-    return ''.join(query_lines)
+from mysql.connector import MySQLConnection, Error
+from python_mysql_dbconfig import read_db_config
 
-query = """
-Create table If Not Exists Failed (fail_date date)
-Create table If Not Exists Succeeded (success_date date)
-Truncate table Failed
-insert into Failed (fail_date) values ('2018-12-28')
-Truncate table Succeeded
-insert into Succeeded (success_date) values ('2018-12-30')
-"""
-print(addSemicolonsToSchema(query))
+def removeWhiteSpace(query):
+    query_lines = query.split('\n')
+    query_lines = [x.strip() for x in query_lines if x.strip() != '']
+    return '\n'.join(query_lines)
+
+def execute(command: str):
+    try:
+        dbconfig = read_db_config()
+        conn = MySQLConnection(**dbconfig)
+        cursor = conn.cursor()
+        cursor.execute(command)
+        conn.commit()
+        
+    except Error as e:
+        print(e)
+
+    finally:
+        cursor.close()
+        conn.close()
+
+def dash(func):
+    def inner(*args, **kwargs):
+        print('+' + "-" * (len(args[0]) - 2) + '+')
+        func(*args, **kwargs)
+        print('+' + "-" * (len(args[0]) - 2) + '+')
+    return inner
+
+@dash
+def printer(input):
+    print(input)
+
+if __name__ == '__main__':
+    schema = """
+    Create table If Not Exists Employee (Id int, Company varchar(255), Salary int)
+    Truncate table Employee
+    insert into Employee (Id, Company, Salary) values ('1', 'A', '2341')
+    insert into Employee (Id, Company, Salary) values ('2', 'A', '341')
+    insert into Employee (Id, Company, Salary) values ('3', 'A', '15')
+    insert into Employee (Id, Company, Salary) values ('4', 'A', '15314')
+    insert into Employee (Id, Company, Salary) values ('5', 'A', '451')
+    insert into Employee (Id, Company, Salary) values ('6', 'A', '513')
+    insert into Employee (Id, Company, Salary) values ('7', 'B', '15')
+    insert into Employee (Id, Company, Salary) values ('8', 'B', '13')
+    insert into Employee (Id, Company, Salary) values ('9', 'B', '1154')
+    insert into Employee (Id, Company, Salary) values ('10', 'B', '1345')
+    insert into Employee (Id, Company, Salary) values ('11', 'B', '1221')
+    insert into Employee (Id, Company, Salary) values ('12', 'B', '234')
+    insert into Employee (Id, Company, Salary) values ('13', 'C', '2345')
+    insert into Employee (Id, Company, Salary) values ('14', 'C', '2645')
+    insert into Employee (Id, Company, Salary) values ('15', 'C', '2645')
+    insert into Employee (Id, Company, Salary) values ('16', 'C', '2652')
+    insert into Employee (Id, Company, Salary) values ('17', 'C', '65')
+    """
+    schema = removeWhiteSpace(schema)
+    for cmd in schema.split('\n'):
+        printer(cmd)
+        execute(cmd)
