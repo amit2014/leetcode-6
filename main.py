@@ -43,28 +43,13 @@ def execute(command: str):
         cursor.close()
         conn.close()
 
-def executeNoCommit(command: str):
-    try:
-        dbconfig = read_db_config()
-        conn = MySQLConnection(**dbconfig)
-        cursor = conn.cursor()
-        cursor.execute(command)
-        #conn.commit()
-        
-    except Error as e:
-        print(e)
-
-    finally:
-        cursor.close()
-        conn.close()
-
-def getTables():
+def getList(tableOrDatabase: str):
     tableList = []
     try:
         dbconfig = read_db_config()
         conn = MySQLConnection(**dbconfig)
         cursor = conn.cursor()
-        cursor.execute('show tables')
+        cursor.execute(f'show {tableOrDatabase}')
         row = cursor.fetchone()
         
         while row is not None:
@@ -109,9 +94,12 @@ def printer(input):
 
 if __name__ == '__main__':
     # the database leetcode needs to exist before running the script
+    print(getList('databases'))
+    """
     execute('use leetcode')
     deleteTables(getTables())
     schema = removeWhiteSpace(schema)
     for cmd in schema.split('\n'):
         printer(cmd)
-        execute(cmd)
+        execute(cmd
+    """
