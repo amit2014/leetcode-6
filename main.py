@@ -44,6 +44,8 @@ def execute(command: str):
         conn.close()
 
 def getList(tableOrDatabase: str):
+    # TODO this actually requires the leetcode database to exist
+    # because of how we create the conn
     tableList = []
     try:
         dbconfig = read_db_config()
@@ -62,7 +64,7 @@ def getList(tableOrDatabase: str):
     finally:
         cursor.close()
         conn.close()
-    
+
     return tableList
 
 def deleteTables(tableList):
@@ -94,12 +96,9 @@ def printer(input):
 
 if __name__ == '__main__':
     # the database leetcode needs to exist before running the script
-    print(getList('databases'))
-    """
     execute('use leetcode')
-    deleteTables(getTables())
+    deleteTables(getList('tables'))
     schema = removeWhiteSpace(schema)
     for cmd in schema.split('\n'):
         printer(cmd)
-        execute(cmd
-    """
+        execute(cmd)
