@@ -1,1 +1,1 @@
-# leetcode-SQLSchema-semicolon-adder
+# leetcode-SQLSchema-helper
