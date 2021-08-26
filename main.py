@@ -4,7 +4,7 @@
 import os
 import time
 import sys
-from typing import List
+from typing import List, Dict
 from selenium import webdriver
 from mysql.connector import MySQLConnection, Error
 from configparser import ConfigParser
@@ -22,7 +22,7 @@ insert into UserActivity (username, activity, startDate, endDate) values ('Bob',
 """
 
 
-def read_db_config(filename='config.ini', section='mysql'):
+def read_db_config(filename: str = 'config.ini', section: str = 'mysql') -> Dict[str, str]:
     """Read database .ini config file, and returns a config dictionary.
 
     Args:
@@ -32,6 +32,8 @@ def read_db_config(filename='config.ini', section='mysql'):
             section of database configuration
     Returns:
         A dict of database parameters.
+    Raises:
+        Exception: If mysql section not found in config.ini file.
     """
     parser = ConfigParser()
     parser.read(filename)
@@ -47,11 +49,18 @@ def read_db_config(filename='config.ini', section='mysql'):
 
 def get_SQL_schema_from_leetcode(link: str) -> str:
     """Extract the SQL schema from leetcode's website given a link.
+
+    Args:
+        link: Full link to leetcode database problem.
+    Returns:
+        The SQL schema for that leetcode database problem from the given link.
     """
 
     #  https://sites.google.com/a/chromium.org/chromedriver/downloads
     #  You need to download and extract the right one and put it in your
     #  home directory, I used 92.
+
+    #  TODO(yrom1) Make this platform neutral.
     path = os.path.expanduser(r'~/chromedriver')
     driver = webdriver.Chrome(executable_path = path)
     driver.get(link)
@@ -70,15 +79,23 @@ def get_SQL_schema_from_leetcode(link: str) -> str:
     return sql_schema_div.text
 
 
-def remove_white_space(query):
+def remove_white_space(query: str) -> str:
     """Remove unnecessary white space from scrapped schema, if exists.
+    
+    Args:
+        query: The SQL Schema for the leetcode problem as one string. 
+    Returns:
+        The SQL Schema with unnecessary space removed.
     """
     query_lines = query.split('\n')
     query_lines = [x.strip() for x in query_lines if x.strip() != '']
     return '\n'.join(query_lines)
 
-def execute(command: str):
+def execute(command: str) -> None:
     """Execute an SQL command.
+
+    Args:
+        command: A string that contains a single SQL statement
     """
     try:
         dbconfig = read_db_config()
@@ -95,10 +112,13 @@ def execute(command: str):
         conn.close()
 
 def get_show_tables() -> List[str]:
+    """Get a list of tables in the currently connected to database.
+
+    Returns:
+        A list of tables in the currently connected to database.
     """
-    """
-    #  TODO(yrom1) this actually requires the leetcode database to exist
-    #  because of how we create the conn
+    #  This actually requires the leetcode database to exist
+    #  because of how we create the conn.
     tableList = []
     try:
         dbconfig = read_db_config()
@@ -120,7 +140,12 @@ def get_show_tables() -> List[str]:
 
     return tableList
 
-def delete_tables(table_list):
+def delete_tables(table_list: List[str]) -> None:
+    """Delete the tables in the leetcode database to reset it.
+
+    Args:
+        table_list: A list of tables in the leetcode database. 
+    """
     for table in table_list:
         try:
             dbconfig = read_db_config()
@@ -136,20 +161,9 @@ def delete_tables(table_list):
             cursor.close()
             conn.close()
 
-def dash(func):
-    def inner(*args, **kwargs):
-        print('+' + "-" * (len(args[0]) - 2) + '+')
-        func(*args, **kwargs)
-        print('+' + "-" * (len(args[0]) - 2) + '+')
-    return inner
-
-@dash
-def printer(input):
-    print(input)
 
 def main() -> None:
-    """
-    Pass a leetcode database problem link to this script as the first
+    """Pass a leetcode database problem link to this script as the first
     argument. The SQL schema for this problem will be loaded into MySQL
     in an *already existing* database called leetcode. Anything already
     in the leetcode database will be purged so it's a clean playground.
