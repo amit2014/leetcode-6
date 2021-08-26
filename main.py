@@ -7,7 +7,8 @@ import sys
 from typing import List
 from selenium import webdriver
 from mysql.connector import MySQLConnection, Error
-from python_mysql_dbconfig import read_db_config
+from configparser import ConfigParser
+
 
 TEST_LINK_1 = 'https://leetcode.com/problems/second-highest-salary/'
 TEST_LINK_2 = 'https://leetcode.com/problems/combine-two-tables/'
@@ -19,6 +20,30 @@ insert into UserActivity (username, activity, startDate, endDate) values ('Alice
 insert into UserActivity (username, activity, startDate, endDate) values ('Alice', 'Travel', '2020-02-24', '2020-02-28')
 insert into UserActivity (username, activity, startDate, endDate) values ('Bob', 'Travel', '2020-02-11', '2020-02-18')
 """
+
+
+def read_db_config(filename='config.ini', section='mysql'):
+    """Read database .ini config file, and returns a config dictionary.
+
+    Args:
+        filename:
+            name of the configuration file
+        section:
+            section of database configuration
+    Returns:
+        A dict of database parameters.
+    """
+    parser = ConfigParser()
+    parser.read(filename)
+    db = {}
+    if parser.has_section(section):
+        items = parser.items(section)
+        for item in items:
+            db[item[0]] = item[1]
+    else:
+        raise Exception(f'{section} not found in the {filename}')
+
+    return db
 
 def get_SQL_schema_from_leetcode(link: str) -> str:
     """Extract the SQL schema from leetcode's website given a link.
@@ -34,10 +59,10 @@ def get_SQL_schema_from_leetcode(link: str) -> str:
     #  TODO(yrom1) A more elegant solution than time.sleep(n) involves checking
     #  if div is available repeatedly but this is good enough for now.  
     time.sleep(3)
-    #  Finds the 'SQL Schema' button.
-    sql_schema_button_wrapper = driver.find_element_by_class_name('sql-schema-wrapper__3VBi')
-    #  Clicks it!
+    #  'SQL Schema' button.
+    #sql_schema_button_wrapper = driver.find_element_by_class_name('sql-schema-wrapper__3VBi')
     sql_schema_button_link = driver.find_element_by_class_name('sql-schema-link__3cEg')
+    #  Clicks it!
     sql_schema_button_link.click()
     time.sleep(2)
     #  This is the div on leetcode containing the actualy SQL schema text.
@@ -146,7 +171,7 @@ def main() -> None:
     for cmd in schema.split('\n'):
         print('Executing:', cmd)
         execute(cmd)
-    print(dash, 'finished without errors!')
+    print(dash, 'succesfully loaded schema!')
 
 if __name__ == '__main__':
     main()
