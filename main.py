@@ -9,7 +9,6 @@ from selenium import webdriver
 from mysql.connector import MySQLConnection, Error
 from configparser import ConfigParser
 
-
 TEST_LINK_1 = 'https://leetcode.com/problems/second-highest-salary/'
 TEST_LINK_2 = 'https://leetcode.com/problems/combine-two-tables/'
 TEST_SCHEMA_1 = """
@@ -22,7 +21,8 @@ insert into UserActivity (username, activity, startDate, endDate) values ('Bob',
 """
 
 
-def read_db_config(filename: str = 'config.ini', section: str = 'mysql') -> Dict[str, str]:
+def read_db_config(filename: str = 'config.ini',
+                   section: str = 'mysql') -> Dict[str, str]:
     """Read database .ini config file, and returns a config dictionary.
 
     Args:
@@ -47,6 +47,7 @@ def read_db_config(filename: str = 'config.ini', section: str = 'mysql') -> Dict
 
     return db
 
+
 def get_SQL_schema_from_leetcode(link: str) -> str:
     """Extract the SQL schema from leetcode's website given a link.
 
@@ -62,15 +63,16 @@ def get_SQL_schema_from_leetcode(link: str) -> str:
 
     #  TODO(yrom1) Make this platform neutral.
     path = os.path.expanduser(r'~/chromedriver')
-    driver = webdriver.Chrome(executable_path = path)
+    driver = webdriver.Chrome(executable_path=path)
     driver.get(link)
     driver.minimize_window()
     #  TODO(yrom1) A more elegant solution than time.sleep(n) involves checking
-    #  if div is available repeatedly but this is good enough for now.  
+    #  if div is available repeatedly but this is good enough for now.
     time.sleep(3)
     #  'SQL Schema' button.
     #sql_schema_button_wrapper = driver.find_element_by_class_name('sql-schema-wrapper__3VBi')
-    sql_schema_button_link = driver.find_element_by_class_name('sql-schema-link__3cEg')
+    sql_schema_button_link = driver.find_element_by_class_name(
+        'sql-schema-link__3cEg')
     #  Clicks it!
     sql_schema_button_link.click()
     time.sleep(2)
@@ -91,6 +93,7 @@ def remove_white_space(query: str) -> str:
     query_lines = [x.strip() for x in query_lines if x.strip() != '']
     return '\n'.join(query_lines)
 
+
 def execute(command: str) -> None:
     """Execute an SQL command.
 
@@ -103,13 +106,14 @@ def execute(command: str) -> None:
         cursor = conn.cursor()
         cursor.execute(command)
         conn.commit()
-        
+
     except Error as e:
         print(e)
 
     finally:
         cursor.close()
         conn.close()
+
 
 def get_show_tables() -> List[str]:
     """Get a list of tables in the currently connected to database.
@@ -126,7 +130,7 @@ def get_show_tables() -> List[str]:
         cursor = conn.cursor()
         cursor.execute(f'show tables')
         row = cursor.fetchone()
-        
+
         while row is not None:
             tableList.append(row)
             row = cursor.fetchone()
@@ -139,6 +143,7 @@ def get_show_tables() -> List[str]:
         conn.close()
 
     return tableList
+
 
 def delete_tables(table_list: List[str]) -> None:
     """Delete the tables in the leetcode database to reset it.
@@ -153,7 +158,7 @@ def delete_tables(table_list: List[str]) -> None:
             cursor = conn.cursor()
             cursor.execute(f'drop table {table[0]}')
             conn.commit()
-            
+
         except Error as e:
             print(e)
 
@@ -186,6 +191,7 @@ def main() -> None:
         print('Executing:', cmd)
         execute(cmd)
     print(dash, 'succesfully loaded schema!')
+
 
 if __name__ == '__main__':
     main()
