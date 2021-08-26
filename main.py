@@ -65,14 +65,15 @@ def get_SQL_schema_from_leetcode(link: str) -> str:
     path = os.path.expanduser(r'~/chromedriver')
     driver = webdriver.Chrome(executable_path=path)
     driver.get(link)
-    driver.minimize_window()
-    #  TODO(yrom1) A more elegant solution than time.sleep(n) involves checking
-    #  if div is available repeatedly but this is good enough for now.
-    time.sleep(3)
+    #driver.minimize_window()
+
+    #  TODO(yrom1) Automate login.
+    input('Please login to your leetcode account if prompted, then press enter.')
     #  'SQL Schema' button.
+    #time.sleep(2)
     #sql_schema_button_wrapper = driver.find_element_by_class_name('sql-schema-wrapper__3VBi')
-    sql_schema_button_link = driver.find_element_by_class_name(
-        'sql-schema-link__3cEg')
+    sql_schema_button_link = driver.find_element_by_link_text('SQL Schema')
+    #sql_schema_button_link = driver.find_element_by_class_name('sql-schema-link__3cEg')
     #  Clicks it!
     sql_schema_button_link.click()
     time.sleep(2)
