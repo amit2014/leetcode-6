@@ -1,4 +1,4 @@
-"""leetcode-SQLSchema-helper
+"""leetcode-MySQL-Schema-loader
 """
 
 import os
