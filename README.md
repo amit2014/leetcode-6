@@ -5,7 +5,7 @@ Load Leetcode's SQL Schema into your MySQL database in one command!
 # Example
 
 ```
-ryan@ubuntu-desktop:~/git/leetcode-SQLSchema-helper$ python3 main.py https://leetcode.com/problems/second-highest-salary/
+$ python3 main.py https://leetcode.com/problems/second-highest-salary/
 ---------- loading link
 ---------- successfully connected to MySQL leetcode db!
 ---------- successfully downloaded SQL Schema!
