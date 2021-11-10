@@ -2,15 +2,16 @@
 """
 
 import os
-import time
 import sys
-from typing import List, Dict
-from selenium import webdriver
-from mysql.connector import MySQLConnection, Error
+import time
 from configparser import ConfigParser
+from typing import Dict, List
 
-TEST_LINK_1 = 'https://leetcode.com/problems/second-highest-salary/'
-TEST_LINK_2 = 'https://leetcode.com/problems/combine-two-tables/'
+from mysql.connector import Error, MySQLConnection
+from selenium import webdriver
+
+TEST_LINK_1 = "https://leetcode.com/problems/second-highest-salary/"
+TEST_LINK_2 = "https://leetcode.com/problems/combine-two-tables/"
 TEST_SCHEMA_1 = """
 Create table If Not Exists UserActivity (username varchar(30), activity varchar(30), startDate date, endDate date)
 Truncate table UserActivity
@@ -21,8 +22,9 @@ insert into UserActivity (username, activity, startDate, endDate) values ('Bob',
 """
 
 
-def read_db_config(filename: str = 'config.ini',
-                   section: str = 'mysql') -> Dict[str, str]:
+def read_db_config(
+    filename: str = "config.ini", section: str = "mysql"
+) -> Dict[str, str]:
     """Read database .ini config file, and returns a config dictionary.
 
     Args:
@@ -43,7 +45,7 @@ def read_db_config(filename: str = 'config.ini',
         for item in items:
             db[item[0]] = item[1]
     else:
-        raise Exception(f'{section} not found in the {filename}')
+        raise Exception(f"{section} not found in the {filename}")
 
     return db
 
@@ -62,31 +64,31 @@ def get_SQL_schema_from_leetcode(link: str) -> str:
     #  home directory, I used 92.
 
     #  TODO(yrom1) Make this platform neutral.
-    path = os.path.expanduser(r'~/chromedriver')
+    path = os.path.expanduser(r"~/chromedriver")
     driver = webdriver.Chrome(executable_path=path)
     driver.get(link)
     #  TODO(yrom1) Automate login.
-    input('Please login to your leetcode account if prompted, then press enter.')
+    input("Please login to your leetcode account if prompted, then press enter.")
     driver.minimize_window()
-    sql_schema_button_link = driver.find_element_by_link_text('SQL Schema')
+    sql_schema_button_link = driver.find_element_by_link_text("SQL Schema")
     sql_schema_button_link.click()
     time.sleep(1)
     #  This is the div on leetcode containing the actualy SQL schema text.
-    sql_schema_div = driver.find_element_by_class_name('lc-modal-body__jO0c')
+    sql_schema_div = driver.find_element_by_class_name("lc-modal-body__jO0c")
     return sql_schema_div.text
 
 
 def remove_white_space(query: str) -> str:
     """Remove unnecessary white space from scrapped schema, if exists.
-    
+
     Args:
-        query: The SQL Schema for the leetcode problem as one string. 
+        query: The SQL Schema for the leetcode problem as one string.
     Returns:
         The SQL Schema with unnecessary space removed.
     """
-    query_lines = query.split('\n')
-    query_lines = [x.strip() for x in query_lines if x.strip() != '']
-    return '\n'.join(query_lines)
+    query_lines = query.split("\n")
+    query_lines = [x.strip() for x in query_lines if x.strip() != ""]
+    return "\n".join(query_lines)
 
 
 def execute(command: str) -> None:
@@ -123,7 +125,7 @@ def get_show_tables() -> List[str]:
         dbconfig = read_db_config()
         conn = MySQLConnection(**dbconfig)
         cursor = conn.cursor()
-        cursor.execute(f'show tables')
+        cursor.execute(f"show tables")
         row = cursor.fetchone()
 
         while row is not None:
@@ -144,14 +146,14 @@ def delete_tables(table_list: List[str]) -> None:
     """Delete the tables in the leetcode database to reset it.
 
     Args:
-        table_list: A list of tables in the leetcode database. 
+        table_list: A list of tables in the leetcode database.
     """
     for table in table_list:
         try:
             dbconfig = read_db_config()
             conn = MySQLConnection(**dbconfig)
             cursor = conn.cursor()
-            cursor.execute(f'drop table {table[0]}')
+            cursor.execute(f"drop table {table[0]}")
             conn.commit()
 
         except Error as e:
@@ -172,21 +174,21 @@ def main() -> None:
     try:
         link = sys.argv[1]
     except IndexError:
-        print('Pass link to this script as the first argument.')
-    dash = '-' * 10
-    print(dash, 'loading link')
+        print("Pass link to this script as the first argument.")
+    dash = "-" * 10
+    print(dash, "loading link")
     schema = get_SQL_schema_from_leetcode(link)
-    execute('use leetcode')
-    print(dash, 'successfully connected to MySQL leetcode db!')
+    execute("use leetcode")
+    print(dash, "successfully connected to MySQL leetcode db!")
     delete_tables(get_show_tables())
     schema = remove_white_space(schema)
-    print(dash, 'successfully downloaded SQL Schema!')
-    print(dash, 'recreating schema in MySQL\'s leetcode database')
-    for cmd in schema.split('\n'):
-        print('Executing:', cmd)
+    print(dash, "successfully downloaded SQL Schema!")
+    print(dash, "recreating schema in MySQL's leetcode database")
+    for cmd in schema.split("\n"):
+        print("Executing:", cmd)
         execute(cmd)
-    print(dash, 'succesfully loaded schema!')
+    print(dash, "succesfully loaded schema!")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
