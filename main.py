@@ -9,6 +9,8 @@ from typing import Dict, List
 
 from mysql.connector import Error, MySQLConnection
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
 
 TEST_LINK_1 = "https://leetcode.com/problems/second-highest-salary/"
 TEST_LINK_2 = "https://leetcode.com/problems/combine-two-tables/"
@@ -22,20 +24,18 @@ insert into UserActivity (username, activity, startDate, endDate) values ('Bob',
 """
 
 
-def read_db_config(
-    filename: str = "config.ini", section: str = "mysql"
-) -> Dict[str, str]:
-    """Read database .ini config file, and returns a config dictionary.
+def read_config(filename: str = "config.ini", section: str = "mysql") -> Dict[str, str]:
+    """Read .ini config file, and returns a config dictionary.
 
     Args:
         filename:
             name of the configuration file
         section:
-            section of database configuration
+            which part of ini file to parse
     Returns:
-        A dict of database parameters.
+        A dict of parameters.
     Raises:
-        Exception: If mysql section not found in config.ini file.
+        Exception: If section not found in config.ini file.
     """
     parser = ConfigParser()
     parser.read(filename)
@@ -50,7 +50,7 @@ def read_db_config(
     return db
 
 
-def get_SQL_schema_from_leetcode(link: str) -> str:
+def get_SQL_schema_from_leetcode(link: str, username: str, password: str) -> str:
     """Extract the SQL schema from leetcode's website given a link.
 
     Args:
@@ -63,12 +63,26 @@ def get_SQL_schema_from_leetcode(link: str) -> str:
     #  You need to download and extract the right one and put it in your
     #  home directory, I used 92.
 
-    #  TODO(yrom1) Make this platform neutral.
+    # TODO remove sleeps with waits for elements
     path = os.path.expanduser(r"~/chromedriver")
     driver = webdriver.Chrome(executable_path=path)
     driver.get(link)
-    #  TODO(yrom1) Automate login.
-    input("Please login to your leetcode account if prompted, then press enter.")
+    time.sleep(2.5)  # TODO test remove
+    WebDriverWait(driver, 10).until(
+        lambda s: s.find_element_by_id("id_login").is_displayed()
+    )
+    textUserName = driver.find_element_by_id("id_login")
+    textUserName.clear()
+    textUserName.send_keys(username)
+    WebDriverWait(driver, 10).until(
+        lambda s: s.find_element_by_id("id_password").is_displayed()
+    )
+    textPassword = driver.find_element_by_id("id_password")
+    textPassword.clear()
+    textPassword.send_keys(password)
+    textPassword.send_keys(Keys.RETURN)
+    # input("Please login to your leetcode account if prompted, then press enter.")
+    time.sleep(2.5)
     driver.minimize_window()
     sql_schema_button_link = driver.find_element_by_link_text("SQL Schema")
     sql_schema_button_link.click()
@@ -98,7 +112,7 @@ def execute(command: str) -> None:
         command: A string that contains a single SQL statement
     """
     try:
-        dbconfig = read_db_config()
+        dbconfig = read_config()
         conn = MySQLConnection(**dbconfig)
         cursor = conn.cursor()
         cursor.execute(command)
@@ -122,7 +136,7 @@ def get_show_tables() -> List[str]:
     #  because of how we create the conn.
     tableList = []
     try:
-        dbconfig = read_db_config()
+        dbconfig = read_config()
         conn = MySQLConnection(**dbconfig)
         cursor = conn.cursor()
         cursor.execute(f"show tables")
@@ -150,7 +164,7 @@ def delete_tables(table_list: List[str]) -> None:
     """
     for table in table_list:
         try:
-            dbconfig = read_db_config()
+            dbconfig = read_config()
             conn = MySQLConnection(**dbconfig)
             cursor = conn.cursor()
             cursor.execute(f"drop table {table[0]}")
@@ -177,7 +191,10 @@ def main() -> None:
         print("Pass link to this script as the first argument.")
     dash = "-" * 10
     print(dash, "loading link")
-    schema = get_SQL_schema_from_leetcode(link)
+    login_info = read_config("config.ini", "leetcode")
+    schema = get_SQL_schema_from_leetcode(
+        link, login_info["user"], login_info["password"]
+    )
     execute("use leetcode")
     print(dash, "successfully connected to MySQL leetcode db!")
     delete_tables(get_show_tables())
