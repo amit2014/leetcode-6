@@ -1,5 +1,5 @@
-"""leetcode-MySQL-Schema-loader
-"""
+#!/usr/bin/env -S python -W ignore::DeprecationWarning
+"""leetcode-MySQL-Schema-loader"""
 
 import os
 import sys
@@ -67,7 +67,7 @@ def get_SQL_schema_from_leetcode(link: str, username: str, password: str) -> str
     path = os.path.expanduser(r"~/chromedriver")
     driver = webdriver.Chrome(executable_path=path)
     driver.get(link)
-    time.sleep(2.5)  # TODO test remove
+    time.sleep(3)  # TODO test remove
     WebDriverWait(driver, 10).until(
         lambda s: s.find_element_by_id("id_login").is_displayed()
     )
@@ -82,11 +82,11 @@ def get_SQL_schema_from_leetcode(link: str, username: str, password: str) -> str
     textPassword.send_keys(password)
     textPassword.send_keys(Keys.RETURN)
     # input("Please login to your leetcode account if prompted, then press enter.")
-    time.sleep(2.5)
+    time.sleep(3)
     driver.minimize_window()
     sql_schema_button_link = driver.find_element_by_link_text("SQL Schema")
     sql_schema_button_link.click()
-    time.sleep(1)
+    time.sleep(3)
     #  This is the div on leetcode containing the actualy SQL schema text.
     sql_schema_div = driver.find_element_by_class_name("lc-modal-body__jO0c")
     return sql_schema_div.text
