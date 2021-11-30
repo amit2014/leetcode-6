@@ -1,4 +1,4 @@
-#!/usr/bin/env -S python -W ignore::DeprecationWarning
+#!/usr/bin/env -S python3 -W ignore::DeprecationWarning
 """leetcode-MySQL-Schema-loader"""
 
 import os
