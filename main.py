@@ -7,6 +7,7 @@ import time
 from configparser import ConfigParser
 from typing import Dict, List
 
+import selenium
 from mysql.connector import Error, MySQLConnection
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -68,21 +69,24 @@ def get_SQL_schema_from_leetcode(link: str, username: str, password: str) -> str
     driver = webdriver.Chrome(executable_path=path)
     driver.get(link)
     time.sleep(3)  # TODO test remove
-    WebDriverWait(driver, 10).until(
-        lambda s: s.find_element_by_id("id_login").is_displayed()
-    )
-    textUserName = driver.find_element_by_id("id_login")
-    textUserName.clear()
-    textUserName.send_keys(username)
-    WebDriverWait(driver, 10).until(
-        lambda s: s.find_element_by_id("id_password").is_displayed()
-    )
-    textPassword = driver.find_element_by_id("id_password")
-    textPassword.clear()
-    textPassword.send_keys(password)
-    textPassword.send_keys(Keys.RETURN)
+    try:
+        WebDriverWait(driver, 10).until(
+            lambda s: s.find_element_by_id("id_login").is_displayed()
+        )
+        textUserName = driver.find_element_by_id("id_login")
+        textUserName.clear()
+        textUserName.send_keys(username)
+        WebDriverWait(driver, 10).until(
+            lambda s: s.find_element_by_id("id_password").is_displayed()
+        )
+        textPassword = driver.find_element_by_id("id_password")
+        textPassword.clear()
+        textPassword.send_keys(password)
+        textPassword.send_keys(Keys.RETURN)
+        time.sleep(3)
+    except selenium.common.exceptions.TimeoutException:
+        pass
     # input("Please login to your leetcode account if prompted, then press enter.")
-    time.sleep(3)
     driver.minimize_window()
     sql_schema_button_link = driver.find_element_by_link_text("SQL Schema")
     sql_schema_button_link.click()
