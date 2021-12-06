@@ -2,6 +2,7 @@
 """leetcode-MySQL-Schema-loader"""
 
 import os
+import re
 import sys
 import time
 from configparser import ConfigParser
@@ -119,7 +120,13 @@ def execute(command: str) -> None:
         dbconfig = read_config()
         conn = MySQLConnection(**dbconfig)
         cursor = conn.cursor()
-        cursor.execute(command)
+        # For some reason leetcode put null as 'None' in one question
+        # so here is the hotfix
+        null_command = re.sub("'None'", "null", command)
+        if null_command != command:
+            print(" " * 11 + "FOUND 'None' in Schema, replacing with null:")
+            print("Executing:", null_command)
+        cursor.execute(null_command)
         conn.commit()
 
     except Error as e:
