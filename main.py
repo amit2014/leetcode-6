@@ -69,7 +69,8 @@ def get_SQL_schema_from_leetcode(link: str, username: str, password: str) -> str
     path = os.path.expanduser(r"~/chromedriver")
     driver = webdriver.Chrome(executable_path=path)
     driver.get(link)
-    time.sleep(3)  # TODO test remove
+    driver.minimize_window()
+    # time.sleep(3)  # TODO test remove
     try:
         WebDriverWait(driver, 10).until(
             lambda s: s.find_element_by_id("id_login").is_displayed()
@@ -87,8 +88,6 @@ def get_SQL_schema_from_leetcode(link: str, username: str, password: str) -> str
         time.sleep(3)
     except selenium.common.exceptions.TimeoutException:
         pass
-    # input("Please login to your leetcode account if prompted, then press enter.")
-    driver.minimize_window()
     sql_schema_button_link = driver.find_element_by_link_text("SQL Schema")
     sql_schema_button_link.click()
     time.sleep(3)
