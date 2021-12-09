@@ -129,7 +129,39 @@ def execute(command: str) -> None:
         conn.commit()
 
     except Error as e:
-        print(e)
+        if not None:
+            print(f"{command=}")
+        raise e
+
+    finally:
+        cursor.close()
+        conn.close()
+
+
+def list_execute(commands: List[str]) -> None:
+    """Execute many SQL commands.
+
+    Args:
+        command: A list of strings that contains SQL statements
+    """
+    try:
+        dbconfig = read_config()
+        conn = MySQLConnection(**dbconfig)
+        cursor = conn.cursor()
+        # For some reason leetcode put null as 'None' in one question
+        # so here is the hotfix
+        for command in commands:
+            null_command = re.sub("'None'", "null", command)
+            if null_command != command:
+                print(" " * 11 + "FOUND 'None' in Schema, replacing with null:")
+                print("Executing:", null_command)
+            cursor.execute(null_command)
+        conn.commit()
+
+    except Error as e:
+        if not None:
+            print(f"{command=}")
+        raise e
 
     finally:
         cursor.close()
