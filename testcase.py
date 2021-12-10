@@ -1,3 +1,5 @@
+"""Paste testcase json into testcase.json and then run this script.
+I assume you already have the schema loaded, or else why would you have the testcase!"""
 import json
 
 with open("testcase.json", "r") as f:
@@ -17,6 +19,10 @@ for table in list(input["headers"].keys()):
 # print(command)
 
 from main import list_execute
+
+# with open('testoutput.txt', 'r') as f:
+#     cmds = f.read()
+# commands = cmds.splitlines()
 
 commands = command.splitlines()
 list_execute(commands)
