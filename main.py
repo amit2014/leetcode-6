@@ -419,7 +419,13 @@ class Array:
     2 <= n <= 105
     0 <= height[i] <= 104"""
     def maxArea(self, height: List[int]) -> int:
-        ...
+        """O(n) time, O(1) space"""
+        m, i, j = 0, 0, len(height) - 1
+        while i < j:
+            m = max(m, (j - i) * min(height[i], height[j]))
+            if height[i] < height[j]: i += 1
+            else: j -= 1
+        return m
 
 
 # Binary
