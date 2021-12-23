@@ -266,6 +266,7 @@ class Array:
     All the integers of nums are unique.
     nums is sorted and rotated between 1 and n times."""
     def findMin(self, nums: List[int]) -> int:
+        """O(log(n)) time, O(1) space"""
         lo, hi = 0, len(nums) - 1
         while lo < hi:
             mid = (lo + hi) // 2
@@ -307,7 +308,7 @@ class Array:
     nums is an ascending array that is possibly rotated.
     -104 <= target <= 104"""
     def search(self, nums: List[int], target: int) -> int:
-        """O(log(n)), O(1)"""
+        """O(log(n)) time, O(1) space"""
         lo, hi = 0, len(nums) - 1
         while lo <= hi:
             mid = (lo + hi) // 2
@@ -347,6 +348,8 @@ class Array:
     0 <= nums.length <= 3000
     -105 <= nums[i] <= 105"""
     def threeSum(self, nums: List[int]) -> List[List[int]]:
+        # no sort version
+        """O(n^2) time, O(n)"""
         res, dups = set(), set()
         seen = {}
         for i, val1 in enumerate(nums):
@@ -360,6 +363,8 @@ class Array:
         return res
 
     def threeSum(self, nums: List[int]) -> List[List[int]]:
+        # sort version
+        """O(n^2) time, O(n)"""
         def twoSumII(nums: List[int], i: int, res: List[List[int]]):
             lo, hi = i + 1, len(nums) - 1
             while lo < hi:
@@ -385,7 +390,37 @@ class Array:
         return res
 
 
-# - Container With Most Water - https://leetcode.com/problems/container-with-most-water/
+    """# - Container With Most Water - https://leetcode.com/problems/container-with-most-water/
+    You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]).
+
+    Find two lines that together with the x-axis form a container, such that the container contains the most water.
+
+    Return the maximum amount of water a container can store.
+
+    Notice that you may not slant the container.
+
+
+
+    Example 1:
+
+
+    Input: height = [1,8,6,2,5,4,8,3,7]
+    Output: 49
+    Explanation: The above vertical lines are represented by array [1,8,6,2,5,4,8,3,7]. In this case, the max area of water (blue section) the container can contain is 49.
+    Example 2:
+
+    Input: height = [1,1]
+    Output: 1
+
+
+    Constraints:
+
+    n == height.length
+    2 <= n <= 105
+    0 <= height[i] <= 104"""
+    def maxArea(self, height: List[int]) -> int:
+        ...
+
 
 # Binary
 
