@@ -1,5 +1,4 @@
-from math import inf
-from typing import Dict, List, Tuple, cast
+from typing import Dict, List
 
 
 class Array:
