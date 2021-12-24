@@ -235,7 +235,7 @@ class Array:
             return 0
         ans = mn = mx = nums[0]
         for num in nums[1:]:
-            mn, mx = min(num, mn*num, mx*num), max(num, mn*num, mx*num)
+            mn, mx = min(num, mn * num, mx * num), max(num, mn * num, mx * num)
             ans = max(mx, ans)
         return ans
 
@@ -626,6 +626,8 @@ class Binary:
 
     Follow up: Could you implement a solution using only O(1) extra space
     complexity and O(n) runtime complexity?"""
+
+
 # - Reverse Bits - https://leetcode.com/problems/reverse-bits/
 
 
