@@ -488,6 +488,7 @@ class Binary:
     # return sum([a, b])
 
     def getSum(self, a: int, b: int) -> int:
+        """O(1) time, O(1) space"""
         x, y = abs(a), abs(b)
         if x < y:
             return self.getSum(b, a)
@@ -537,12 +538,14 @@ class Binary:
     Follow up: If this function is called many times, how would you optimize it?"""
 
     def hammingWeight(self, n: int) -> int:
+        """O(1)* time, O(1) space *for fixed 32 bit input"""
         return bin(n).count("1")
 
     def _hammingWeight(self, n: int) -> int:
+        """O(1)* time, O(1) space *for fixed 32 bit input)"""
         count = 0
         while n:
-            n = n & (n - 1)
+            n &= (n - 1)
             count += 1
         return count
 
@@ -583,6 +586,7 @@ class Binary:
     __builtin_popcount in C++)?"""
 
     def countBits(self, n: int) -> List[int]:
+        """O(n) time, O(1)* space *exclude outout"""
         ans = [0] * (n + 1)
         for x in range(1, n + 1):
             ans[x] = ans[x & (x - 1)] + 1
