@@ -482,9 +482,23 @@ class Binary:
 
     -1000 <= a, b <= 1000"""
 
-    def getSum(self, a: int, b: int) -> int:
-        ...
+    # ;^)
+    # import operator; return operator.add(a, b)
+    # return a.__add__(b)
+    # return sum([a, b])
 
+    def getSum(self, a: int, b: int) -> int:
+        x, y = abs(a), abs(b)
+        if x < y:
+            return self.getSum(b, a)
+        sign = 1 if a > 0 else -1
+        if a * b >= 0:
+            while y:
+                x, y = x ^ y, (x & y) << 1
+        else:
+            while y:
+                x, y = x ^ y, ((~x) & y) << 1
+        return x * sign
 
 # - Number of 1 Bits - https://leetcode.com/problems/number-of-1-bits/
 # - Counting Bits - https://leetcode.com/problems/counting-bits/
