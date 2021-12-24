@@ -4,14 +4,15 @@ from typing import Dict, List, Tuple, cast
 
 class Array:
     """
-     - Two Sum - https://leetcode.com/problems/two-sum/
-    Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
+    # - Two Sum -
+    # https://leetcode.com/problems/two-sum/
+    Given an array of integers nums and an integer target, return indices of
+    the two numbers such that they add up to target.
 
-    You may assume that each input would have exactly one solution, and you may not use the same element twice.
+    You may assume that each input would have exactly one solution, and you may
+    not use the same element twice.
 
     You can return the answer in any order.
-
-
 
     Example 1:
 
@@ -27,7 +28,6 @@ class Array:
     Input: nums = [3,3], target = 6
     Output: [0,1]
 
-
     Constraints:
 
     2 <= nums.length <= 104
@@ -36,7 +36,8 @@ class Array:
     Only one valid answer exists.
 
 
-    Follow-up: Can you come up with an algorithm that is less than O(n2) time complexity?
+    Follow-up: Can you come up with an algorithm that is less than O(n2) time
+    complexity?
     """
 
     def twoSum(self, nums: List[int], target: int) -> List[int]:
@@ -49,27 +50,30 @@ class Array:
         raise Exception
 
     """
-    # - Best Time to Buy and Sell Stock - https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
-    You are given an array prices where prices[i] is the price of a given stock on the ith day.
+    # - Best Time to Buy and Sell Stock -
+    # https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
+    You are given an array prices where prices[i] is the price of a given stock
+    on the ith day.
 
-    You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.
+    You want to maximize your profit by choosing a single day to buy one stock
+    and choosing a different day in the future to sell that stock.
 
-    Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.
-
-
+    Return the maximum profit you can achieve from this transaction. If you
+    cannot achieve any profit, return 0.
 
     Example 1:
 
     Input: prices = [7,1,5,3,6,4]
     Output: 5
-    Explanation: Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.
-    Note that buying on day 2 and selling on day 1 is not allowed because you must buy before you sell.
+    Explanation: Buy on day 2 (price = 1) and sell on day 5 (price = 6),
+    profit = 6-1 = 5.
+    Note that buying on day 2 and selling on day 1 is not allowed because you
+    must buy before you sell.
     Example 2:
 
     Input: prices = [7,6,4,3,1]
     Output: 0
     Explanation: In this case, no transactions are done and the max profit = 0.
-
 
     Constraints:
 
@@ -86,10 +90,10 @@ class Array:
         return profit
 
     """
-    # - Contains Duplicate - https://leetcode.com/problems/contains-duplicate/
-    Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.
-
-
+    # - Contains Duplicate -
+    # https://leetcode.com/problems/contains-duplicate/
+    Given an integer array nums, return true if any value appears at least
+    twice in the array, and return false if every element is distinct.
 
     Example 1:
 
@@ -104,7 +108,6 @@ class Array:
     Input: nums = [1,1,1,3,3,4,3,2,4,2]
     Output: true
 
-
     Constraints:
 
     1 <= nums.length <= 105
@@ -116,14 +119,16 @@ class Array:
         return len(nums) != len(set(nums))
 
     """
-    # - Product of Array Except Self - https://leetcode.com/problems/product-of-array-except-self/
-    Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i].
+    # - Product of Array Except Self -
+    # https://leetcode.com/problems/product-of-array-except-self/
+    Given an integer array nums, return an array answer such that answer[i] is
+    equal to the product of all the elements of nums except nums[i].
 
-    The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer.
+    The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit
+    integer.
 
-    You must write an algorithm that runs in O(n) time and without using the division operation.
-
-
+    You must write an algorithm that runs in O(n) time and without using the
+    division operation.
 
     Example 1:
 
@@ -134,15 +139,15 @@ class Array:
     Input: nums = [-1,1,0,-3,3]
     Output: [0,0,9,0,0]
 
-
     Constraints:
 
     2 <= nums.length <= 105
     -30 <= nums[i] <= 30
-    The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer.
+    The product of any prefix or suffix of nums is guaranteed to fit in a
+    32-bit integer.
 
-
-    Follow up: Can you solve the problem in O(1) extra space complexity? (The output array does not count as extra space for space complexity analysis.)
+    Follow up: Can you solve the problem in O(1) extra space complexity? (The
+    output array does not count as extra space for space complexity analysis.)
     """
 
     def productExceptSelf(self, nums: List[int]) -> List[int]:
@@ -157,12 +162,12 @@ class Array:
         return ans
 
     """
-    # - Maximum Subarray - https://leetcode.com/problems/maximum-subarray/
-    Given an integer array nums, find the contiguous subarray (containing at least one number) which has the largest sum and return its sum.
+    # - Maximum Subarray -
+    # https://leetcode.com/problems/maximum-subarray/
+    Given an integer array nums, find the contiguous subarray (containing at
+    least one number) which has the largest sum and return its sum.
 
     A subarray is a contiguous part of an array.
-
-
 
     Example 1:
 
@@ -178,14 +183,13 @@ class Array:
     Input: nums = [5,4,-1,7,8]
     Output: 23
 
-
     Constraints:
 
     1 <= nums.length <= 105
     -104 <= nums[i] <= 104
 
-
-    Follow up: If you have figured out the O(n) solution, try coding another solution using the divide and conquer approach, which is more subtle.
+    Follow up: If you have figured out the O(n) solution, try coding another
+    solution using the divide and conquer approach, which is more subtle.
     """
 
     def maxSubArray(self, nums: List[int]) -> int:
@@ -197,14 +201,14 @@ class Array:
         return ans
 
     """
-    # - Maximum Product Subarray - https://leetcode.com/problems/maximum-product-subarray/
-    Given an integer array nums, find a contiguous non-empty subarray within the array that has the largest product, and return the product.
+    # - Maximum Product Subarray -
+    # https://leetcode.com/problems/maximum-product-subarray/
+    Given an integer array nums, find a contiguous non-empty subarray within
+    the array that has the largest product, and return the product.
 
     The test cases are generated so that the answer will fit in a 32-bit integer.
 
     A subarray is a contiguous subsequence of the array.
-
-
 
     Example 1:
 
@@ -217,12 +221,12 @@ class Array:
     Output: 0
     Explanation: The result cannot be 2, because [-2,-1] is not a subarray.
 
-
     Constraints:
 
     1 <= nums.length <= 2 * 104
     -10 <= nums[i] <= 10
-    The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer.
+    The product of any prefix or suffix of nums is guaranteed to fit in a
+    32-bit integer.
     """
 
     def maxProduct(self, nums: List[int]) -> int:
@@ -235,18 +239,21 @@ class Array:
             ans = max(mx, ans)
         return ans
 
-    """# - Find Minimum in Rotated Sorted Array - https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
-    Suppose an array of length n sorted in ascending order is rotated between 1 and n times. For example, the array nums = [0,1,2,4,5,6,7] might become:
+    """
+    # - Find Minimum in Rotated Sorted Array -
+    # https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
+    Suppose an array of length n sorted in ascending order is rotated between 1
+    and n times. For example, the array nums = [0,1,2,4,5,6,7] might become:
 
     [4,5,6,7,0,1,2] if it was rotated 4 times.
     [0,1,2,4,5,6,7] if it was rotated 7 times.
-    Notice that rotating an array [a[0], a[1], a[2], ..., a[n-1]] 1 time results in the array [a[n-1], a[0], a[1], a[2], ..., a[n-2]].
+    Notice that rotating an array [a[0], a[1], a[2], ..., a[n-1]] 1 time
+    results in the array [a[n-1], a[0], a[1], a[2], ..., a[n-2]].
 
-    Given the sorted rotated array nums of unique elements, return the minimum element of this array.
+    Given the sorted rotated array nums of unique elements, return the minimum
+    element of this array.
 
     You must write an algorithm that runs in O(log n) time.
-
-
 
     Example 1:
 
@@ -257,13 +264,14 @@ class Array:
 
     Input: nums = [4,5,6,7,0,1,2]
     Output: 0
-    Explanation: The original array was [0,1,2,4,5,6,7] and it was rotated 4 times.
+    Explanation: The original array was [0,1,2,4,5,6,7] and it was rotated 4
+    times.
     Example 3:
 
     Input: nums = [11,13,15,17]
     Output: 11
-    Explanation: The original array was [11,13,15,17] and it was rotated 4 times.
-
+    Explanation: The original array was [11,13,15,17] and it was rotated 4
+    times.
 
     Constraints:
 
@@ -284,16 +292,22 @@ class Array:
                 lo = mid + 1
         return nums[lo]
 
-    """# - Search in Rotated Sorted Array - https://leetcode.com/problems/search-in-rotated-sorted-array/
-    There is an integer array nums sorted in ascending order (with distinct values).
+    """
+    # - Search in Rotated Sorted Array -
+    # https://leetcode.com/problems/search-in-rotated-sorted-array/
+    There is an integer array nums sorted in ascending order (with distinct
+    values).
 
-    Prior to being passed to your function, nums is possibly rotated at an unknown pivot index k (1 <= k < nums.length) such that the resulting array is [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]] (0-indexed). For example, [0,1,2,4,5,6,7] might be rotated at pivot index 3 and become [4,5,6,7,0,1,2].
+    Prior to being passed to your function, nums is possibly rotated at an
+    unknown pivot index k (1 <= k < nums.length) such that the resulting array
+    is [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]]
+    (0-indexed). For example, [0,1,2,4,5,6,7] might be rotated at pivot index
+    3 and become [4,5,6,7,0,1,2].
 
-    Given the array nums after the possible rotation and an integer target, return the index of target if it is in nums, or -1 if it is not in nums.
+    Given the array nums after the possible rotation and an integer target,
+    return the index of target if it is in nums, or -1 if it is not in nums.
 
     You must write an algorithm with O(log n) runtime complexity.
-
-
 
     Example 1:
 
@@ -307,7 +321,6 @@ class Array:
 
     Input: nums = [1], target = 0
     Output: -1
-
 
     Constraints:
 
@@ -336,12 +349,14 @@ class Array:
                     hi = mid - 1
         return -1
 
-    """# - 3Sum - https://leetcode.com/problems/3sum/
-    Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
+    """
+    # - 3Sum -
+    # https://leetcode.com/problems/3sum/
+    Given an integer array nums, return all the triplets [nums[i], nums[j],
+    nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] +
+    nums[k] == 0.
 
     Notice that the solution set must not contain duplicate triplets.
-
-
 
     Example 1:
 
@@ -402,28 +417,32 @@ class Array:
                 self.twoSumII(nums, i, res)
         return res
 
-    """# - Container With Most Water - https://leetcode.com/problems/container-with-most-water/
-    You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]).
+    """
+    # - Container With Most Water -
+    # https://leetcode.com/problems/container-with-most-water/
+    You are given an integer array height of length n. There are n vertical
+    lines drawn such that the two endpoints of the ith line are (i, 0)
+    and (i, height[i]).
 
-    Find two lines that together with the x-axis form a container, such that the container contains the most water.
+    Find two lines that together with the x-axis form a container, such that
+    the container contains the most water.
 
     Return the maximum amount of water a container can store.
 
     Notice that you may not slant the container.
 
-
-
     Example 1:
-
 
     Input: height = [1,8,6,2,5,4,8,3,7]
     Output: 49
-    Explanation: The above vertical lines are represented by array [1,8,6,2,5,4,8,3,7]. In this case, the max area of water (blue section) the container can contain is 49.
+    Explanation: The above vertical lines are represented by array
+    [1,8,6,2,5,4,8,3,7]. In this case, the max area of water (blue section)
+    the container can contain is 49.
+
     Example 2:
 
     Input: height = [1,1]
     Output: 1
-
 
     Constraints:
 
@@ -444,10 +463,11 @@ class Array:
 
 
 class Binary:
-    """# - Sum of Two Integers - https://leetcode.com/problems/sum-of-two-integers/
-    Given two integers a and b, return the sum of the two integers without using the operators + and -.
-
-
+    """
+    # - Sum of Two Integers -
+    # https://leetcode.com/problems/sum-of-two-integers/
+    Given two integers a and b, return the sum of the two integers without
+    using the operators + and -.
 
     Example 1:
 
@@ -457,7 +477,6 @@ class Binary:
 
     Input: a = 2, b = 3
     Output: 5
-
 
     Constraints:
 
