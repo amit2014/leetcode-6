@@ -627,6 +627,19 @@ class Binary:
     Follow up: Could you implement a solution using only O(1) extra space
     complexity and O(n) runtime complexity?"""
 
+    def missingNumber(self, nums):
+        """XOR solution O(n) time, O(1) space"""
+        missing = len(nums)
+        for i, num in enumerate(nums):
+            missing ^= i ^ num
+        return missing
+
+    def _missingNumber(self, nums: List[int]) -> int:
+        """gauss formula O(n) time, O(1) space"""
+        expected_sum = len(nums) * (len(nums) + 1) // 2
+        actual_sum = sum(nums)
+        return expected_sum - actual_sum
+
 
 # - Reverse Bits - https://leetcode.com/problems/reverse-bits/
 
