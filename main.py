@@ -1,5 +1,6 @@
-from typing import List, Tuple
 from math import inf
+from typing import Dict, List, Tuple, cast
+
 
 class Array:
     """
@@ -37,12 +38,15 @@ class Array:
 
     Follow-up: Can you come up with an algorithm that is less than O(n2) time complexity?
     """
+
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         """O(n) time, O(n) space"""
-        seen = dict()
+        seen: Dict[int, int] = {}
         for i, x in enumerate(nums):
-            if target - x in seen: return [seen[target - x], i]
+            if target - x in seen:
+                return [seen[target - x], i]
             seen[x] = i
+        raise Exception
 
     """
     # - Best Time to Buy and Sell Stock - https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
@@ -72,14 +76,14 @@ class Array:
     1 <= prices.length <= 105
     0 <= prices[i] <= 104
     """
+
     def maxProfit(self, prices: List[int]) -> int:
         """O(n) time, O(1) space"""
-        buy, profit = inf, 0
+        buy, profit = prices[0], 0
         for price in prices:
             buy = min(buy, price)
             profit = max(profit, price - buy)
         return profit
-
 
     """
     # - Contains Duplicate - https://leetcode.com/problems/contains-duplicate/
@@ -106,6 +110,7 @@ class Array:
     1 <= nums.length <= 105
     -109 <= nums[i] <= 109
     """
+
     def containsDuplicate(self, nums: List[int]) -> bool:
         """O(n) time, O(n) space"""
         return len(nums) != len(set(nums))
@@ -139,6 +144,7 @@ class Array:
 
     Follow up: Can you solve the problem in O(1) extra space complexity? (The output array does not count as extra space for space complexity analysis.)
     """
+
     def productExceptSelf(self, nums: List[int]) -> List[int]:
         """O(n) time, O(1) space (excluding output array)"""
         ans = [1] * len(nums)
@@ -181,6 +187,7 @@ class Array:
 
     Follow up: If you have figured out the O(n) solution, try coding another solution using the divide and conquer approach, which is more subtle.
     """
+
     def maxSubArray(self, nums: List[int]) -> int:
         """O(n) time, O(1) space"""
         cur = ans = nums[0]
@@ -188,7 +195,6 @@ class Array:
             cur = max(num, cur + num)
             ans = max(ans, cur)
         return ans
-
 
     """
     # - Maximum Product Subarray - https://leetcode.com/problems/maximum-product-subarray/
@@ -218,15 +224,16 @@ class Array:
     -10 <= nums[i] <= 10
     The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer.
     """
+
     def maxProduct(self, nums: List[int]) -> int:
         """O(n) time, O(1) space"""
-        if len(nums) == 0: return 0
+        if len(nums) == 0:
+            return 0
         ans = mn = mx = nums[0]
         for num in nums[1:]:
-            mn, mx = min(num, mn*num, mx*num) , max(num, mn*num, mx*num)
+            mn, mx = min(num, mn * num, mx * num), max(num, mn * num, mx * num)
             ans = max(mx, ans)
         return ans
-
 
     """# - Find Minimum in Rotated Sorted Array - https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
     Suppose an array of length n sorted in ascending order is rotated between 1 and n times. For example, the array nums = [0,1,2,4,5,6,7] might become:
@@ -265,15 +272,17 @@ class Array:
     -5000 <= nums[i] <= 5000
     All the integers of nums are unique.
     nums is sorted and rotated between 1 and n times."""
+
     def findMin(self, nums: List[int]) -> int:
         """O(log(n)) time, O(1) space"""
         lo, hi = 0, len(nums) - 1
         while lo < hi:
             mid = (lo + hi) // 2
-            if nums[mid] < nums[hi]: hi = mid
-            else: lo = mid + 1
+            if nums[mid] < nums[hi]:
+                hi = mid
+            else:
+                lo = mid + 1
         return nums[lo]
-
 
     """# - Search in Rotated Sorted Array - https://leetcode.com/problems/search-in-rotated-sorted-array/
     There is an integer array nums sorted in ascending order (with distinct values).
@@ -307,20 +316,25 @@ class Array:
     All values of nums are unique.
     nums is an ascending array that is possibly rotated.
     -104 <= target <= 104"""
+
     def search(self, nums: List[int], target: int) -> int:
         """O(log(n)) time, O(1) space"""
         lo, hi = 0, len(nums) - 1
         while lo <= hi:
             mid = (lo + hi) // 2
-            if nums[mid] == target: return mid
+            if nums[mid] == target:
+                return mid
             if nums[lo] <= nums[mid]:
-                if nums[lo] <= target < nums[mid]: hi = mid - 1
-                else: lo = mid + 1
+                if nums[lo] <= target < nums[mid]:
+                    hi = mid - 1
+                else:
+                    lo = mid + 1
             else:
-                if nums[mid] < target <= nums[hi]: lo = mid + 1
-                else: hi = mid - 1
+                if nums[mid] < target <= nums[hi]:
+                    lo = mid + 1
+                else:
+                    hi = mid - 1
         return -1
-
 
     """# - 3Sum - https://leetcode.com/problems/3sum/
     Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
@@ -347,48 +361,46 @@ class Array:
 
     0 <= nums.length <= 3000
     -105 <= nums[i] <= 105"""
+
     def threeSum(self, nums: List[int]) -> List[List[int]]:
-        # no sort version
-        """O(n^2) time, O(n)"""
+        """no sort version O(n^2) time, O(n)"""
         res, dups = set(), set()
-        seen = {}
+        seen: Dict[int, int] = {}
         for i, val1 in enumerate(nums):
             if val1 not in dups:
                 dups.add(val1)
-                for j, val2 in enumerate(nums[i+1:]):
+                for j, val2 in enumerate(nums[i + 1 :]):
                     complement = -val1 - val2
                     if complement in seen and seen[complement] == i:
-                        res.add(tuple(sorted((val1, val2, complement))))
+                        res.add(list(sorted((val1, val2, complement))))
                     seen[val2] = i
-        return res
+        return list(res)
 
-    def threeSum(self, nums: List[int]) -> List[List[int]]:
-        # sort version
-        """O(n^2) time, O(n)"""
-        def twoSumII(nums: List[int], i: int, res: List[List[int]]):
-            lo, hi = i + 1, len(nums) - 1
-            while lo < hi:
-                sum = nums[i] + nums[lo] + nums[hi]
-                if sum < 0:
+    def twoSumII(self, nums: List[int], i: int, res: List[List[int]]):
+        lo, hi = i + 1, len(nums) - 1
+        while lo < hi:
+            sum = nums[i] + nums[lo] + nums[hi]
+            if sum < 0:
+                lo += 1
+            elif sum > 0:
+                hi -= 1
+            else:
+                res.append([nums[i], nums[lo], nums[hi]])
+                lo += 1
+                hi -= 1
+                while lo < hi and nums[lo] == nums[lo - 1]:
                     lo += 1
-                elif sum > 0:
-                    hi -= 1
-                else:
-                    res.append([nums[i], nums[lo], nums[hi]])
-                    lo += 1
-                    hi -= 1
-                    while lo < hi and nums[lo] == nums[lo - 1]:
-                        lo += 1
 
-        res = []
+    def _threeSum(self, nums: List[int]) -> List[List[int]]:
+        """sort version O(n^2) time, O(n)"""
+        res: List[List[int]] = []
         nums.sort()
         for i in range(len(nums)):
             if nums[i] > 0:
                 break
             if i == 0 or nums[i - 1] != nums[i]:
-                twoSumII(nums, i, res)
+                self.twoSumII(nums, i, res)
         return res
-
 
     """# - Container With Most Water - https://leetcode.com/problems/container-with-most-water/
     You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]).
@@ -418,19 +430,43 @@ class Array:
     n == height.length
     2 <= n <= 105
     0 <= height[i] <= 104"""
+
     def maxArea(self, height: List[int]) -> int:
         """O(n) time, O(1) space"""
         m, i, j = 0, 0, len(height) - 1
         while i < j:
             m = max(m, (j - i) * min(height[i], height[j]))
-            if height[i] < height[j]: i += 1
-            else: j -= 1
+            if height[i] < height[j]:
+                i += 1
+            else:
+                j -= 1
         return m
 
 
-# Binary
+class Binary:
+    """# - Sum of Two Integers - https://leetcode.com/problems/sum-of-two-integers/
+    Given two integers a and b, return the sum of the two integers without using the operators + and -.
 
-# - Sum of Two Integers - https://leetcode.com/problems/sum-of-two-integers/
+
+
+    Example 1:
+
+    Input: a = 1, b = 2
+    Output: 3
+    Example 2:
+
+    Input: a = 2, b = 3
+    Output: 5
+
+
+    Constraints:
+
+    -1000 <= a, b <= 1000"""
+
+    def getSum(self, a: int, b: int) -> int:
+        ...
+
+
 # - Number of 1 Bits - https://leetcode.com/problems/number-of-1-bits/
 # - Counting Bits - https://leetcode.com/problems/counting-bits/
 # - Missing Number - https://leetcode.com/problems/missing-number/
