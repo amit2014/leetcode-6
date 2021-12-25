@@ -1,6 +1,7 @@
 from functools import lru_cache
-from typing import Dict, List, Union
 from math import inf
+from typing import Dict, List, Union
+
 
 class Array:
     """
@@ -752,11 +753,13 @@ class Binary:
 
     def climbStairs(self, n: int) -> int:
         """O(n) time, O(n) space"""
+
         @lru_cache(maxsize=None)
         def fn(k: int) -> int:
             if k <= 1:
                 return 1
             return fn(k - 1) + fn(k - 2)
+
         return fn(n)
 
     """
@@ -789,15 +792,22 @@ class Binary:
     1 <= coins.length <= 12
     1 <= coins[i] <= 231 - 1
     0 <= amount <= 104"""
+
     def coinChange(self, coins: List[int], amount: int) -> int:
         """O(S * n) time, O(S) space
         where S is amount n is denomination count"""
+
         @lru_cache(maxsize=None)
         def fn(x: int) -> Union[float, int]:
-            if x == 0: return 0
-            if x < 0: return inf
+            if x == 0:
+                return 0
+            if x < 0:
+                return inf
             return min(1 + fn(x - coin) for coin in coins)
-        return fn(amount) if fn(amount) < inf else -1
+
+        fn_amount = fn(amount)
+        return fn_amount if isinstance(fn_amount, int) else -1
+
 
 # - Longest Increasing Subsequence - https://leetcode.com/problems/longest-increasing-subsequence/
 # - Longest Common Subsequence -
