@@ -1,5 +1,5 @@
-from typing import Dict, List
 from functools import lru_cache
+from typing import Dict, List
 
 
 class Array:
@@ -546,7 +546,7 @@ class Binary:
         """O(1)* time, O(1) space *for fixed 32 bit input)"""
         count = 0
         while n:
-            n &= (n - 1)
+            n &= n - 1
             count += 1
         return count
 
@@ -645,7 +645,6 @@ class Binary:
         actual_sum = sum(nums)
         return expected_sum - actual_sum
 
-
     """# - Reverse Bits -
     # https://leetcode.com/problems/reverse-bits/
     Reverse bits of a given 32 bits unsigned integer.
@@ -687,7 +686,7 @@ class Binary:
         """;^) python solution O(1) time, O(1) space"""
         return int(bin(n)[2:].zfill(32)[::-1], 2)
 
-    def reverseBits(self, n):
+    def reverseBits_(self, n):
         """32 loops solution O(1) time, O(1) space"""
         ret, power = 0, 31
         while n:
@@ -696,25 +695,33 @@ class Binary:
             power -= 1
         return ret
 
-    def reverseBits(self, n: int) -> int:
+    def reverseBits__(self, n: int) -> int:
         """no loop solution O(1) time, O(1) space"""
         n = (n >> 16) | (n << 16)
-        n = ((n & 0xff00ff00) >> 8) | ((n & 0x00ff00ff) << 8)
-        n = ((n & 0xf0f0f0f0) >> 4) | ((n & 0x0f0f0f0f) << 4)
-        n = ((n & 0xcccccccc) >> 2) | ((n & 0x33333333) << 2)
-        n = ((n & 0xaaaaaaaa) >> 1) | ((n & 0x55555555) << 1)
+        n = ((n & 0xFF00FF00) >> 8) | ((n & 0x00FF00FF) << 8)
+        n = ((n & 0xF0F0F0F0) >> 4) | ((n & 0x0F0F0F0F) << 4)
+        n = ((n & 0xCCCCCCCC) >> 2) | ((n & 0x33333333) << 2)
+        n = ((n & 0xAAAAAAAA) >> 1) | ((n & 0x55555555) << 1)
         return n
 
-    def reverseBits(self, n: int) -> int:
+    def reverseBits___(self, n: int) -> int:
         """no loop solution O(1) time, O(1) space"""
         n = (n >> 16) | (n << 16)
-        n = ((n & 0b11111111000000001111111100000000) >> 8) | ((n & 0b00000000111111110000000011111111) << 8)
-        n = ((n & 0b11110000111100001111000011110000) >> 4) | ((n & 0b00001111000011110000111100001111) << 4)
-        n = ((n & 0b11001100110011001100110011001100) >> 2) | ((n & 0b00110011001100110011001100110011) << 2)
-        n = ((n & 0b10101010101010101010101010101010) >> 1) | ((n & 0b01010101010101010101010101010101) << 1)
+        n = ((n & 0b11111111000000001111111100000000) >> 8) | (
+            (n & 0b00000000111111110000000011111111) << 8
+        )
+        n = ((n & 0b11110000111100001111000011110000) >> 4) | (
+            (n & 0b00001111000011110000111100001111) << 4
+        )
+        n = ((n & 0b11001100110011001100110011001100) >> 2) | (
+            (n & 0b00110011001100110011001100110011) << 2
+        )
+        n = ((n & 0b10101010101010101010101010101010) >> 1) | (
+            (n & 0b01010101010101010101010101010101) << 1
+        )
         return n
 
-# Dynamic Programming
+    # Dynamic Programming
 
     """# - Climbing Stairs -
     # https://leetcode.com/problems/climbing-stairs/
@@ -742,13 +749,18 @@ class Binary:
 
     Constraints:
     1 <= n <= 45"""
+
     def climbStairs(self, n: int) -> int:
         """O(n) time, O(n) space"""
+
         @lru_cache(maxsize=None)
         def fn(k):
-            if k <= 1: return 1
-            return fn(k-1) + fn(k-2)
+            if k <= 1:
+                return 1
+            return fn(k - 1) + fn(k - 2)
+
         return fn(n)
+
 
 # - Coin Change - https://leetcode.com/problems/coin-change/
 # - Longest Increasing Subsequence - https://leetcode.com/problems/longest-increasing-subsequence/
