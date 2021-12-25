@@ -681,8 +681,46 @@ class Binary:
 
     Follow up: If this function is called many times, how would you optimize
     it?"""
+
     def reverseBits(self, n: int) -> int:
+        """;^) python solution O(1) time, O(1) space"""
         return int(bin(n)[2:].zfill(32)[::-1], 2)
+
+    def reverseBits(self, n):
+        """32 loops solution O(1) time, O(1) space"""
+        ret, power = 0, 31
+        while n:
+            ret += (n & 1) << power
+            n = n >> 1
+            power -= 1
+        return ret
+
+    def reverseBits(self, n: int) -> int:
+        """no loop solution O(1) time, O(1) space"""
+        """
+        >>> bin(0xaaaaaaaa)[2:].zfill(32)
+        '10101010101010101010101010101010'
+        >>> bin(0x55555555)[2:].zfill(32)
+        '01010101010101010101010101010101'
+        >>> bin(0xcccccccc)[2:].zfill(32)
+        '11001100110011001100110011001100'
+        >>> bin(0x33333333)[2:].zfill(32)
+        '00110011001100110011001100110011'
+        >>> bin(0xf0f0f0f0)[2:].zfill(32)
+        '11110000111100001111000011110000'
+        >>> bin(0x0f0f0f0f)[2:].zfill(32)
+        '00001111000011110000111100001111'
+        >>> bin(0xff00ff00)[2:].zfill(32)
+        '11111111000000001111111100000000'
+        >>> bin(0x00ff00ff)[2:].zfill(32)
+        '00000000111111110000000011111111'
+        """
+        n = (n >> 16) | (n << 16)
+        n = ((n & 0xff00ff00) >> 8) | ((n & 0x00ff00ff) << 8)
+        n = ((n & 0xf0f0f0f0) >> 4) | ((n & 0x0f0f0f0f) << 4)
+        n = ((n & 0xcccccccc) >> 2) | ((n & 0x33333333) << 2)
+        n = ((n & 0xaaaaaaaa) >> 1) | ((n & 0x55555555) << 1)
+        return n
 
 # Dynamic Programming
 
