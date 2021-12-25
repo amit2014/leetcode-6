@@ -752,15 +752,12 @@ class Binary:
 
     def climbStairs(self, n: int) -> int:
         """O(n) time, O(n) space"""
-
         @lru_cache(maxsize=None)
-        def fn(k):
+        def fn(k: int) -> int:
             if k <= 1:
                 return 1
             return fn(k - 1) + fn(k - 2)
-
         return fn(n)
-
 
 # - Coin Change - https://leetcode.com/problems/coin-change/
 # - Longest Increasing Subsequence - https://leetcode.com/problems/longest-increasing-subsequence/
