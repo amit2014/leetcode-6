@@ -1,4 +1,5 @@
 from typing import Dict, List
+from functools import lru_cache
 
 
 class Array:
@@ -715,7 +716,40 @@ class Binary:
 
 # Dynamic Programming
 
-# - Climbing Stairs - https://leetcode.com/problems/climbing-stairs/
+    """# - Climbing Stairs -
+    # https://leetcode.com/problems/climbing-stairs/
+    You are climbing a staircase. It takes n steps to reach the top.
+
+    Each time you can either climb 1 or 2 steps. In how many distinct ways can
+    you climb to the top?
+
+    Example 1:
+
+    Input: n = 2
+    Output: 2
+    Explanation: There are two ways to climb to the top.
+    1. 1 step + 1 step
+    2. 2 steps
+
+    Example 2:
+
+    Input: n = 3
+    Output: 3
+    Explanation: There are three ways to climb to the top.
+    1. 1 step + 1 step + 1 step
+    2. 1 step + 2 steps
+    3. 2 steps + 1 step
+
+    Constraints:
+    1 <= n <= 45"""
+    def climbStairs(self, n: int) -> int:
+        """O(n) time, O(n) space"""
+        @lru_cache(maxsize=None)
+        def fn(k):
+            if k <= 1: return 1
+            return fn(k-1) + fn(k-2)
+        return fn(n)
+
 # - Coin Change - https://leetcode.com/problems/coin-change/
 # - Longest Increasing Subsequence - https://leetcode.com/problems/longest-increasing-subsequence/
 # - Longest Common Subsequence -
