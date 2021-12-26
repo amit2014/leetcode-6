@@ -1,4 +1,5 @@
 from bisect import bisect_left
+from collections import defaultdict
 from functools import lru_cache
 from math import inf
 from typing import Dict, List, Union
@@ -850,8 +851,82 @@ class Binary:
                 arr[i] = num
         return len(arr)
 
+    """# - Longest Common Subsequence -
+    # https://leetcode.com/problems/longest-common-subsequence/
+    Given two strings text1 and text2, return the length of their longest
+    common subsequence. If there is no common subsequence, return 0.
 
-# - Longest Common Subsequence -
+    A subsequence of a string is a new string generated from the original
+    string with some characters (can be none) deleted without changing the
+    relative order of the remaining characters.
+
+    For example, "ace" is a subsequence of "abcde". A common subsequence of
+    two strings is a subsequence that is common to both strings.
+
+    Example 1:
+    Input: text1 = "abcde", text2 = "ace"
+    Output: 3
+    Explanation: The longest common subsequence is "ace" and its length is 3.
+
+    Example 2:
+    Input: text1 = "abc", text2 = "abc"
+    Output: 3
+    Explanation: The longest common subsequence is "abc" and its length is 3.
+
+    Example 3:
+    Input: text1 = "abc", text2 = "def"
+    Output: 0
+    Explanation: There is no such common subsequence, so the result is 0.
+
+    Constraints:
+    1 <= text1.length, text2.length <= 1000
+    text1 and text2 consist of only lowercase English characters."""
+
+    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+        """nuts O(idk)"""
+        # stores the smallest index of end of subseq of len i+1
+        arr: List[int] = []
+        d = defaultdict(list)
+        for i, char in enumerate(text2):
+            d[char].append(i)
+        for char in text1:
+            if char in d:
+                for i in reversed(d[char]):
+                    ins = bisect_left(arr, i)
+                    if ins == len(arr):
+                        arr.append(i)
+                    else:
+                        arr[ins] = i
+        return len(arr)
+
+    def longestCommonSubsequence_(self, text1: str, text2: str) -> int:
+        """memoization recursion solution O(m*n) time, O(m*n) space
+        where m, n len of strs"""
+
+        @lru_cache(maxsize=None)
+        def memo_solve(p1, p2):
+            if p1 == len(text1) or p2 == len(text2):
+                return 0
+            if text1[p1] == text2[p2]:
+                return 1 + memo_solve(p1 + 1, p2 + 1)
+            else:
+                return max(memo_solve(p1, p2 + 1), memo_solve(p1 + 1, p2))
+
+        return memo_solve(0, 0)
+
+    def longestCommonSubsequence__(self, text1: str, text2: str) -> int:
+        """iteration solution O(m*n) time, O(m*n) space
+        where m, n len of strs"""
+        grid = [[0] * (len(text2) + 1) for _ in range(len(text1) + 1)]
+        for c in reversed(range(len(text2))):
+            for r in reversed(range(len(text1))):
+                if text2[c] == text1[r]:
+                    grid[r][c] = 1 + grid[r + 1][c + 1]
+                else:
+                    grid[r][c] = max(grid[r + 1][c], grid[r][c + 1])
+        return grid[0][0]
+
+
 # - Word Break Problem - https://leetcode.com/problems/word-break/
 # - Combination Sum - https://leetcode.com/problems/combination-sum-iv/
 # - House Robber - https://leetcode.com/problems/house-robber/
