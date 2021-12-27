@@ -950,6 +950,17 @@ class Binary:
     Input: s = "catsandog", wordDict = ["cats","dog","sand","and","cat"]
     Output: false"""
 
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        @lru_cache(maxsize=None)
+        def fn(i):
+            """Return True if s[i:] can be segmented"""
+            if i == len(s):
+                return True
+            return any(
+                s[i : i + len(word)] == word and fn(i + len(word)) for word in wordDict
+            )
+        return fn(0)
+
 
 # - Combination Sum - https://leetcode.com/problems/combination-sum-iv/
 # - House Robber - https://leetcode.com/problems/house-robber/
