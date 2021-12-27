@@ -951,7 +951,6 @@ class Binary:
     Output: false"""
 
 
-
 # - Combination Sum - https://leetcode.com/problems/combination-sum-iv/
 # - House Robber - https://leetcode.com/problems/house-robber/
 # - House Robber II - https://leetcode.com/problems/house-robber-ii/
@@ -998,17 +997,18 @@ class Binary:
 # - Rotate Image - https://leetcode.com/problems/rotate-image/
 # - Word Search - https://leetcode.com/problems/word-search/
 
+
 class String:
-# - Longest Substring Without Repeating Characters - https://leetcode.com/problems/longest-substring-without-repeating-characters/
-# - Longest Repeating Character Replacement - https://leetcode.com/problems/longest-repeating-character-replacement/
-# - Minimum Window Substring - https://leetcode.com/problems/minimum-window-substring/
-# - Valid Anagram - https://leetcode.com/problems/valid-anagram/
-# - Group Anagrams - https://leetcode.com/problems/group-anagrams/
-# - Valid Parentheses - https://leetcode.com/problems/valid-parentheses/
-# - Valid Palindrome - https://leetcode.com/problems/valid-palindrome/
-# - Longest Palindromic Substring - https://leetcode.com/problems/longest-palindromic-substring/
-# - Palindromic Substrings - https://leetcode.com/problems/palindromic-substrings/
-# - Encode and Decode Strings (Leetcode Premium) - https://leetcode.com/problems/encode-and-decode-strings/
+    # - Longest Substring Without Repeating Characters - https://leetcode.com/problems/longest-substring-without-repeating-characters/
+    # - Longest Repeating Character Replacement - https://leetcode.com/problems/longest-repeating-character-replacement/
+    # - Minimum Window Substring - https://leetcode.com/problems/minimum-window-substring/
+    # - Valid Anagram - https://leetcode.com/problems/valid-anagram/
+    # - Group Anagrams - https://leetcode.com/problems/group-anagrams/
+    # - Valid Parentheses - https://leetcode.com/problems/valid-parentheses/
+    # - Valid Palindrome - https://leetcode.com/problems/valid-palindrome/
+    # - Longest Palindromic Substring - https://leetcode.com/problems/longest-palindromic-substring/
+    # - Palindromic Substrings - https://leetcode.com/problems/palindromic-substrings/
+    # - Encode and Decode Strings (Leetcode Premium) - https://leetcode.com/problems/encode-and-decode-strings/
     """
     # - Edit Distance -
     # https://leetcode.com/problems/edit-distance/
@@ -1038,6 +1038,7 @@ class String:
     exention -> exection (replace 'n' with 'c')
     exection -> execution (insert 'u')
     """
+
     def minDistance(self, word1: str, word2: str) -> int:
         m, n = len(word1), len(word2)
 
@@ -1051,6 +1052,7 @@ class String:
             return 1 + min(fn(i + 1, j), fn(i, j + 1), fn(i + 1, j + 1))
 
         return fn(0, 0)
+
 
 # Tree
 
