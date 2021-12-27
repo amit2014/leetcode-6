@@ -1022,14 +1022,15 @@ class Binary:
     5 (money = 1). Total amount you can rob = 2 + 9 + 1 = 12."""
 
     def rob(self, nums: List[int]) -> int:
-
         @lru_cache(maxsize=None)
         def fn(i):
             """Return the maximum amount of money after robbing ith house"""
-            if i < 0: return 0
-            return max(fn(i-1), fn(i-2) + nums[i])
+            if i < 0:
+                return 0
+            return max(fn(i - 1), fn(i - 2) + nums[i])
 
-        return fn(len(nums)-1)
+        return fn(len(nums) - 1)
+
 
 # - House Robber II - https://leetcode.com/problems/house-robber-ii/
 # - Decode Ways - https://leetcode.com/problems/decode-ways/
