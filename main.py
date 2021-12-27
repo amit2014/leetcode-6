@@ -998,8 +998,7 @@ class Binary:
 
         return fn(target)
 
-    """
-    # - House Robber -
+    """# - House Robber -
     # https://leetcode.com/problems/house-robber/
     You are a professional robber planning to rob houses along a street. Each
     house has a certain amount of money stashed, the only constraint stopping
@@ -1031,9 +1030,78 @@ class Binary:
 
         return fn(len(nums) - 1)
 
+    """# - House Robber II -
+    # https://leetcode.com/problems/house-robber-ii/
+    You are a professional robber planning to rob houses along a street. Each
+    house has a certain amount of money stashed. All houses at this place are
+    arranged in a circle. That means the first house is the neighbor of the
+    last one. Meanwhile, adjacent houses have security system connected and it
+    will automatically contact the police if two adjacent houses were broken
+    into on the same night. Given a list of non-negative integers representing
+    the amount of money of each house, determine the maximum amount of money
+    you can rob tonight without alerting the police.
 
-# - House Robber II - https://leetcode.com/problems/house-robber-ii/
-# - Decode Ways - https://leetcode.com/problems/decode-ways/
+    Example 1:
+    Input: [2,3,2]
+    Output: 3
+    Explanation: You cannot rob house 1 (money = 2) and then rob house 3
+    (money = 2), because they are adjacent houses.
+
+    Example 2:
+    Input: [1,2,3,1]
+    Output: 4
+    Explanation: Rob house 1 (money = 1) and then rob house 3 (money = 3).
+    Total amount you can rob = 1 + 3 = 4."""
+
+    def rob_(self, nums: List[int]) -> int:
+        if len(nums) == 1:  # edge case
+            return nums[0]
+
+        def fn(lo, hi):
+            """Return money after robbing houses[lo:hi]"""
+            f0 = f1 = 0
+            for i in range(lo, hi):
+                f0, f1 = f1, max(f1, f0 + nums[i])
+            return f1
+
+        return max(fn(0, len(nums) - 1), fn(1, len(nums)))
+
+    """# - Decode Ways -
+    # https://leetcode.com/problems/decode-ways/
+    A message containing letters from A-Z is being encoded to numbers using the
+    following mapping:
+
+    'A' -> 1
+    'B' -> 2
+    ...
+    'Z' -> 26
+
+    Given a non-empty string containing only digits, determine the total number
+    of ways to decode it.
+
+    Example 1:
+    Input: "12"
+    Output: 2
+    Explanation: It could be decoded as "AB" (1 2) or "L" (12).
+
+    Example 2:
+    Input: "226"
+    Output: 3
+    Explanation: It could be decoded as "BZ" (2 26), "VF" (22 6), or "BBF" (2 2 6)."""
+
+    def numDecodings(self, s: str) -> int:
+        @lru_cache(maxsize=None)
+        def fn(i):
+            """Return decode ways of s[i:]"""
+            if i >= len(s):
+                return i == len(s)
+            return (
+                0 if s[i] == "0" else fn(i + 1) + (int(s[i : i + 2]) <= 26) * fn(i + 2)
+            )
+
+        return fn(0)
+
+
 # - Unique Paths - https://leetcode.com/problems/unique-paths/
 # - Jump Game - https://leetcode.com/problems/jump-game/
 
