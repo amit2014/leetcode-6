@@ -959,10 +959,46 @@ class Binary:
             return any(
                 s[i : i + len(word)] == word and fn(i + len(word)) for word in wordDict
             )
+
         return fn(0)
 
+    """# - Combination Sum -
+    # https://leetcode.com/problems/combination-sum-iv/
+    Given an integer array with all positive numbers and no duplicates, find
+    the number of possible combinations that add up to a positive integer
+    target.
 
-# - Combination Sum - https://leetcode.com/problems/combination-sum-iv/
+    Example:
+    nums = [1, 2, 3]
+    target = 4
+    The possible combination ways are:
+    (1, 1, 1, 1)
+    (1, 1, 2)
+    (1, 2, 1)
+    (1, 3)
+    (2, 1, 1)
+    (2, 2)
+    (3, 1)
+    Note that different sequences are counted as different combinations.
+    Therefore the output is 7.
+
+    Follow up:
+    * What if negative numbers are allowed in the given array?
+    * How does it change the problem?
+    * What limitation we need to add to the question to allow negative numbers?
+    """
+
+    def combinationSum4(self, nums: List[int], target: int) -> int:
+        @lru_cache(maxsize=None)
+        def fn(target):
+            """Return number of combinations summing up to target."""
+            if target <= 0:
+                return int(target == 0)
+            return sum(fn(target - num) for num in nums)
+
+        return fn(target)
+
+
 # - House Robber - https://leetcode.com/problems/house-robber/
 # - House Robber II - https://leetcode.com/problems/house-robber-ii/
 # - Decode Ways - https://leetcode.com/problems/decode-ways/
