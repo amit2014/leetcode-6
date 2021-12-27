@@ -926,8 +926,32 @@ class Binary:
                     grid[r][c] = max(grid[r + 1][c], grid[r][c + 1])
         return grid[0][0]
 
+    """# - Word Break Problem -
+    # https://leetcode.com/problems/word-break/
+    Given a string s and a dictionary of strings wordDict, return true if s can
+    be segmented into a space-separated sequence of one or more dictionary
+    words.
 
-# - Word Break Problem - https://leetcode.com/problems/word-break/
+    Note that the same word in the dictionary may be reused multiple times in
+    the segmentation.
+
+    Example 1:
+    Input: s = "leetcode", wordDict = ["leet","code"]
+    Output: true
+    Explanation: Return true because "leetcode" can be segmented as "leet code".
+
+    Example 2:
+    Input: s = "applepenapple", wordDict = ["apple","pen"]
+    Output: true
+    Explanation: Return true because "applepenapple" can be segmented as "apple pen apple".
+    Note that you are allowed to reuse a dictionary word.
+
+    Example 3:
+    Input: s = "catsandog", wordDict = ["cats","dog","sand","and","cat"]
+    Output: false"""
+
+
+
 # - Combination Sum - https://leetcode.com/problems/combination-sum-iv/
 # - House Robber - https://leetcode.com/problems/house-robber/
 # - House Robber II - https://leetcode.com/problems/house-robber-ii/
@@ -974,8 +998,7 @@ class Binary:
 # - Rotate Image - https://leetcode.com/problems/rotate-image/
 # - Word Search - https://leetcode.com/problems/word-search/
 
-# String
-
+class String:
 # - Longest Substring Without Repeating Characters - https://leetcode.com/problems/longest-substring-without-repeating-characters/
 # - Longest Repeating Character Replacement - https://leetcode.com/problems/longest-repeating-character-replacement/
 # - Minimum Window Substring - https://leetcode.com/problems/minimum-window-substring/
@@ -986,6 +1009,48 @@ class Binary:
 # - Longest Palindromic Substring - https://leetcode.com/problems/longest-palindromic-substring/
 # - Palindromic Substrings - https://leetcode.com/problems/palindromic-substrings/
 # - Encode and Decode Strings (Leetcode Premium) - https://leetcode.com/problems/encode-and-decode-strings/
+    """
+    # - Edit Distance -
+    # https://leetcode.com/problems/edit-distance/
+    Given two strings word1 and word2, return the minimum number of operations required to convert word1 to word2.
+
+    You have the following three operations permitted on a word:
+
+    Insert a character
+    Delete a character
+    Replace a character
+
+    Example 1:
+    Input: word1 = "horse", word2 = "ros"
+    Output: 3
+    Explanation:
+    horse -> rorse (replace 'h' with 'r')
+    rorse -> rose (remove 'r')
+    rose -> ros (remove 'e')
+
+    Example 2:
+    Input: word1 = "intention", word2 = "execution"
+    Output: 5
+    Explanation:
+    intention -> inention (remove 't')
+    inention -> enention (replace 'i' with 'e')
+    enention -> exention (replace 'n' with 'x')
+    exention -> exection (replace 'n' with 'c')
+    exection -> execution (insert 'u')
+    """
+    def minDistance(self, word1: str, word2: str) -> int:
+        m, n = len(word1), len(word2)
+
+        @lru_cache(maxsize=None)
+        def fn(i, j):
+            """Return edit distance between word1[i:] and word2[j:]"""
+            if i == m or j == n:
+                return m + n - i - j
+            if word1[i] == word2[j]:
+                return fn(i + 1, j + 1)
+            return 1 + min(fn(i + 1, j), fn(i, j + 1), fn(i + 1, j + 1))
+
+        return fn(0, 0)
 
 # Tree
 
