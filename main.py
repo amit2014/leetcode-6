@@ -115,6 +115,7 @@ def execute(command: Union[str, List[str]]) -> None:
     Args:
         command: A string or list of strings that contains a single SQL statement(s)
     """
+
     def swap_None_to_null(command: str) -> str:
         """For some reason leetcode put null as 'None' in multiple questions
         so here is the hotfix."""
@@ -122,6 +123,7 @@ def execute(command: Union[str, List[str]]) -> None:
         if null_command != command:
             print(" " * 11 + "FOUND 'None' in Schema, replacing with null:")
             print("Executing:", null_command)
+        return null_command
 
     try:
         dbconfig = read_config()
@@ -139,7 +141,7 @@ def execute(command: Union[str, List[str]]) -> None:
                 cursor.execute(null_command)
             conn.commit()
         else:
-            raise ValueError('Expected str or list[str].')
+            raise ValueError("Expected str or list[str].")
 
     except Error as e:
         if not None:
