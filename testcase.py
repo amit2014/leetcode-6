@@ -18,11 +18,11 @@ for table in list(input["headers"].keys()):
         command += f"insert into {table} values {row};\n"  # TODO column names
 # print(command)
 
-from main import list_execute
+from main import execute
 
 # with open('testoutput.txt', 'r') as f:
 #     cmds = f.read()
 # commands = cmds.splitlines()
 
 commands = command.splitlines()
-list_execute(commands)
+execute(commands)
