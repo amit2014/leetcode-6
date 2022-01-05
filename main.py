@@ -6,7 +6,7 @@ import re
 import sys
 import time
 from configparser import ConfigParser
-from typing import Dict, List
+from typing import Dict, List, Union
 
 import selenium
 from mysql.connector import Error, MySQLConnection
@@ -109,54 +109,37 @@ def remove_white_space(query: str) -> str:
     return "\n".join(query_lines)
 
 
-def execute(command: str) -> None:
-    """Execute an SQL command.
+def execute(command: Union[str, List[str]]) -> None:
+    """Execute one or many SQL non parameterized command(s).
 
     Args:
-        command: A string that contains a single SQL statement
+        command: A string or list of strings that contains a single SQL statement(s)
     """
-    try:
-        dbconfig = read_config()
-        conn = MySQLConnection(**dbconfig)
-        cursor = conn.cursor()
-        # For some reason leetcode put null as 'None' in one question
-        # so here is the hotfix
+    def swap_None_to_null(command: str) -> str:
+        """For some reason leetcode put null as 'None' in multiple questions
+        so here is the hotfix."""
         null_command = re.sub("'None'", "null", command)
         if null_command != command:
             print(" " * 11 + "FOUND 'None' in Schema, replacing with null:")
             print("Executing:", null_command)
-        cursor.execute(null_command)
-        conn.commit()
 
-    except Error as e:
-        if not None:
-            print(f"{command=}")
-        raise e
-
-    finally:
-        cursor.close()
-        conn.close()
-
-
-def list_execute(commands: List[str]) -> None:
-    """Execute many SQL commands.
-
-    Args:
-        command: A list of strings that contains SQL statements
-    """
     try:
         dbconfig = read_config()
         conn = MySQLConnection(**dbconfig)
         cursor = conn.cursor()
-        # For some reason leetcode put null as 'None' in one question
-        # so here is the hotfix
-        for command in commands:
-            null_command = re.sub("'None'", "null", command)
-            if null_command != command:
-                print(" " * 11 + "FOUND 'None' in Schema, replacing with null:")
-                print("Executing:", null_command)
+
+        if isinstance(command, str):
+            null_command = swap_None_to_null(command)
             cursor.execute(null_command)
-        conn.commit()
+            conn.commit()
+
+        elif isinstance(command, list):
+            for cmd in command:
+                null_command = swap_None_to_null(cmd)
+                cursor.execute(null_command)
+            conn.commit()
+        else:
+            raise ValueError('Expected str or list[str].')
 
     except Error as e:
         if not None:
