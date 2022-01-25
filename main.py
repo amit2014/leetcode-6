@@ -1288,8 +1288,51 @@ class LinkedList:
                 return True
         return False
 
+    """
+    # - Merge Two Sorted Lists - https://leetcode.com/problems/merge-two-sorted-lists/
+    You are given the heads of two sorted linked lists list1 and list2.
 
-# - Merge Two Sorted Lists - https://leetcode.com/problems/merge-two-sorted-lists/
+    Merge the two lists in a one sorted list. The list should be made by splicing
+    together the nodes of the first two lists.
+
+    Return the head of the merged linked list.
+
+    Example 1:
+    (1) -> (2) -> (4)
+    (1) -> (3) -> (4)
+
+            |
+            v
+
+    (1) -> (1) -> (2) -> (3) -> (4) -> (4)
+
+    Input: list1 = [1,2,4], list2 = [1,3,4]
+    Output: [1,1,2,3,4,4]
+
+    Example 2:
+
+    Input: list1 = [], list2 = []
+    Output: []
+
+    Example 3:
+
+    Input: list1 = [], list2 = [0]
+    Output: [0]
+    """
+
+    def mergeTwoLists(
+        self, list1: Optional[ListNode], list2: Optional[ListNode]
+    ) -> Optional[ListNode]:
+        dummy = node = ListNode()
+        while list1 and list2:
+            if list1.val > list2.val:
+                list1, list2 = list2, list1
+            node.next = list1
+            list1, node = list1.next, node.next
+        node.next = list1 or list2
+        return dummy.next
+
+
 # - Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
 # - Remove Nth Node From End Of List - https://leetcode.com/problems/remove-nth-node-from-end-of-list/
 # - Reorder List - https://leetcode.com/problems/reorder-list/
