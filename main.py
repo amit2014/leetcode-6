@@ -2,7 +2,7 @@ from bisect import bisect_left
 from collections import defaultdict
 from functools import lru_cache
 from math import comb, factorial, inf
-from typing import Dict, List, Union, Optional
+from typing import Dict, List, Optional, Union
 
 
 class Array:
@@ -1196,9 +1196,11 @@ class Binary:
 
 class ListNode:
     """LinkedList helper"""
+
     def __init__(self, val=0, next=None):
         self.val = val
         self.next = next
+
 
 class LinkedList:
     """
@@ -1234,7 +1236,59 @@ class LinkedList:
             node.next, node, prev = prev, node.next, node
         return prev
 
-# - Detect Cycle in a Linked List - https://leetcode.com/problems/linked-list-cycle/
+    """
+    # - Detect Cycle in a Linked List -
+    # https://leetcode.com/problems/linked-list-cycle/
+    Given head, the head of a linked list, determine if the linked list has a cycle
+    in it.
+
+    There is a cycle in a linked list if there is some node in the list that can be
+    reached again by continuously following the next pointer. Internally, pos is used
+    to denote the index of the node that tail's next pointer is connected to. Note that
+    pos is not passed as a parameter.
+
+    Return true if there is a cycle in the linked list. Otherwise, return false.
+
+    Example 1:
+    (3) -> (2) -> (0) -> (-4) ┐
+            ^                 |
+            |_________________|
+
+    Input: head = [3,2,0,-4], pos = 1
+    Output: true
+    Explanation: There is a cycle in the linked list, where the tail connects to the
+    1st node (0-indexed).
+
+    Example 2:
+    (1) -> (2) ┐
+     ^         |
+     |_________|
+
+    Input: head = [1,2], pos = 0
+    Output: true
+    Explanation: There is a cycle in the linked list, where the tail connects to the
+    0th node.
+
+    Example 3:
+    (1)
+
+    Input: head = [1], pos = -1
+    Output: false
+    Explanation: There is no cycle in the linked list.
+    """
+
+    def hasCycle(self, head: Optional[ListNode]) -> bool:
+        if head is None or head.next is None:
+            return False
+        fast = slow = head
+        while fast and fast.next:
+            fast = fast.next.next
+            slow = slow.next
+            if fast == slow:
+                return True
+        return False
+
+
 # - Merge Two Sorted Lists - https://leetcode.com/problems/merge-two-sorted-lists/
 # - Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
 # - Remove Nth Node From End Of List - https://leetcode.com/problems/remove-nth-node-from-end-of-list/
