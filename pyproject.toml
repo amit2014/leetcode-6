@@ -1,2 +1,7 @@
 [tool.mypy]
 allow_redefinition = true
+
+[tool.isort]
+profile = "black"
+
+[tool.black]
