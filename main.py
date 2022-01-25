@@ -2,7 +2,7 @@ from bisect import bisect_left
 from collections import defaultdict
 from functools import lru_cache
 from math import comb, factorial, inf
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Optional
 
 
 class Array:
@@ -1194,9 +1194,46 @@ class Binary:
 # - Meeting Rooms II (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms-ii/
 
 
-# Linked List
+class ListNode:
+    """LinkedList helper"""
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
 
-# - Reverse a Linked List - https://leetcode.com/problems/reverse-linked-list/
+class LinkedList:
+    """
+    # - Reverse a Linked List - https://leetcode.com/problems/reverse-linked-list/
+    Given the head of a singly linked list, reverse the list, and return the reversed list.
+
+    Example 1:
+    (1) -> (2) -> (3) -> (4) -> (5)
+                |
+                V
+    (5) -> (4) -> (3) -> (2) -> (1)
+
+    Input: head = [1,2,3,4,5]
+    Output: [5,4,3,2,1]
+
+    Example 2:
+    (1) -> (2)
+        |
+        V
+    (2) -> (1)
+
+    Input: head = [1,2]
+    Output: [2,1]
+
+    Example 3:
+    Input: head = []
+    Output: [] # return None
+    """
+
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        prev, node = None, head
+        while node:
+            node.next, node, prev = prev, node.next, node
+        return prev
+
 # - Detect Cycle in a Linked List - https://leetcode.com/problems/linked-list-cycle/
 # - Merge Two Sorted Lists - https://leetcode.com/problems/merge-two-sorted-lists/
 # - Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
