@@ -1377,8 +1377,44 @@ class LinkedList:
                 heappush(pq, (x.next.val, i, x.next))
         return dummy.next
 
+    """
+    # - Remove Nth Node From End Of List -
+    # https://leetcode.com/problems/remove-nth-node-from-end-of-list/
+    Given the head of a linked list, remove the nth node from the end of the list
+    and return its head.
 
-# - Remove Nth Node From End Of List - https://leetcode.com/problems/remove-nth-node-from-end-of-list/
+    Example 1:
+    (1) -> (2) -> (3) -> (4) -> (5)
+                   |
+                   v
+    (1) -> (2) -> (3) --------> (5)
+
+    Input: head = [1,2,3,4,5], n = 2
+    Output: [1,2,3,5]
+
+    Example 2:
+
+    Input: head = [1], n = 1
+    Output: []
+
+    Example 3:
+
+    Input: head = [1,2], n = 1
+    Output: [1]
+    """
+
+    def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
+        dummy = ListNode(next=head)
+        fast = slow = dummy
+        i = 0
+        while fast:
+            fast = fast.next
+            if (i := i + 1) > n + 1:
+                slow = slow.next
+        slow.next = slow.next.next
+        return dummy.next
+
+
 # - Reorder List - https://leetcode.com/problems/reorder-list/
 
 
