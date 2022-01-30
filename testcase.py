@@ -13,6 +13,7 @@ for table in list(input["headers"].keys()):
     command += f"truncate table {table};\n"
     for row in rows:
         row = repr(row)
+        row = row.replace("None", "null")
         row = row.replace("[", "(")
         row = row.replace("]", ")")
         command += f"insert into {table} values {row};\n"  # TODO column names
