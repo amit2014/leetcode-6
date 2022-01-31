@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 from bisect import bisect_left
-from collections import defaultdict
+from collections import Counter, defaultdict
 from functools import lru_cache
-from heapq import heapify, heappop, heappush
+from heapq import heapify, heappop, heappush, nlargest
+from itertools import chain
 from math import comb, factorial, inf
 from typing import Dict, List, Optional, Union, no_type_check
 
@@ -1558,8 +1559,51 @@ class String:
 # - Add and Search Word - https://leetcode.com/problems/add-and-search-word-data-structure-design/
 # - Word Search II - https://leetcode.com/problems/word-search-ii/
 
-# Heap
 
-# - Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
-# - Top K Frequent Elements - https://leetcode.com/problems/top-k-frequent-elements/
+class Heap:
+    """# - Merge K Sorted Lists -
+    # https://leetcode.com/problems/merge-k-sorted-lists/"""
+
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
+        ...  # see class LinkedList
+
+    """
+    # - Top K Frequent Elements -
+    # https://leetcode.com/problems/top-k-frequent-elements/
+    Given an integer array nums and an integer k, return the k most frequent elements. You may return the answer in any order.
+
+    Example 1:
+    Input: nums = [1,1,1,2,2,3], k = 2
+    Output: [1,2]
+
+    Example 2:
+    Input: nums = [1], k = 1
+    Output: [1]
+    """
+
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        """Bucket sort O(n) time, O(n) space"""
+        bucket: List[List[int]] = [[] for _ in range(len(nums) + 1)]
+        count = Counter(nums).items()
+        for num, freq in count:
+            # freq can't be bigger than len(nums)
+            bucket[freq].append(num)
+        arr = list(chain(*bucket))
+        return arr[::-1][:k]
+
+    def topKFrequent_(self, nums: List[int], k: int) -> List[int]:
+        """Heapq way, O(nlogn) or nlogk time, O(n) space"""
+        # 1. build hash map : character and how often it appears
+        # O(N) time
+        count = Counter(nums)
+        # 2-3. build heap of top k frequent elements and
+        # convert it into an output array
+        # O(N log k) time
+        return nlargest(k, count.keys(), key=count.__getitem__)
+
+    def topKFrequent__(self, nums: List[int], k: int) -> List[int]:
+        """Calls heapq under the hood"""
+        return [x for x, y in Counter(nums).most_common(k)]
+
+
 # - Find Median from Data Stream - https://leetcode.com/problems/find-median-from-data-stream/
