@@ -22,29 +22,17 @@ class Array:
     You can return the answer in any order.
 
     Example 1:
-
     Input: nums = [2,7,11,15], target = 9
     Output: [0,1]
     Output: Because nums[0] + nums[1] == 9, we return [0, 1].
-    Example 2:
 
+    Example 2:
     Input: nums = [3,2,4], target = 6
     Output: [1,2]
-    Example 3:
 
+    Example 3:
     Input: nums = [3,3], target = 6
     Output: [0,1]
-
-    Constraints:
-
-    2 <= nums.length <= 104
-    -109 <= nums[i] <= 109
-    -109 <= target <= 109
-    Only one valid answer exists.
-
-
-    Follow-up: Can you come up with an algorithm that is less than O(n2) time
-    complexity?
     """
 
     def twoSum(self, nums: List[int], target: int) -> List[int]:
@@ -69,23 +57,17 @@ class Array:
     cannot achieve any profit, return 0.
 
     Example 1:
-
     Input: prices = [7,1,5,3,6,4]
     Output: 5
     Explanation: Buy on day 2 (price = 1) and sell on day 5 (price = 6),
     profit = 6-1 = 5.
     Note that buying on day 2 and selling on day 1 is not allowed because you
     must buy before you sell.
-    Example 2:
 
+    Example 2:
     Input: prices = [7,6,4,3,1]
     Output: 0
     Explanation: In this case, no transactions are done and the max profit = 0.
-
-    Constraints:
-
-    1 <= prices.length <= 105
-    0 <= prices[i] <= 104
     """
 
     def maxProfit(self, prices: List[int]) -> int:
@@ -103,22 +85,16 @@ class Array:
     twice in the array, and return false if every element is distinct.
 
     Example 1:
-
     Input: nums = [1,2,3,1]
     Output: true
-    Example 2:
 
+    Example 2:
     Input: nums = [1,2,3,4]
     Output: false
-    Example 3:
 
+    Example 3:
     Input: nums = [1,1,1,3,3,4,3,2,4,2]
     Output: true
-
-    Constraints:
-
-    1 <= nums.length <= 105
-    -109 <= nums[i] <= 109
     """
 
     def containsDuplicate(self, nums: List[int]) -> bool:
@@ -138,23 +114,12 @@ class Array:
     division operation.
 
     Example 1:
-
     Input: nums = [1,2,3,4]
     Output: [24,12,8,6]
-    Example 2:
 
+    Example 2:
     Input: nums = [-1,1,0,-3,3]
     Output: [0,0,9,0,0]
-
-    Constraints:
-
-    2 <= nums.length <= 105
-    -30 <= nums[i] <= 30
-    The product of any prefix or suffix of nums is guaranteed to fit in a
-    32-bit integer.
-
-    Follow up: Can you solve the problem in O(1) extra space complexity? (The
-    output array does not count as extra space for space complexity analysis.)
     """
 
     def productExceptSelf(self, nums: List[int]) -> List[int]:
@@ -177,26 +142,17 @@ class Array:
     A subarray is a contiguous part of an array.
 
     Example 1:
-
     Input: nums = [-2,1,-3,4,-1,2,1,-5,4]
     Output: 6
     Explanation: [4,-1,2,1] has the largest sum = 6.
-    Example 2:
 
+    Example 2:
     Input: nums = [1]
     Output: 1
-    Example 3:
 
+    Example 3:
     Input: nums = [5,4,-1,7,8]
     Output: 23
-
-    Constraints:
-
-    1 <= nums.length <= 105
-    -104 <= nums[i] <= 104
-
-    Follow up: If you have figured out the O(n) solution, try coding another
-    solution using the divide and conquer approach, which is more subtle.
     """
 
     def maxSubArray(self, nums: List[int]) -> int:
@@ -219,22 +175,14 @@ class Array:
     A subarray is a contiguous subsequence of the array.
 
     Example 1:
-
     Input: nums = [2,3,-2,4]
     Output: 6
     Explanation: [2,3] has the largest product 6.
-    Example 2:
 
+    Example 2:
     Input: nums = [-2,0,-1]
     Output: 0
     Explanation: The result cannot be 2, because [-2,-1] is not a subarray.
-
-    Constraints:
-
-    1 <= nums.length <= 2 * 104
-    -10 <= nums[i] <= 10
-    The product of any prefix or suffix of nums is guaranteed to fit in a
-    32-bit integer.
     """
 
     def maxProduct(self, nums: List[int]) -> int:
@@ -264,30 +212,22 @@ class Array:
     You must write an algorithm that runs in O(log n) time.
 
     Example 1:
-
     Input: nums = [3,4,5,1,2]
     Output: 1
     Explanation: The original array was [1,2,3,4,5] rotated 3 times.
-    Example 2:
 
+    Example 2:
     Input: nums = [4,5,6,7,0,1,2]
     Output: 0
     Explanation: The original array was [0,1,2,4,5,6,7] and it was rotated 4
     times.
-    Example 3:
 
+    Example 3:
     Input: nums = [11,13,15,17]
     Output: 11
     Explanation: The original array was [11,13,15,17] and it was rotated 4
     times.
-
-    Constraints:
-
-    n == nums.length
-    1 <= n <= 5000
-    -5000 <= nums[i] <= 5000
-    All the integers of nums are unique.
-    nums is sorted and rotated between 1 and n times."""
+    """
 
     def findMin(self, nums: List[int]) -> int:
         """O(log(n)) time, O(1) space"""
@@ -318,25 +258,17 @@ class Array:
     You must write an algorithm with O(log n) runtime complexity.
 
     Example 1:
-
     Input: nums = [4,5,6,7,0,1,2], target = 0
     Output: 4
-    Example 2:
 
+    Example 2:
     Input: nums = [4,5,6,7,0,1,2], target = 3
     Output: -1
-    Example 3:
 
+    Example 3:
     Input: nums = [1], target = 0
     Output: -1
-
-    Constraints:
-
-    1 <= nums.length <= 5000
-    -104 <= nums[i] <= 104
-    All values of nums are unique.
-    nums is an ascending array that is possibly rotated.
-    -104 <= target <= 104"""
+    """
 
     def search(self, nums: List[int], target: int) -> int:
         """O(log(n)) time, O(1) space"""
@@ -367,23 +299,17 @@ class Array:
     Notice that the solution set must not contain duplicate triplets.
 
     Example 1:
-
     Input: nums = [-1,0,1,2,-1,-4]
     Output: [[-1,-1,2],[-1,0,1]]
-    Example 2:
 
+    Example 2:
     Input: nums = []
     Output: []
-    Example 3:
 
+    Example 3:
     Input: nums = [0]
     Output: []
-
-
-    Constraints:
-
-    0 <= nums.length <= 3000
-    -105 <= nums[i] <= 105"""
+    """
 
     def threeSum(self, nums: List[int]) -> List[List[int]]:
         """no sort version O(n^2) time, O(n)"""
@@ -440,7 +366,6 @@ class Array:
     Notice that you may not slant the container.
 
     Example 1:
-
     Input: height = [1,8,6,2,5,4,8,3,7]
     Output: 49
     Explanation: The above vertical lines are represented by array
@@ -448,15 +373,9 @@ class Array:
     the container can contain is 49.
 
     Example 2:
-
     Input: height = [1,1]
     Output: 1
-
-    Constraints:
-
-    n == height.length
-    2 <= n <= 105
-    0 <= height[i] <= 104"""
+    """
 
     def maxArea(self, height: List[int]) -> int:
         """O(n) time, O(1) space"""
@@ -478,17 +397,13 @@ class Binary:
     using the operators + and -.
 
     Example 1:
-
     Input: a = 1, b = 2
     Output: 3
-    Example 2:
 
+    Example 2:
     Input: a = 2, b = 3
     Output: 5
-
-    Constraints:
-
-    -1000 <= a, b <= 1000"""
+    """
 
     # ;^)
     # import operator; return operator.add(a, b)
@@ -512,7 +427,8 @@ class Binary:
     """
     # - Number of 1 Bits -
     # https://leetcode.com/problems/number-of-1-bits/
-    Write a function that takes an unsigned integer and returns the number of '1' bits it has (also known as the Hamming weight).
+    Write a function that takes an unsigned integer and returns the number of '1'
+    bits it has (also known as the Hamming weight).
 
     Note:
 
@@ -524,26 +440,26 @@ class Binary:
     notation. Therefore, in Example 3, the input represents the signed integer. -3.
 
     Example 1:
-
     Input: n = 00000000000000000000000000001011
     Output: 3
-    Explanation: The input binary string 00000000000000000000000000001011 has a total of three '1' bits.
-    Example 2:
+    Explanation: The input binary string 00000000000000000000000000001011 has a
+    total of
+    three '1' bits.
 
+    Example 2:
     Input: n = 00000000000000000000000010000000
     Output: 1
-    Explanation: The input binary string 00000000000000000000000010000000 has a total of one '1' bit.
-    Example 3:
+    Explanation: The input binary string 00000000000000000000000010000000 has a
+    total of
+    one '1' bit.
 
+    Example 3:
     Input: n = 11111111111111111111111111111101
     Output: 31
-    Explanation: The input binary string 11111111111111111111111111111101 has a total of thirty one '1' bits.
-
-    Constraints:
-
-    The input must be a binary string of length 32.
-
-    Follow up: If this function is called many times, how would you optimize it?"""
+    Explanation: The input binary string 11111111111111111111111111111101 has a
+    total of
+    thirty one '1' bits.
+    """
 
     def hammingWeight(self, n: int) -> int:
         """O(1)* time, O(1) space *for fixed 32 bit input"""
@@ -559,7 +475,8 @@ class Binary:
 
     """# - Counting Bits -
     # https://leetcode.com/problems/counting-bits/
-    Given an integer n, return an array ans of length n + 1 such that for each i (0 <= i <= n), ans[i] is the number of 1's in the binary
+    Given an integer n, return an array ans of length n + 1 such that for each i
+    (0 <= i <= n), ans[i] is the number of 1's in the binary
     representation of i.
 
     Example 1:
@@ -947,12 +864,14 @@ class Binary:
     Example 2:
     Input: s = "applepenapple", wordDict = ["apple","pen"]
     Output: true
-    Explanation: Return true because "applepenapple" can be segmented as "apple pen apple".
+    Explanation: Return true because "applepenapple" can be segmented
+    as "apple pen apple".
     Note that you are allowed to reuse a dictionary word.
 
     Example 3:
     Input: s = "catsandog", wordDict = ["cats","dog","sand","and","cat"]
-    Output: false"""
+    Output: false
+    """
 
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
         @lru_cache(maxsize=None)
@@ -1177,25 +1096,25 @@ class Binary:
         return True
 
 
-# Graph
+class Graph:
+    ...
+    # - Clone Graph - https://leetcode.com/problems/clone-graph/
+    # - Course Schedule - https://leetcode.com/problems/course-schedule/
+    # - Pacific Atlantic Water Flow - https://leetcode.com/problems/pacific-atlantic-water-flow/
+    # - Number of Islands - https://leetcode.com/problems/number-of-islands/
+    # - Longest Consecutive Sequence - https://leetcode.com/problems/longest-consecutive-sequence/
+    # - Alien Dictionary (Leetcode Premium) - https://leetcode.com/problems/alien-dictionary/
+    # - Graph Valid Tree (Leetcode Premium) - https://leetcode.com/problems/graph-valid-tree/
+    # - Number of Connected Components in an Undirected Graph (Leetcode Premium) - https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/
 
-# - Clone Graph - https://leetcode.com/problems/clone-graph/
-# - Course Schedule - https://leetcode.com/problems/course-schedule/
-# - Pacific Atlantic Water Flow - https://leetcode.com/problems/pacific-atlantic-water-flow/
-# - Number of Islands - https://leetcode.com/problems/number-of-islands/
-# - Longest Consecutive Sequence - https://leetcode.com/problems/longest-consecutive-sequence/
-# - Alien Dictionary (Leetcode Premium) - https://leetcode.com/problems/alien-dictionary/
-# - Graph Valid Tree (Leetcode Premium) - https://leetcode.com/problems/graph-valid-tree/
-# - Number of Connected Components in an Undirected Graph (Leetcode Premium) - https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/
 
-
-# Interval
-
-# - Insert Interval - https://leetcode.com/problems/insert-interval/
-# - Merge Intervals - https://leetcode.com/problems/merge-intervals/
-# - Non-overlapping Intervals - https://leetcode.com/problems/non-overlapping-intervals/
-# - Meeting Rooms (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms/
-# - Meeting Rooms II (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms-ii/
+class Interval:
+    ...
+    # - Insert Interval - https://leetcode.com/problems/insert-interval/
+    # - Merge Intervals - https://leetcode.com/problems/merge-intervals/
+    # - Non-overlapping Intervals - https://leetcode.com/problems/non-overlapping-intervals/
+    # - Meeting Rooms (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms/
+    # - Meeting Rooms II (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms-ii/
 
 
 class ListNode:
@@ -1477,12 +1396,12 @@ class LinkedList:
             second.next, second = first, second.next
 
 
-# Matrix
-
-# - Set Matrix Zeroes - https://leetcode.com/problems/set-matrix-zeroes/
-# - Spiral Matrix - https://leetcode.com/problems/spiral-matrix/
-# - Rotate Image - https://leetcode.com/problems/rotate-image/
-# - Word Search - https://leetcode.com/problems/word-search/
+class Matrix:
+    ...
+    # - Set Matrix Zeroes - https://leetcode.com/problems/set-matrix-zeroes/
+    # - Spiral Matrix - https://leetcode.com/problems/spiral-matrix/
+    # - Rotate Image - https://leetcode.com/problems/rotate-image/
+    # - Word Search - https://leetcode.com/problems/word-search/
 
 
 class String:
@@ -1542,22 +1461,22 @@ class String:
         return fn(0, 0)
 
 
-# Tree
-
-# - Maximum Depth of Binary Tree - https://leetcode.com/problems/maximum-depth-of-binary-tree/
-# - Same Tree - https://leetcode.com/problems/same-tree/
-# - Invert/Flip Binary Tree - https://leetcode.com/problems/invert-binary-tree/
-# - Binary Tree Maximum Path Sum - https://leetcode.com/problems/binary-tree-maximum-path-sum/
-# - Binary Tree Level Order Traversal - https://leetcode.com/problems/binary-tree-level-order-traversal/
-# - Serialize and Deserialize Binary Tree - https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
-# - Subtree of Another Tree - https://leetcode.com/problems/subtree-of-another-tree/
-# - Construct Binary Tree from Preorder and Inorder Traversal - https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
-# - Validate Binary Search Tree - https://leetcode.com/problems/validate-binary-search-tree/
-# - Kth Smallest Element in a BST - https://leetcode.com/problems/kth-smallest-element-in-a-bst/
-# - Lowest Common Ancestor of BST - https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
-# - Implement Trie (Prefix Tree) - https://leetcode.com/problems/implement-trie-prefix-tree/
-# - Add and Search Word - https://leetcode.com/problems/add-and-search-word-data-structure-design/
-# - Word Search II - https://leetcode.com/problems/word-search-ii/
+class Tree:
+    ...
+    # - Maximum Depth of Binary Tree - https://leetcode.com/problems/maximum-depth-of-binary-tree/
+    # - Same Tree - https://leetcode.com/problems/same-tree/
+    # - Invert/Flip Binary Tree - https://leetcode.com/problems/invert-binary-tree/
+    # - Binary Tree Maximum Path Sum - https://leetcode.com/problems/binary-tree-maximum-path-sum/
+    # - Binary Tree Level Order Traversal - https://leetcode.com/problems/binary-tree-level-order-traversal/
+    # - Serialize and Deserialize Binary Tree - https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
+    # - Subtree of Another Tree - https://leetcode.com/problems/subtree-of-another-tree/
+    # - Construct Binary Tree from Preorder and Inorder Traversal - https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
+    # - Validate Binary Search Tree - https://leetcode.com/problems/validate-binary-search-tree/
+    # - Kth Smallest Element in a BST - https://leetcode.com/problems/kth-smallest-element-in-a-bst/
+    # - Lowest Common Ancestor of BST - https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
+    # - Implement Trie (Prefix Tree) - https://leetcode.com/problems/implement-trie-prefix-tree/
+    # - Add and Search Word - https://leetcode.com/problems/add-and-search-word-data-structure-design/
+    # - Word Search II - https://leetcode.com/problems/word-search-ii/
 
 
 class Heap:
@@ -1605,5 +1524,46 @@ class Heap:
         """Calls heapq under the hood"""
         return [x for x, y in Counter(nums).most_common(k)]
 
+    class MedianFinder:
+        """
+        # - Find Median from Data Stream -
+        # https://leetcode.com/problems/find-median-from-data-stream/
+        The median is the middle value in an ordered integer list. If the size of the
+        list is even, there is no middle value and the median is the mean of the two
+        middle values.
 
-# - Find Median from Data Stream - https://leetcode.com/problems/find-median-from-data-stream/
+        For example, for arr = [2,3,4], the median is 3.
+        For example, for arr = [2,3], the median is (2 + 3) / 2 = 2.5.
+
+        Implement the MedianFinder class:
+        MedianFinder() initializes the MedianFinder object.
+        void addNum(int num) adds the integer num from the data stream to the
+        data structure.
+        double findMedian() returns the median of all elements so far.
+        Answers within 10-5
+        of the actual answer will be accepted.
+
+        Example 1:
+        Input
+        ["MedianFinder", "addNum", "addNum", "findMedian", "addNum", "findMedian"]
+        [[], [1], [2], [], [3], []]
+        Output
+        [null, null, null, 1.5, null, 2.0]
+
+        Explanation
+        MedianFinder medianFinder = new MedianFinder();
+        medianFinder.addNum(1);    // arr = [1]
+        medianFinder.addNum(2);    // arr = [1, 2]
+        medianFinder.findMedian(); // return 1.5 (i.e., (1 + 2) / 2)
+        medianFinder.addNum(3);    // arr[1, 2, 3]
+        medianFinder.findMedian(); // return 2.0
+        """
+
+        def __init__(self):
+            ...
+
+        def addNum(self, num: int) -> None:
+            ...
+
+        def findMedian(self) -> float:
+            ...
