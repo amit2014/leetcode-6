@@ -1475,8 +1475,60 @@ class String:
                 i += 1
         return len(s) - i
 
-    # - Minimum Window Substring - https://leetcode.com/problems/minimum-window-substring/
-    # - Valid Anagram - https://leetcode.com/problems/valid-anagram/
+    """
+    # - Minimum Window Substring -
+    # https://leetcode.com/problems/minimum-window-substring/
+    Given two strings s and t of lengths m and n respectively, return the minimum
+    window substring of s such that every character in t (including duplicates)
+    is included in the window. If there is no such substring, return the empty
+    string "".
+
+    The testcases will be generated such that the answer is unique.
+
+    A substring is a contiguous sequence of characters within the string.
+
+    Example 1:
+    Input: s = "ADOBECODEBANC", t = "ABC"
+    Output: "BANC"
+    Explanation: The minimum window substring "BANC" includes 'A', 'B', and 'C' from string t.
+
+    Example 2:
+    Input: s = "a", t = "a"
+    Output: "a"
+    Explanation: The entire string s is the minimum window.
+
+    Example 3:
+    Input: s = "a", t = "aa"
+    Output: ""
+    Explanation: Both 'a's from t must be included in the window.
+    Since the largest window of s only has one 'a', return empty string.
+    """
+
+    def minWindow(self, s: str, t: str) -> str:
+        ...
+
+    """
+    # - Valid Anagram -
+    # https://leetcode.com/problems/valid-anagram/
+    Given two strings s and t, return true if t is an anagram of s, and
+    false otherwise.
+
+    An Anagram is a word or phrase formed by rearranging the letters of a
+    different word or phrase, typically using all the original letters exactly
+    once.
+
+    Example 1:
+    Input: s = "anagram", t = "nagaram"
+    Output: true
+
+    Example 2:
+    Input: s = "rat", t = "car"
+    Output: false
+    """
+
+    def isAnagram(self, s: str, t: str) -> bool:
+        return Counter(s) == Counter(t)
+
     # - Group Anagrams - https://leetcode.com/problems/group-anagrams/
     # - Valid Parentheses - https://leetcode.com/problems/valid-parentheses/
     # - Valid Palindrome - https://leetcode.com/problems/valid-palindrome/
