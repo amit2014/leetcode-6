@@ -1440,7 +1440,41 @@ class String:
             mp[c] = j
         return ans
 
-    # - Longest Repeating Character Replacement - https://leetcode.com/problems/longest-repeating-character-replacement/
+    """
+    # - Longest Repeating Character Replacement -
+    # https://leetcode.com/problems/longest-repeating-character-replacement/
+    You are given a string s and an integer k. You can choose any character of
+    the string and change it to any other uppercase English character. You can
+    perform this operation at most k times.
+
+    Return the length of the longest substring containing the same letter you
+    can get after performing the above operations.
+
+    Example 1:
+    Input: s = "ABAB", k = 2
+    Output: 4
+    Explanation: Replace the two 'A's with two 'B's or vice versa.
+
+    Example 2:
+    Input: s = "AABABBA", k = 1
+    Output: 4
+    Explanation: Replace the one 'A' in the middle with 'B' and form "AABBBBA".
+    The substring "BBBB" has the longest repeating letters, which is 4.
+    """
+
+    def characterReplacement(self, s: str, k: int) -> int:
+        # TODO I honestly still don't get it 100% need to revisit
+        maxf = i = 0
+        count: Dict[str, int] = Counter()
+        for j in range(len(s)):
+            ic, jc = s[i], s[j]
+            count[jc] += 1
+            maxf = max(maxf, count[jc])
+            if j - i + 1 > maxf + k:
+                count[ic] -= 1
+                i += 1
+        return len(s) - i
+
     # - Minimum Window Substring - https://leetcode.com/problems/minimum-window-substring/
     # - Valid Anagram - https://leetcode.com/problems/valid-anagram/
     # - Group Anagrams - https://leetcode.com/problems/group-anagrams/
