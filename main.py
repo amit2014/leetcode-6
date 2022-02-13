@@ -1568,9 +1568,35 @@ class String:
         t = re.sub(r"[\W_]+", "", s).upper()
         return t == t[::-1]
 
-    # - Longest Palindromic Substring - https://leetcode.com/problems/longest-palindromic-substring/
+    """
+    # - Longest Palindromic Substring -
+    # https://leetcode.com/problems/longest-palindromic-substring/
+    Given a string s, return the longest palindromic substring in s.
+
+    Example 1:
+    Input: s = "babad"
+    Output: "bab"
+    Explanation: "aba" is also a valid answer.
+
+    Example 2:
+    Input: s = "cbbd"
+    Output: "bb"
+    """
+
+    def longestPalindrome(self, s: str) -> str:
+        def helper(i: int, j: int) -> str:
+            while i >= 0 and j < len(s) and s[i] == s[j]:
+                i, j = i - 1, j + 1
+            return s[i + 1 : j]
+
+        ans = ""
+        for k in range(len(s)):
+            ans = max(helper(k, k), helper(k, k + 1), ans, key=len)
+        return ans
+
     # - Palindromic Substrings - https://leetcode.com/problems/palindromic-substrings/
     # - Encode and Decode Strings (Leetcode Premium) - https://leetcode.com/problems/encode-and-decode-strings/
+
     """
     # - Edit Distance -
     # https://leetcode.com/problems/edit-distance/
