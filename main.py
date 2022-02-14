@@ -1531,7 +1531,39 @@ class String:
         return Counter(s) == Counter(t)
 
     # - Group Anagrams - https://leetcode.com/problems/group-anagrams/
-    # - Valid Parentheses - https://leetcode.com/problems/valid-parentheses/
+    """
+    # - Valid Parentheses -
+    # https://leetcode.com/problems/valid-parentheses/
+    Given a string s containing just the characters '(', ')', '{', '}',
+    '[' and ']', determine if the input string is valid.
+
+    An input string is valid if:
+
+    Open brackets must be closed by the same type of brackets.
+    Open brackets must be closed in the correct order.
+
+    Example 1:
+    Input: s = "()"
+    Output: true
+
+    Example 2:
+    Input: s = "()[]{}"
+    Output: true
+
+    Example 3:
+    Input: s = "(]"
+    Output: false
+    """
+
+    def isValid(self, s: str) -> bool:
+        match, stack = {"(": ")", "[": "]", "{": "}"}, []
+        for x in s:
+            if x in match:
+                stack.append(x)
+            elif not stack or match[stack.pop()] != x:
+                return False
+        return not stack
+
     """
     # - Valid Palindrome -
     # https://leetcode.com/problems/valid-palindrome/
