@@ -7,7 +7,7 @@ from functools import lru_cache
 from heapq import heapify, heappop, heappush, nlargest
 from itertools import chain
 from math import comb, factorial, inf
-from typing import Dict, List, Optional, Union, no_type_check
+from typing import Dict, Final, List, Optional, Union, no_type_check
 
 
 class Array:
@@ -1594,7 +1594,37 @@ class String:
             ans = max(helper(k, k), helper(k, k + 1), ans, key=len)
         return ans
 
-    # - Palindromic Substrings - https://leetcode.com/problems/palindromic-substrings/
+    """
+    # - Palindromic Substrings -
+    # https://leetcode.com/problems/palindromic-substrings/
+    Given a string s, return the number of palindromic substrings in it.
+
+    A string is a palindrome when it reads the same backward as forward.
+
+    A substring is a contiguous sequence of characters within the string.
+
+    Example 1:
+    Input: s = "abc"
+    Output: 3
+    Explanation: Three palindromic strings: "a", "b", "c".
+
+    Example 2:
+    Input: s = "aaa"
+    Output: 6
+    Explanation: Six palindromic strings: "a", "a", "a", "aa", "aa", "aaa".
+    """
+
+    def countSubstrings(self, s: str) -> int:
+        n: Final = len(s)
+        dp = [[0] * n for _ in range(n)]
+
+        ans = 0
+        for i in reversed(range(n)):
+            for j in range(i, n):
+                dp[i][j] = s[i] == s[j] and ((j - i + 1) < 3 or dp[i + 1][j - 1])
+                ans += dp[i][j]
+        return ans
+
     # - Encode and Decode Strings (Leetcode Premium) - https://leetcode.com/problems/encode-and-decode-strings/
 
     """
