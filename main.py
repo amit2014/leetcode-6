@@ -1705,9 +1705,49 @@ class String:
         return fn(0, 0)
 
 
+class TreeNode:
+    def __init__(
+        self,
+        val: int = 0,
+        left: Optional[TreeNode] = None,
+        right: Optional[TreeNode] = None,
+    ):
+        self.val = val
+        self.left = left
+        self.right = right
+
+
 class Tree:
-    ...
-    # - Maximum Depth of Binary Tree - https://leetcode.com/problems/maximum-depth-of-binary-tree/
+    """
+    # - Maximum Depth of Binary Tree -
+    # https://leetcode.com/problems/maximum-depth-of-binary-tree/
+    Given the root of a binary tree, return its maximum depth.
+
+    A binary tree's maximum depth is the number of nodes along the longest
+    path from the root node down to the farthest leaf node.
+
+    Example 1:
+        (3)
+       /   \
+    (9)   (20)
+          /  \
+        (15) (7)
+    Input: root = [3,9,20,null,null,15,7]
+    Output: 3
+
+    Example 2:
+    Input: root = [1,null,2]
+    Output: 2
+    """
+
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        def fn(node):
+            if not node:
+                return 0
+            return 1 + max(fn(node.left), fn(node.right))
+
+        return fn(root)
+
     # - Same Tree - https://leetcode.com/problems/same-tree/
     # - Invert/Flip Binary Tree - https://leetcode.com/problems/invert-binary-tree/
     # - Binary Tree Maximum Path Sum - https://leetcode.com/problems/binary-tree-maximum-path-sum/
