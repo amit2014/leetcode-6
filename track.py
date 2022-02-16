@@ -3,7 +3,7 @@ import re
 import tokenize
 
 p = re.compile(r".*https://leetcode.com/.*")
-with open("main.py") as f:
+with open("leetcode.py") as f:
     count = 0
     for token_type, *_, line in tokenize.generate_tokens(f.readline):
         if token_type == tokenize.COMMENT and p.match(line):
