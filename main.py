@@ -1808,7 +1808,45 @@ class Tree:
         root.left, root.right = self.invertTree(root.right), self.invertTree(root.left)
         return root
 
-    # - Binary Tree Maximum Path Sum - https://leetcode.com/problems/binary-tree-maximum-path-sum/
+    """
+    # - Binary Tree Maximum Path Sum -
+    # https://leetcode.com/problems/binary-tree-maximum-path-sum/
+    A path in a binary tree is a sequence of nodes where each pair of adjacent
+    nodes in the sequence has an edge connecting them. A node can only appear
+    in the sequence at most once. Note that the path does not need to pass
+    through the root.
+
+    The path sum of a path is the sum of the node's values in the path.
+
+    Given the root of a binary tree, return the maximum path sum of any non-empty path.
+
+    Example 1:
+        (2)
+        / \
+     (1)   (3)
+    Input: root = [1,2,3]
+    Output: 6
+    Explanation: The optimal path is 2 -> 1 -> 3 with a path sum of 2 + 1 + 3 = 6.
+
+    Example 2:
+    Input: root = [-10,9,20,null,null,15,7]
+    Output: 42
+    Explanation: The optimal path is 15 -> 20 -> 7 with a path sum of 15 + 20 + 7 = 42.
+    """
+
+    def maxPathSum(self, root: Optional[TreeNode]) -> int:
+        def fn(node):
+            """Return path sum ending at node and maximum path sum seen so far"""
+            if not node:
+                return 0, -inf
+            lh, lps = fn(node.left)
+            rh, rps = fn(node.right)
+            return node.val + max(0, lh, rh), max(
+                lps, rps, node.val + max(0, lh) + max(0, rh)
+            )
+
+        return fn(root)[1]
+
     # - Binary Tree Level Order Traversal - https://leetcode.com/problems/binary-tree-level-order-traversal/
     # - Serialize and Deserialize Binary Tree - https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
     # - Subtree of Another Tree - https://leetcode.com/problems/subtree-of-another-tree/
