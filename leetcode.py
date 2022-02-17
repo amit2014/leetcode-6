@@ -2,12 +2,12 @@ from __future__ import annotations
 
 import re
 from bisect import bisect_left
-from collections import Counter, defaultdict
+from collections import Counter, defaultdict, deque
 from functools import lru_cache
 from heapq import heapify, heappop, heappush, nlargest
 from itertools import chain
 from math import comb, factorial, inf
-from typing import Dict, Final, List, Optional, Tuple, Union, no_type_check
+from typing import Deque, Dict, Final, List, Optional, Tuple, Union, no_type_check
 
 
 class Array:
@@ -1898,7 +1898,116 @@ class Tree:
             queue = newq
         return ans
 
-    # - Serialize and Deserialize Binary Tree - https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
+    r"""
+    # - Serialize and Deserialize Binary Tree -
+    # https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
+    Serialization is the process of converting a data structure or object into a
+    sequence of bits so that it can be stored in a file or memory buffer, or
+    transmitted across a network connection link to be reconstructed later in the
+    same or another computer environment.
+
+    Design an algorithm to serialize and deserialize a binary tree. There is no
+    restriction on how your serialization/deserialization algorithm should work.
+    You just need to ensure that a binary tree can be serialized to a string and
+    this string can be deserialized to the original tree structure.
+
+    Clarification: The input/output format is the same as how LeetCode serializes a
+    binary tree. You do not necessarily need to follow this format, so please be
+    creative and come up with different approaches yourself.
+
+    Example 1:
+        (1)
+        / \
+      (2) (3)
+          / \
+        (4) (5)
+    Input: root = [1,2,3,null,null,4,5]
+    Output: [1,2,3,null,null,4,5]
+
+    Example 2:
+    Input: root = []
+    Output: []
+    """
+
+    class Codec:
+        """DFS O(n) time O(n) space"""
+
+        def serialize(self, root: Optional[TreeNode]) -> str:
+            def rserialize(root, string):
+                if root is None:
+                    string += "None,"
+                else:
+                    string += str(root.val) + ","
+                    string = rserialize(root.left, string)
+                    string = rserialize(root.right, string)
+                return string
+
+            return rserialize(root, "")
+
+        def deserialize(self, data: str) -> Optional[TreeNode]:
+            def rdeserialize(l):
+                if l[0] == "None":
+                    l.pop(0)
+                    return None
+
+                root = TreeNode(l[0])
+                l.pop(0)
+                root.left = rdeserialize(l)
+                root.right = rdeserialize(l)
+                return root
+
+            data_list = data.split(",")
+            root = rdeserialize(data_list)
+            return root
+
+    class Codec_:
+        r""" BFS O(n) time and O(n) space, BFS traversal
+        e.g., 1
+             / \
+           2    5
+         / \
+        3   4  , level order traversal, serialize will be '1,2,5,3,4,None,None,None,None,None,None,'; deserialize
+        with queue as well, convert back. Time and Space O(n).
+        """
+
+        def serialize(self, root: Optional[TreeNode]) -> str:
+            if not root:
+                return ""
+            queue: Deque[TreeNode] = deque()
+            queue.append(root)
+            ans = ""
+            while queue:
+                node = queue.popleft()
+                if not node:
+                    ans += "None,"
+                    continue
+                ans += str(node.val) + ","
+                queue.append(node.left)  # type: ignore
+                queue.append(node.right)  # type: ignore
+            return ans
+
+        def deserialize(self, data: str) -> Optional[TreeNode]:
+            if not data:
+                return None
+            ls: Final = data.split(",")
+            root = TreeNode(int(ls[0]))
+            queue: Deque[TreeNode] = deque()
+            queue.append(root)
+            i = 1
+            while queue and i < len(ls):
+                node = queue.popleft()
+                if ls[i] != "None":
+                    left = TreeNode(int(ls[i]))
+                    node.left = left
+                    queue.append(left)
+                i += 1
+                if ls[i] != "None":
+                    right = TreeNode(int(ls[i]))
+                    node.right = right
+                    queue.append(right)
+                i += 1
+            return root
+
     # - Subtree of Another Tree - https://leetcode.com/problems/subtree-of-another-tree/
     # - Construct Binary Tree from Preorder and Inorder Traversal - https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
     # - Validate Binary Search Tree - https://leetcode.com/problems/validate-binary-search-tree/
