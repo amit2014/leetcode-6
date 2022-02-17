@@ -2049,7 +2049,32 @@ class Tree:
             return True
         return self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot)
 
-    # - Construct Binary Tree from Preorder and Inorder Traversal - https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
+    """
+    # - Construct Binary Tree from Preorder and Inorder Traversal -
+    # https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
+    Given two integer arrays preorder and inorder where preorder is the preorder
+    traversal of a binary tree and inorder is the inorder traversal of the same
+    tree, construct and return the binary tree.
+
+    Example 1:
+    Input: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]
+    Output: [3,9,20,null,null,15,7]
+
+    Example 2:
+    Input: preorder = [-1], inorder = [-1]
+    Output: [-1]
+    # NOTE no duplicates in tree
+    """
+
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
+        if inorder:
+            index = inorder.index(preorder.pop(0))
+            root = TreeNode(inorder[index])
+            root.left = self.buildTree(preorder, inorder[0:index])
+            root.right = self.buildTree(preorder, inorder[index + 1 :])
+            return root
+        return None
+
     # - Validate Binary Search Tree - https://leetcode.com/problems/validate-binary-search-tree/
     # - Kth Smallest Element in a BST - https://leetcode.com/problems/kth-smallest-element-in-a-bst/
     # - Lowest Common Ancestor of BST - https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
