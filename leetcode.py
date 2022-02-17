@@ -2008,7 +2008,47 @@ class Tree:
                 i += 1
             return root
 
-    # - Subtree of Another Tree - https://leetcode.com/problems/subtree-of-another-tree/
+    r"""
+    # - Subtree of Another Tree -
+    # https://leetcode.com/problems/subtree-of-another-tree/
+    Given the roots of two binary trees `root` and `subRoot`, return `true` if there
+    is a subtree of `root` with the same structure and node values of `subRoot`
+    and `false` otherwise.
+
+    A subtree of a binary tree `tree` is a tree that consists of a node in `tree`
+    and all of this node's descendants. The tree `tree` could also be considered
+    as a subtree of itself.
+
+    Example 1:
+        3         4
+       / \       / \
+      4   5     1   2
+     / \
+    1   2
+    Input: root = [3,4,5,1,2], subRoot = [4,1,2]
+    Output: true
+
+    Example 2:
+    Input: root = [3,4,5,1,2,null,null,null,null,0], subRoot = [4,1,2]
+    Output: false
+    """
+
+    def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
+        def isSame(root, subRoot):
+            if not root and not subRoot:
+                return True
+            if not root or not subRoot:
+                return False
+            if root.val != subRoot.val:
+                return False
+            return isSame(root.left, subRoot.left) and isSame(root.right, subRoot.right)
+
+        if not root:
+            return False
+        if isSame(root, subRoot):
+            return True
+        return self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot)
+
     # - Construct Binary Tree from Preorder and Inorder Traversal - https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
     # - Validate Binary Search Tree - https://leetcode.com/problems/validate-binary-search-tree/
     # - Kth Smallest Element in a BST - https://leetcode.com/problems/kth-smallest-element-in-a-bst/
