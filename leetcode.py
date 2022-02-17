@@ -2075,7 +2075,57 @@ class Tree:
             return root
         return None
 
-    # - Validate Binary Search Tree - https://leetcode.com/problems/validate-binary-search-tree/
+    r"""
+    # - Validate Binary Search Tree -
+    # https://leetcode.com/problems/validate-binary-search-tree/
+    Given the root of a binary tree, determine if it is a valid binary search
+    tree (BST).
+
+    A valid BST is defined as follows:
+        - The left subtree of a node contains only nodes with keys less than the
+        node's key.
+        - The right subtree of a node contains only nodes with keys greater than the
+        node's key.
+        - Both the left and right subtrees must also be binary search trees.
+
+
+    Example 1:
+        2
+       / \
+      1   3
+    Input: root = [2,1,3]
+    Output: true
+
+    Example 2:
+    Input: root = [5,1,4,null,null,3,6]
+    Output: false
+    Explanation: The root node's value is 5 but its right child's value is 4.
+    """
+
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        def fn(root, floor=float("-inf"), ceiling=float("inf")):
+            if not root:
+                return True
+            if root.val <= floor or root.val >= ceiling:
+                return False
+            # in the left branch, root is the new ceiling;
+            # contrarily root is the new floor in right branch
+            return fn(root.left, floor, root.val) and fn(root.right, root.val, ceiling)
+
+        return fn(root)
+
+    def isValidBST_(self, root: Optional[TreeNode]) -> bool:
+        def fn(node, lo=-inf, hi=inf):
+            if not node:
+                return True
+            return (
+                fn(node.left, lo, node.val)
+                and lo < node.val < hi
+                and fn(node.right, node.val, hi)
+            )
+
+        return fn(root)
+
     # - Kth Smallest Element in a BST - https://leetcode.com/problems/kth-smallest-element-in-a-bst/
     # - Lowest Common Ancestor of BST - https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
     # - Implement Trie (Prefix Tree) - https://leetcode.com/problems/implement-trie-prefix-tree/
