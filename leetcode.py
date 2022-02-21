@@ -1174,11 +1174,32 @@ class Graph:
 
 
 class Interval:
-    ...
     # - Insert Interval - https://leetcode.com/problems/insert-interval/
     # - Merge Intervals - https://leetcode.com/problems/merge-intervals/
     # - Non-overlapping Intervals - https://leetcode.com/problems/non-overlapping-intervals/
-    # - Meeting Rooms (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms/
+    """
+    # - Meeting Rooms (Leetcode Premium) -
+    # https://leetcode.com/problems/meeting-rooms/
+    Given an array of meeting time intervals where intervals[i] = [starti, endi],
+    determine if a person could attend all meetings.
+
+    Example 1:
+    Input: intervals = [[0,30],[5,10],[15,20]]
+    Output: false
+
+    Example 2:
+    Input: intervals = [[7,10],[2,4]]
+    Output: true
+    """
+
+    def canAttendMeetings(self, intervals: List[List[int]]) -> bool:
+        # O(nlogn) time, O(1) space
+        intervals.sort()
+        for i in range(len(intervals) - 1):
+            if intervals[i][1] > intervals[i + 1][0]:
+                return False
+        return True
+
     # - Meeting Rooms II (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms-ii/
 
 
