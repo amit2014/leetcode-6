@@ -7,7 +7,17 @@ from functools import lru_cache, reduce
 from heapq import heapify, heappop, heappush, nlargest
 from itertools import chain
 from math import comb, factorial, inf
-from typing import Deque, Dict, Final, List, Optional, Tuple, Union, no_type_check
+from typing import (
+    Callable,
+    Deque,
+    Dict,
+    Final,
+    List,
+    Optional,
+    Tuple,
+    Union,
+    no_type_check,
+)
 
 
 class Array:
@@ -1097,9 +1107,73 @@ class Binary:
         return True
 
 
+class Node:
+    def __init__(self, val: int = 0, neighbors: Optional[List[Node]] = None):
+        self.val = val
+        self.neighbors = neighbors if neighbors is not None else []
+
+
 class Graph:
-    ...
-    # - Clone Graph - https://leetcode.com/problems/clone-graph/
+    """
+    # - Clone Graph -
+    # https://leetcode.com/problems/clone-graph/
+    Given a reference of a node in a connected undirected graph.
+    Return a deep copy (clone) of the graph.
+    Each node in the graph contains a value (int) and a list (List[Node]) of its neighbors.
+
+    class Node {
+        public int val;
+        public List<Node> neighbors;
+    }
+
+    Test case format:
+    For simplicity, each node's value is the same as the node's index (1-indexed). For
+    example, the first node with val == 1, the second node with val == 2, and so on.
+    The graph is represented in the test case using an adjacency list.
+
+    An adjacency list is a collection of unordered lists used to represent a finite
+    graph. Each list describes the set of neighbors of a node in the graph.
+
+    The given node will always be the first node with val = 1. You must return the
+    copy of the given node as a reference to the cloned graph.
+
+    Example 1:
+    1 - 2
+    |   |
+    4 - 3
+    # NOTE can't be same objects at nodes
+    # NOTE can't mess up the connections
+    Input: adjList = [[2,4],[1,3],[2,4],[1,3]]
+    Output: [[2,4],[1,3],[2,4],[1,3]]
+    Explanation: There are 4 nodes in the graph.
+    1st node (val = 1)'s neighbors are 2nd node (val = 2) and 4th node (val = 4).
+    2nd node (val = 2)'s neighbors are 1st node (val = 1) and 3rd node (val = 3).
+    3rd node (val = 3)'s neighbors are 2nd node (val = 2) and 4th node (val = 4).
+    4th node (val = 4)'s neighbors are 1st node (val = 1) and 3rd node (val = 3).
+
+    Example 2:
+    Input: adjList = [[]]
+    Output: [[]]
+    Explanation: Note that the input contains one empty list. The graph consists of
+    only one node with val = 1 and it does not have any neighbors.
+
+    Example 3:
+    Input: adjList = []
+    Output: []
+    Explanation: This an empty graph, it does not have any nodes.
+    """
+
+    def cloneGraph(self, node: Node) -> Node:
+        memo: Dict[Node, Node] = {}
+
+        def fn(n: Node) -> Node:
+            if n not in memo:
+                clone = memo[n] = Node(n.val)
+                clone.neighbors = [fn(nn) for nn in n.neighbors]
+            return memo[n]
+
+        return node and fn(node)
+
     # - Course Schedule - https://leetcode.com/problems/course-schedule/
     # - Pacific Atlantic Water Flow - https://leetcode.com/problems/pacific-atlantic-water-flow/
     # - Number of Islands - https://leetcode.com/problems/number-of-islands/
@@ -1208,7 +1282,7 @@ class LinkedList:
         fast = slow = head
         while fast and fast.next:
             fast = fast.next.next
-            slow = slow.next
+            slow = slow.next  # type: ignore
             if fast == slow:
                 return True
         return False
@@ -1335,8 +1409,8 @@ class LinkedList:
         while fast:
             fast = fast.next
             if (i := i + 1) > n + 1:
-                slow = slow.next
-        slow.next = slow.next.next
+                slow = slow.next  # type: ignore
+        slow.next = slow.next.next  # type: ignore
         return dummy.next
 
     """
@@ -1379,7 +1453,7 @@ class LinkedList:
         # in 1->2->3->4->5->6 find 4
         slow = fast = head
         while fast and fast.next:
-            slow = slow.next
+            slow = slow.next  # type: ignore
             fast = fast.next.next
 
         # reverse the second part of the list [Problem 206]
@@ -1392,9 +1466,9 @@ class LinkedList:
         # merge two sorted linked lists [Problem 21]
         # merge 1->2->3->4 and 6->5->4 into 1->6->2->5->3->4
         first, second = head, prev
-        while second.next:
-            first.next, first = second, first.next
-            second.next, second = first, second.next
+        while second.next:  # type: ignore
+            first.next, first = second, first.next  # type: ignore
+            second.next, second = first, second.next  # type: ignore
 
 
 class Matrix:
@@ -1717,7 +1791,8 @@ class TreeNode:
         self.right = right
 
 
-TrieNode = lambda: defaultdict(TrieNode)  # type: ignore
+TrieNodeType = Dict[str, "TrieNodeType"]
+TrieNode: Callable[[], TrieNodeType] = lambda: defaultdict(TrieNode)
 
 
 class TrieNode_:
@@ -1868,7 +1943,7 @@ class Tree:
                 lps, rps, node.val + max(0, lh) + max(0, rh)
             )
 
-        return fn(root)[1]
+        return fn(root)[1]  # type: ignore
 
     r"""
     # - Binary Tree Level Order Traversal -
@@ -2232,7 +2307,7 @@ class Tree:
     @no_type_check  # assume we can find an ans in tree
     def lowestCommonAncestor(
         self, root: TreeNode, p: TreeNode, q: TreeNode
-    ) -> TreeNode:
+    ) -> TreeNode:  # type: ignore
         # O(n) time, O(1) space
         node = root
         while node:
@@ -2276,11 +2351,12 @@ class Tree:
     """
 
     class Trie:
+        # O(m) time where m is string len, O(1) space
         def __init__(self):
             self.trie = TrieNode()
 
         def insert(self, word):
-            reduce(lambda d, k: d[k], word, self.trie)["end"] = True
+            reduce(lambda d, k: d[k], word, self.trie)["end"] = True  # type: ignore
 
         def search(self, word):
             return reduce(
@@ -2322,7 +2398,48 @@ class Tree:
                 node = node.children[i]
             return True
 
-    # - Add and Search Word - https://leetcode.com/problems/add-and-search-word-data-structure-design/
+    """
+    # - Add and Search Word -
+    # https://leetcode.com/problems/add-and-search-word-data-structure-design/
+    Design a data structure that supports adding new words and finding if a string
+    matches any previously added string.
+
+    Implement the WordDictionary class:
+
+    WordDictionary() Initializes the object.
+    void addWord(word) Adds word to the data structure, it can be matched later.
+    bool search(word) Returns true if there is any string in the data structure that
+    matches word or false otherwise. word may contain dots '.' where dots can be
+    matched with any letter.
+
+    Example:
+    Input
+    ["WordDictionary","addWord","addWord","addWord","search","search","search","search"]
+    [[],["bad"],["dad"],["mad"],["pad"],["bad"],[".ad"],["b.."]]
+    Output
+    [null,null,null,null,false,true,true,true]
+
+    Explanation
+    WordDictionary wordDictionary = new WordDictionary();
+    wordDictionary.addWord("bad");
+    wordDictionary.addWord("dad");
+    wordDictionary.addWord("mad");
+    wordDictionary.search("pad"); // return False
+    wordDictionary.search("bad"); // return True
+    wordDictionary.search(".ad"); // return True
+    wordDictionary.search("b.."); // return True
+    """
+
+    class WordDictionary:
+        def __init__(self):
+            ...
+
+        def addWord(self, word: str) -> None:
+            ...
+
+        def search(self, word: str) -> bool:
+            ...
+
     # - Word Search II - https://leetcode.com/problems/word-search-ii/
 
 

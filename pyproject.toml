@@ -1,6 +1,8 @@
 [tool.mypy]
 allow_redefinition = true
 
+[tool.pyright]
+
 [tool.isort]
 profile = "black"
 
