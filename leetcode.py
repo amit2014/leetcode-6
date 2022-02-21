@@ -1193,6 +1193,12 @@ class Interval:
     """
 
     def canAttendMeetings(self, intervals: List[List[int]]) -> bool:
+        intervals.sort()
+        return all(
+            intervals[i - 1][1] <= intervals[i][0] for i in range(1, len(intervals))
+        )
+
+    def canAttendMeetings_(self, intervals: List[List[int]]) -> bool:
         # O(nlogn) time, O(1) space
         intervals.sort()
         for i in range(len(intervals) - 1):
@@ -1200,7 +1206,33 @@ class Interval:
                 return False
         return True
 
-    # - Meeting Rooms II (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms-ii/
+    """
+    # - Meeting Rooms II (Leetcode Premium) -
+    # https://leetcode.com/problems/meeting-rooms-ii/
+    Given an array of meeting time intervals intervals where intervals[i] =
+    [starti, endi], return the minimum number of conference rooms required.
+
+    Example 1:
+    Input: intervals = [[0,30],[5,10],[15,20]]
+    Output: 2
+
+    Example 2:
+    Input: intervals = [[7,10],[2,4]]
+    Output: 1
+    """
+
+    def minMeetingRooms(self, intervals: List[List[int]]) -> int:
+        # O(nlogn) time, O(n) space
+        if not intervals:
+            return 0
+        free_rooms = []
+        intervals.sort(key=lambda x: x[0])
+        heappush(free_rooms, intervals[0][1])
+        for i in intervals[1:]:
+            if free_rooms[0] <= i[0]:
+                heappop(free_rooms)
+            heappush(free_rooms, i[1])
+        return len(free_rooms)
 
 
 class ListNode:
