@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 from bisect import bisect_left
 from collections import Counter, defaultdict, deque
-from functools import lru_cache
+from functools import lru_cache, reduce
 from heapq import heapify, heappop, heappush, nlargest
 from itertools import chain
 from math import comb, factorial, inf
@@ -1717,6 +1717,15 @@ class TreeNode:
         self.right = right
 
 
+TrieNode = lambda: defaultdict(TrieNode)  # type: ignore
+
+
+class TrieNode_:
+    def __init__(self):
+        self.word = False
+        self.children = {}
+
+
 class Tree:
     r"""
     # - Maximum Depth of Binary Tree -
@@ -2249,7 +2258,6 @@ class Tree:
     - boolean startsWith(String prefix) Returns true if there is a previously
     inserted string word that has the prefix prefix, and false otherwise.
 
-
     Example 1:
     Input
     ["Trie", "insert", "search", "search", "startsWith", "insert", "search"]
@@ -2266,6 +2274,54 @@ class Tree:
     trie.insert("app");
     trie.search("app");     // return True
     """
+
+    class Trie:
+        def __init__(self):
+            self.trie = TrieNode()
+
+        def insert(self, word):
+            reduce(lambda d, k: d[k], word, self.trie)["end"] = True
+
+        def search(self, word):
+            return reduce(
+                lambda d, k: d[k] if k in d else TrieNode(), word, self.trie
+            ).get("end", False)
+
+        def startsWith(self, word):
+            return bool(
+                reduce(
+                    lambda d, k: d[k] if k in d else TrieNode(), word, self.trie
+                ).keys()
+            )
+
+    class Trie_:
+        def __init__(self):
+            self.root = TrieNode_()
+
+        def insert(self, word: str) -> None:
+            node = self.root
+            for i in word:
+                if i not in node.children:
+                    node.children[i] = TrieNode_()
+                node = node.children[i]
+            node.word = True
+
+        def search(self, word: str) -> bool:
+            node = self.root
+            for i in word:
+                if i not in node.children:
+                    return False
+                node = node.children[i]
+            return node.word
+
+        def startsWith(self, prefix: str) -> bool:
+            node = self.root
+            for i in prefix:
+                if i not in node.children:
+                    return False
+                node = node.children[i]
+            return True
+
     # - Add and Search Word - https://leetcode.com/problems/add-and-search-word-data-structure-design/
     # - Word Search II - https://leetcode.com/problems/word-search-ii/
 
