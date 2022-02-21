@@ -7,17 +7,7 @@ from functools import lru_cache, reduce
 from heapq import heapify, heappop, heappush, nlargest
 from itertools import chain
 from math import comb, factorial, inf
-from typing import (
-    Callable,
-    Deque,
-    Dict,
-    Final,
-    List,
-    Optional,
-    Tuple,
-    Union,
-    no_type_check,
-)
+from typing import Callable, Deque, Dict, Final, List, Optional, Tuple, Union
 
 
 class Array:
@@ -1275,7 +1265,6 @@ class LinkedList:
     Explanation: There is no cycle in the linked list.
     """
 
-    @no_type_check
     def hasCycle(self, head: Optional[ListNode]) -> bool:
         if head is None or head.next is None:
             return False
@@ -1401,7 +1390,6 @@ class LinkedList:
     Output: [1]
     """
 
-    @no_type_check
     def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
         dummy = ListNode(next=head)
         fast = slow = dummy
@@ -1444,7 +1432,6 @@ class LinkedList:
     Output: [1,5,2,4,3]
     """
 
-    @no_type_check
     def reorderList(self, head: Optional[ListNode]) -> None:
         if not head:
             return
@@ -2304,7 +2291,6 @@ class Tree:
     Output: 2
     """
 
-    @no_type_check  # assume we can find an ans in tree
     def lowestCommonAncestor(
         self, root: TreeNode, p: TreeNode, q: TreeNode
     ) -> TreeNode:  # type: ignore
