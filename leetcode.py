@@ -2129,7 +2129,8 @@ class Tree:
     r"""
     # - Kth Smallest Element in a BST -
     # https://leetcode.com/problems/kth-smallest-element-in-a-bst/
-    Given the root of a binary search tree, and an integer k, return the kth smallest value (1-indexed) of all the values of the nodes in the tree.
+    Given the root of a binary search tree, and an integer k, return the kth
+    smallest value (1-indexed) of all the values of the nodes in the tree.
 
     Example 1:
         3
@@ -2150,10 +2151,121 @@ class Tree:
           1
     Input: root = [5,3,6,2,4,null,null,1], k = 3
     Output: 3
+
+    Follow up: If the BST is modified often (i.e., we can do insert and delete
+    operations) and you need to find the kth smallest frequently, how would
+    you optimize?
     """
 
-    # - Lowest Common Ancestor of BST - https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
-    # - Implement Trie (Prefix Tree) - https://leetcode.com/problems/implement-trie-prefix-tree/
+    def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
+        # O(n) time, O(n) space
+        def inorder(r):
+            return inorder(r.left) + [r.val] + inorder(r.right) if r else []
+
+        return inorder(root)[k - 1]  # nth smallest is nth element of inorder traverse 🤯
+
+    def kthSmallest_(self, root: Optional[TreeNode], k: int) -> int:
+        # O(H + k) time, O(H) space
+        # NOTE O(log N + k) time for balanced tree, O(N + k) for unbalanced on left
+        node = root
+        stack: List[TreeNode] = []
+        while node or stack:
+            if node:
+                stack.append(node)
+                node = node.left
+                continue
+            node = stack.pop()
+            if (k := k - 1) == 0:
+                return node.val
+            node = node.right
+        raise Exception
+
+    r"""
+    # - Lowest Common Ancestor of BST -
+    # https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
+    Given a binary search tree (BST), find the lowest common ancestor (LCA) of two
+    given nodes in the BST.
+
+    According to the definition of LCA on Wikipedia: “The lowest common ancestor is
+    defined between two nodes p and q as the lowest node in T that has both p and q as
+    descendants (where we allow a node to be a descendant of itself).”
+
+    Example 1:
+                 6
+               /   \
+              2     8
+             / \   / \
+            0   4 7   9
+               / \
+              3   5
+    Input: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8
+    Output: 6
+    Explanation: The LCA of nodes 2 and 8 is 6.
+
+    Example 2:
+                 6
+               /   \
+              2     8
+             / \   / \
+            0   4 7   9
+               / \
+              3   5
+    Input: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 4
+    Output: 2
+    Explanation: The LCA of nodes 2 and 4 is 2, since a node can be a descendant of
+    itself according to the LCA definition.
+
+    Example 3:
+    Input: root = [2,1], p = 2, q = 1
+    Output: 2
+    """
+
+    @no_type_check  # assume we can find an ans in tree
+    def lowestCommonAncestor(
+        self, root: TreeNode, p: TreeNode, q: TreeNode
+    ) -> TreeNode:
+        # O(n) time, O(1) space
+        node = root
+        while node:
+            if p.val > node.val and q.val > node.val:
+                node = node.right
+            elif p.val < node.val and q.val < node.val:
+                node = node.left
+            else:
+                return node
+
+    """
+    # - Implement Trie (Prefix Tree) -
+    # https://leetcode.com/problems/implement-trie-prefix-tree/
+    A trie (pronounced as "try") or prefix tree is a tree data structure used to
+    efficiently store and retrieve keys in a dataset of strings. There are various
+    applications of this data structure, such as autocomplete and spellchecker.
+
+    Implement the Trie class:
+    - Trie() Initializes the trie object.
+    - void insert(String word) Inserts the string word into the trie.
+    - boolean search(String word) Returns true if the string word is in the trie
+    (i.e., was inserted before), and false otherwise.
+    - boolean startsWith(String prefix) Returns true if there is a previously
+    inserted string word that has the prefix prefix, and false otherwise.
+
+
+    Example 1:
+    Input
+    ["Trie", "insert", "search", "search", "startsWith", "insert", "search"]
+    [[], ["apple"], ["apple"], ["app"], ["app"], ["app"], ["app"]]
+    Output
+    [null, null, true, false, true, null, true]
+
+    Explanation
+    Trie trie = new Trie();
+    trie.insert("apple");
+    trie.search("apple");   // return True
+    trie.search("app");     // return False
+    trie.startsWith("app"); // return True
+    trie.insert("app");
+    trie.search("app");     // return True
+    """
     # - Add and Search Word - https://leetcode.com/problems/add-and-search-word-data-structure-design/
     # - Word Search II - https://leetcode.com/problems/word-search-ii/
 
