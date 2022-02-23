@@ -7,7 +7,18 @@ from functools import lru_cache, reduce
 from heapq import heapify, heappop, heappush, nlargest
 from itertools import chain
 from math import comb, factorial, inf
-from typing import Callable, Deque, Dict, Final, List, Optional, Tuple, Union
+from typing import (
+    Callable,
+    Deque,
+    Dict,
+    Final,
+    Generic,
+    List,
+    Optional,
+    Tuple,
+    TypeVar,
+    Union,
+)
 
 
 class Array:
@@ -1236,8 +1247,122 @@ class Graph:
         # Otherwise, convert the ordering we found into a string and return it.
         return "".join(output)
 
-    # - Graph Valid Tree (Leetcode Premium) - https://leetcode.com/problems/graph-valid-tree/
-    # - Number of Connected Components in an Undirected Graph (Leetcode Premium) - https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/
+
+class UnionFind:
+    def __init__(self, n: int):
+        self.parent = [node for node in range(n)]
+
+    def find(self, A: int):
+        while A != self.parent[A]:
+            A = self.parent[A]
+        return A
+
+    def union(self, A: int, B: int) -> bool:
+        """True if a merge happened, False otherwise"""
+        root_A = self.find(A)
+        root_B = self.find(B)
+        if root_A == root_B:
+            return False
+        self.parent[root_A] = root_B
+        return True
+
+
+class GraphUnion:
+    """
+    # - Graph Valid Tree (Leetcode Premium) -
+    # https://leetcode.com/problems/graph-valid-tree/
+    You have a graph of `n` nodes labeled from `0` to `n - 1`. You are given an
+    integer `n` and a list of edges where `edges[i] = [ai, bi]` indicates that there
+    is an undirected edge between nodes `ai` and `bi` in the graph.
+
+    Return `true` if the edges of the given graph make up a valid tree, and
+    `false` otherwise.
+
+    Example 1:
+    Input: n = 5, edges = [[0,1],[0,2],[0,3],[1,4]]
+    Output: true
+
+    Example 2:
+    Input: n = 5, edges = [[0,1],[1,2],[2,3],[1,3],[1,4]]
+    Output: false
+    """
+
+    """
+    Recall that a graph, G, is a tree iff the following two conditions are met:
+        - G is fully connected. In other words, for every pair of nodes in G, there is
+        a path between them.
+        - G contains no cycles. In other words, there is exactly one path between each
+        pair of nodes in G.
+    """
+
+    def validTree(self, n: int, edges: List[List[int]]) -> bool:
+        # BFS, O(n) time, O(n) space
+        if len(edges) != n - 1:
+            return False
+
+        adj_list = [[] for _ in range(n)]
+        for A, B in edges:
+            adj_list[A].append(B)
+            adj_list[B].append(A)
+
+        seen = {0}  # only to protect against cycles
+        queue: Deque[int] = deque([0])
+
+        while queue:
+            node = queue.popleft()
+            for neighbour in adj_list[node]:
+                if neighbour in seen:
+                    continue
+                seen.add(neighbour)
+                queue.append(neighbour)
+
+        return len(seen) == n
+
+    def validTree_(self, n: int, edges: List[List[int]]) -> bool:
+        # O(N * inverse Ackermann function) time, O(N) space
+
+        if len(edges) != n - 1:
+            return False
+
+        unionFind = UnionFind(n)
+        for A, B in edges:
+            if not unionFind.union(A, B):
+                return False
+        return True
+
+    """
+    # - Number of Connected Components in an Undirected Graph (Leetcode Premium) -
+    # https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/
+    You have a graph of n nodes. You are given an integer n and an array edges where
+    edges[i] = [ai, bi] indicates that there is an edge between ai and bi in the graph.
+
+    Return the number of connected components in the graph.
+
+    Example 1:
+    0 - 1 3
+        | |
+        2 4
+    Input: n = 5, edges = [[0,1],[1,2],[3,4]]
+    Output: 2
+
+    Example 2:
+    0 - 1 3
+        |/|
+        2 4
+    Input: n = 5, edges = [[0,1],[1,2],[2,3],[3,4]]
+    Output: 1
+    """
+
+    def countComponents(self, n: int, edges: List[List[int]]) -> int:
+        # O(N * inverse Ackermann function) time, O(N) space
+        uf = UnionFind(n)
+        for edge in edges:
+            uf.union(edge[0], edge[1])
+
+        parent = set()
+        for i in range(n):
+            parent.add(uf.find(i))
+        return len(parent)
 
 
 class Interval:
