@@ -1307,19 +1307,13 @@ class UnionFind:
     def __init__(self, n: int):
         # O(n) space
         self.parent = [node for node in range(n)]
+        self.size = [1] * n
 
     def find(self, A: int):
         # O(inverse Ackermann function) time
-        root = A
-        while root != self.parent[root]:
-            root = self.parent[root]
-
-        while A != root:
-            old_root = self.parent[A]
-            self.parent[A] = root
-            A = old_root
-
-        return root
+        while self.parent[A] != A:
+            A, self.parent[A] = self.parent[A], self.parent[self.parent[A]]
+        return A
 
     def union(self, A: int, B: int) -> bool:
         """True if a merge happened, False otherwise"""
