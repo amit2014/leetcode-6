@@ -1206,6 +1206,33 @@ class Graph:
     Output: 3
     """
 
+    def numIslands(self, grid: List[List[str]]) -> int:
+        # DFS O(mn) time and space, m = rows, n = cols
+        def fn(i, j, grid: List[List[str]]) -> None:
+            """DFS, flood island with `0`s."""
+            if (
+                i < 0
+                or j < 0
+                or i == len(grid)
+                or j == len(grid[0])
+                or grid[i][j] == "0"
+            ):
+                return
+            else:
+                grid[i][j] = "0"
+            fn(i, j + 1, grid)
+            fn(i, j - 1, grid)
+            fn(i + 1, j, grid)
+            fn(i - 1, j, grid)
+
+        islands = 0
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if grid[i][j] == "1":
+                    islands += 1
+                    fn(i, j, grid)
+        return islands
+
     # - Longest Consecutive Sequence - https://leetcode.com/problems/longest-consecutive-sequence/
     """
     # - Alien Dictionary (Leetcode Premium) -
@@ -1288,8 +1315,8 @@ class UnionFind:
         return A
 
     def union(self, A: int, B: int) -> bool:
-        # O(inverse Ackermann function) time
         """True if a merge happened, False otherwise"""
+        # O(inverse Ackermann function) time
         root_A = self.find(A)
         root_B = self.find(B)
         if root_A == root_B:
