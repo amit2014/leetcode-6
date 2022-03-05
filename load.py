@@ -6,6 +6,7 @@ import re
 import sys
 import time
 from configparser import ConfigParser
+from pathlib import Path
 from typing import Dict, List, Union
 
 import selenium
@@ -13,7 +14,7 @@ from mysql.connector import Error, MySQLConnection
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
-from pathlib import Path
+
 TEST_LINK_1 = "https://leetcode.com/problems/second-highest-salary/"
 TEST_LINK_2 = "https://leetcode.com/problems/combine-two-tables/"
 TEST_SCHEMA_1 = """
@@ -83,7 +84,7 @@ def get_SQL_schema_from_leetcode(link: str, username: str, password: str) -> str
         textPassword.clear()
         textPassword.send_keys(password)
         textPassword.send_keys(Keys.RETURN)
-        input('do captcha then hit ENTER')
+        input("do captcha then hit ENTER")
         textPassword = driver.find_element_by_id("id_password")
         textPassword.send_keys(Keys.RETURN)
         time.sleep(3)
@@ -205,7 +206,6 @@ def delete_tables(table_list: List[str]) -> None:
             conn.close()
 
 
-
 def main() -> None:
     """Pass a leetcode database problem link to this script as the first
     argument. The SQL schema for this problem will be loaded into MySQL
@@ -213,34 +213,37 @@ def main() -> None:
     in the leetcode database will be purged so it's a clean playground.
     """
 
-    try:
-        link = sys.argv[1]
-    except IndexError:
-        print("Pass link to this script as the first argument.")
+    link = sys.argv[1]
 
     execute("use leetcode")
     delete_tables(get_show_tables())
 
-    name = link[link.find('problems') + len('problems') + 1:]
+    name = link[link.find("problems") + len("problems") + 1 :]
 
-    if name in [file.stem for file in list((Path('.') / 'schemas').glob('*'))]:
-        with open(f'{name}', 'r') as f:
+    if name in [file.stem for file in list((Path(".") / "schemas").glob("*"))]:
+        print("in cache")
+        with open(f"./schemas/{name}", "r") as f:
             schema = f.read()
     else:
+        print("not in cache")
         login_info = read_config("config.ini", "leetcode")
         schema = get_SQL_schema_from_leetcode(
             link, login_info["user"], login_info["password"]
         )
         schema = remove_white_space(schema)
-        with open(f'./schemas/{name}', 'w') as f:
+        with open(f"./schemas/{name}", "w") as f:
             f.write(schema)
 
     for cmd in schema.split("\n"):
         print(cmd)
         execute(cmd)
 
-    print("success ✨🍰✨")
-
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+        print("Success ✨🍰✨")
+    except IndexError:
+        print("Pass link to this script as the first argument")
+    except Exception:
+        print('Unknown error')
