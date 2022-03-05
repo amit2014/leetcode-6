@@ -13,7 +13,7 @@ from mysql.connector import Error, MySQLConnection
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
-
+from pathlib import Path
 TEST_LINK_1 = "https://leetcode.com/problems/second-highest-salary/"
 TEST_LINK_2 = "https://leetcode.com/problems/combine-two-tables/"
 TEST_SCHEMA_1 = """
@@ -62,15 +62,13 @@ def get_SQL_schema_from_leetcode(link: str, username: str, password: str) -> str
     """
 
     #  https://sites.google.com/a/chromium.org/chromedriver/downloads
-    #  You need to download and extract the right one and put it in your
-    #  home directory, I used 92.
+    #  You need to download and extract the right one and put it on your path
 
     # TODO remove sleeps with waits for elements
     path = os.path.expanduser(r"~/chromedriver")
     driver = webdriver.Chrome(executable_path=path)
     driver.get(link)
     # driver.minimize_window()
-    # time.sleep(3)  # TODO test remove
     try:
         WebDriverWait(driver, 10).until(
             lambda s: s.find_element_by_id("id_login").is_displayed()
@@ -94,7 +92,6 @@ def get_SQL_schema_from_leetcode(link: str, username: str, password: str) -> str
     sql_schema_button_link = driver.find_element_by_link_text("SQL Schema")
     sql_schema_button_link.click()
     time.sleep(3)
-    #  This is the div on leetcode containing the actualy SQL schema text.
     sql_schema_div = driver.find_element_by_class_name("lc-modal-body__jO0c")
     return sql_schema_div.text
 
@@ -208,33 +205,41 @@ def delete_tables(table_list: List[str]) -> None:
             conn.close()
 
 
+
 def main() -> None:
     """Pass a leetcode database problem link to this script as the first
     argument. The SQL schema for this problem will be loaded into MySQL
     in an *already existing* database called leetcode. Anything already
     in the leetcode database will be purged so it's a clean playground.
     """
-    #  TODO(yrom1) Redo this with argparse.
+
     try:
         link = sys.argv[1]
     except IndexError:
         print("Pass link to this script as the first argument.")
-    dash = "-" * 10
-    print(dash, "loading link")
-    login_info = read_config("config.ini", "leetcode")
-    schema = get_SQL_schema_from_leetcode(
-        link, login_info["user"], login_info["password"]
-    )
+
     execute("use leetcode")
-    print(dash, "successfully connected to MySQL leetcode db!")
     delete_tables(get_show_tables())
-    schema = remove_white_space(schema)
-    print(dash, "successfully downloaded SQL Schema!")
-    print(dash, "recreating schema in MySQL's leetcode database")
+
+    name = link[link.find('problems') + len('problems') + 1:]
+
+    if name in [file.stem for file in list((Path('.') / 'schemas').glob('*'))]:
+        with open(f'{name}', 'r') as f:
+            schema = f.read()
+    else:
+        login_info = read_config("config.ini", "leetcode")
+        schema = get_SQL_schema_from_leetcode(
+            link, login_info["user"], login_info["password"]
+        )
+        schema = remove_white_space(schema)
+        with open(f'./schemas/{name}', 'w') as f:
+            f.write(schema)
+
     for cmd in schema.split("\n"):
-        print("Executing:", cmd)
+        print(cmd)
         execute(cmd)
-    print(dash, "succesfully loaded schema!")
+
+    print("success ✨🍰✨")
 
 
 if __name__ == "__main__":
