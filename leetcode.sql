@@ -578,8 +578,61 @@ GROUP BY Request_at
 ;
 
 597. Friend Requests I: Overall Acceptance Rate (Easy)
+
+/*
 1270. All People Report to the Given Manager (Medium)
 -- https://leetcode.com/problems/all-people-report-to-the-given-manager
+
+Write an SQL query to find employee_id of all employees that directly or indirectly report their work to the head of the company.
+
+The indirect relation between managers will not exceed three managers as the company is small.
+
+Return the result table in any order.
+
+The query result format is in the following example.
+
+Example 1:
+
+Input:
+Employees table:
++-------------+---------------+------------+
+| employee_id | employee_name | manager_id |
++-------------+---------------+------------+
+| 1           | Boss          | 1          |
+| 3           | Alice         | 3          |
+| 2           | Bob           | 1          |
+| 4           | Daniel        | 2          |
+| 7           | Luis          | 4          |
+| 8           | Jhon          | 3          |
+| 9           | Angela        | 8          |
+| 77          | Robert        | 1          |
++-------------+---------------+------------+
+Output:
++-------------+
+| employee_id |
++-------------+
+| 2           |
+| 77          |
+| 4           |
+| 7           |
++-------------+
+Explanation:
+The head of the company is the employee with employee_id 1.
+The employees with employee_id 2 and 77 report their work directly to the head of the company.
+The employee with employee_id 4 reports their work indirectly to the head of the company 4 --> 2 --> 1.
+The employee with employee_id 7 reports their work indirectly to the head of the company 7 --> 4 --> 2 --> 1.
+The employees with employee_id 3, 8, and 9 do not report their work to the head of the company directly or indirectly.
+*/
+SELECT a.employee_id
+FROM Employees a
+    INNER JOIN Employees b
+    INNER JOIN Employees c
+    ON a.manager_id = b.employee_id
+    AND b.manager_id = c.employee_id
+WHERE c.manager_id = 1 /* there could be many chains  */
+    AND a.employee_id != 1 /* this is only here to exclude the head person in the company is the manager of xerself */
+;
+
 1179. Reformat Department Table (Easy)
 -- https://leetcode.com/problems/reformat-department-table
 /*
