@@ -69,7 +69,7 @@ def get_SQL_schema_from_leetcode(link: str, username: str, password: str) -> str
     path = os.path.expanduser(r"~/chromedriver")
     driver = webdriver.Chrome(executable_path=path)
     driver.get(link)
-    driver.minimize_window()
+    # driver.minimize_window()
     # time.sleep(3)  # TODO test remove
     try:
         WebDriverWait(driver, 10).until(
@@ -84,6 +84,9 @@ def get_SQL_schema_from_leetcode(link: str, username: str, password: str) -> str
         textPassword = driver.find_element_by_id("id_password")
         textPassword.clear()
         textPassword.send_keys(password)
+        textPassword.send_keys(Keys.RETURN)
+        input('do captcha then hit ENTER')
+        textPassword = driver.find_element_by_id("id_password")
         textPassword.send_keys(Keys.RETURN)
         time.sleep(3)
     except selenium.common.exceptions.TimeoutException:
