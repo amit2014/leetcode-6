@@ -1584,7 +1584,31 @@ class Interval:
                 prev = y
         return ans
 
-    # - Merge Intervals - https://leetcode.com/problems/merge-intervals/
+    """
+    # - Merge Intervals -
+    # https://leetcode.com/problems/merge-intervals/
+    Given an array of intervals where intervals[i] = [starti, endi], merge all
+    overlapping intervals, and return an array of the non-overlapping intervals
+    that cover all the intervals in the input.
+
+    Example 1:
+    Input: intervals = [[1,3],[2,6],[8,10],[15,18]]
+    Output: [[1,6],[8,10],[15,18]]
+    Explanation: Since intervals [1,3] and [2,6] overlaps, merge them into [1,6].
+
+    Example 2:
+    Input: intervals = [[1,4],[4,5]]
+    Output: [[1,5]]
+    Explanation: Intervals [1,4] and [4,5] are considered overlapping.
+    """
+
+    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+        ans: List[List[int]] = []
+        for x, y in sorted(intervals, key=lambda x: x[1]):
+            while ans and x <= ans[-1][1]:
+                x = min(x, ans.pop()[0])
+            ans.append([x, y])
+        return ans
 
     """
     # - Insert Interval -
@@ -1609,7 +1633,7 @@ class Interval:
     Output: [[1,2],[3,10],[12,16]]
     Explanation: Because the new interval [4,8] overlaps with [3,5],[6,7],[8,10].
     """
-    # TODO revisit after merge interval
+
     def insert(
         self, intervals: List[List[int]], newInterval: List[int]
     ) -> List[List[int]]:
