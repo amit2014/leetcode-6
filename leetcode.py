@@ -7,18 +7,7 @@ from functools import lru_cache, reduce
 from heapq import heapify, heappop, heappush, nlargest
 from itertools import chain
 from math import comb, factorial, inf
-from typing import (
-    Callable,
-    Deque,
-    Dict,
-    Final,
-    Generic,
-    List,
-    Optional,
-    Tuple,
-    TypeVar,
-    Union,
-)
+from typing import Callable, Deque, Dict, Final, List, Optional, Set, Tuple, Union
 
 
 class Array:
@@ -1258,33 +1247,36 @@ class Graph:
     """
 
     def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
-        # O(mn) time and space
+        # O(rows * cols) time and space
         if not heights or not heights[0]:
             return []
 
-        m, n = len(heights[0]), len(heights)
+        len_cols, len_rows = len(heights[0]), len(heights)
 
-        def bfs(starts):
+        def bfs(starts) -> Set[Tuple[int, int]]:
             queue = deque(starts)
             visited = set(starts)
             while queue:
                 x, y = queue.popleft()
                 for dx, dy in [(x, y + 1), (x, y - 1), (x - 1, y), (x + 1, y)]:
                     if (
-                        0 <= dx < n
-                        and 0 <= dy < m
+                        0 <= dx < len_rows
+                        and 0 <= dy < len_cols
                         and (dx, dy) not in visited
                         and heights[dx][dy] >= heights[x][y]
                     ):
                         queue.append((dx, dy))
                         visited.add((dx, dy))
-
             return visited
 
-        pacific = [(0, i) for i in range(m)] + [(i, 0) for i in range(1, n)]
-        atlantic = [(n - 1, i) for i in range(m)] + [(i, m - 1) for i in range(n - 1)]
+        pacific = [(0, i) for i in range(len_cols)] + [
+            (i, 0) for i in range(1, len_rows)
+        ]  # top and left edges
+        atlantic = [(len_rows - 1, i) for i in range(len_cols)] + [
+            (i, len_cols - 1) for i in range(len_rows - 1)
+        ]  # bottom and right edges
 
-        return bfs(pacific) & bfs(atlantic)
+        return [list(pair) for pair in (bfs(pacific) & bfs(atlantic))]
 
     """
     # - Number of Islands -
