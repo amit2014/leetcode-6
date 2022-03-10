@@ -1548,9 +1548,83 @@ class GraphUnion:
 
 
 class Interval:
-    # - Insert Interval - https://leetcode.com/problems/insert-interval/
+    """
+    # - Non-overlapping Intervals -
+    # https://leetcode.com/problems/non-overlapping-intervals/
+    Given an array of intervals intervals where intervals[i] = [starti, endi],
+    return the minimum number of intervals you need to remove to make the rest
+    of the intervals non-overlapping.
+
+    Example 1:
+    Input: intervals = [[1,2],[2,3],[3,4],[1,3]]
+    Output: 1
+    Explanation: [1,3] can be removed and the rest of the intervals
+    are non-overlapping.
+
+    Example 2:
+    Input: intervals = [[1,2],[1,2],[1,2]]
+    Output: 2
+    Explanation: You need to remove two [1,2] to make the rest of the intervals
+    non-overlapping.
+
+    Example 3:
+    Input: intervals = [[1,2],[2,3]]
+    Output: 0
+    Explanation: You don't need to remove any of the intervals since they're
+    already non-overlapping.
+    """
+
+    def eraseOverlapIntervals(self, intervals: List[List[int]]) -> int:
+        # O(nlogn) time O(1) space
+        ans, prev = 0, -inf
+        for x, y in sorted(intervals, key=lambda x: x[1]):
+            if x < prev:
+                ans += 1
+            else:
+                prev = y
+        return ans
+
     # - Merge Intervals - https://leetcode.com/problems/merge-intervals/
-    # - Non-overlapping Intervals - https://leetcode.com/problems/non-overlapping-intervals/
+
+    """
+    # - Insert Interval -
+    # https://leetcode.com/problems/insert-interval/
+    You are given an array of non-overlapping intervals intervals where intervals[i] =
+    [starti, endi] represent the start and the end of the ith interval and intervals is
+    sorted in ascending order by starti. You are also given an interval newInterval =
+    [start, end] that represents the start and end of another interval.
+
+    Insert newInterval into intervals such that intervals is still sorted in ascending
+    order by starti and intervals still does not have any overlapping intervals
+    (merge overlapping intervals if necessary).
+
+    Return intervals after the insertion.
+
+    Example 1:
+    Input: intervals = [[1,3],[6,9]], newInterval = [2,5]
+    Output: [[1,5],[6,9]]
+
+    Example 2:
+    Input: intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]], newInterval = [4,8]
+    Output: [[1,2],[3,10],[12,16]]
+    Explanation: Because the new interval [4,8] overlaps with [3,5],[6,7],[8,10].
+    """
+    # TODO revisit after merge interval
+    def insert(
+        self, intervals: List[List[int]], newInterval: List[int]
+    ) -> List[List[int]]:
+        ans: List[List[int]] = []
+        for i, interval in enumerate(intervals):
+            if interval[1] < newInterval[0]:
+                ans.append(interval)
+            elif not (newInterval[1] < interval[0]):
+                newInterval[0] = min(newInterval[0], interval[0])
+                newInterval[1] = max(newInterval[1], interval[1])
+            else:
+                ans.append(newInterval)
+                return ans + intervals[i:]
+        return ans + [newInterval]
+
     """
     # - Meeting Rooms (Leetcode Premium) -
     # https://leetcode.com/problems/meeting-rooms/
