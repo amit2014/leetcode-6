@@ -1639,12 +1639,12 @@ class Interval:
     ) -> List[List[int]]:
         ans: List[List[int]] = []
         for i, interval in enumerate(intervals):
-            if interval[1] < newInterval[0]:
+            if interval[1] < newInterval[0]:  # old: [1,2] new: [3,4]
                 ans.append(interval)
-            elif not (newInterval[1] < interval[0]):
+            elif interval[0] <= newInterval[1]:  # old: [2 3] new: [2 5]
                 newInterval[0] = min(newInterval[0], interval[0])
                 newInterval[1] = max(newInterval[1], interval[1])
-            else:
+            else:  # old: [5 6] new: [3 4]
                 ans.append(newInterval)
                 return ans + intervals[i:]
         return ans + [newInterval]
