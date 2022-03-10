@@ -1201,16 +1201,16 @@ class Graph:
 
     # NOTE All the pairs prerequisites[i] are unique.
     """
-
+    # FIXME fix type hints
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
         indeg = [0] * numCourses
-        graph = {}
+        graph = {}  # type:ignore
         for course, prereq in prerequisites:
             indeg[course] += 1
             graph.setdefault(prereq, []).append(course)
 
         stack = [i for i, x in enumerate(indeg) if x == 0]
-        seen = []
+        seen = []  # type:ignore
         while stack:
             x = stack.pop()
             seen.append(x)
@@ -1220,7 +1220,71 @@ class Graph:
                     stack.append(xx)
         return len(seen) == numCourses
 
-    # - Pacific Atlantic Water Flow - https://leetcode.com/problems/pacific-atlantic-water-flow/
+    """
+    # - Pacific Atlantic Water Flow -
+    # https://leetcode.com/problems/pacific-atlantic-water-flow/
+    There is an m x n rectangular island that borders both the Pacific Ocean
+    and Atlantic Ocean. The Pacific Ocean touches the island's left and top
+    edges, and the Atlantic Ocean touches the island's right and bottom edges.
+
+    The island is partitioned into a grid of square cells. You are given an
+    m x n integer matrix heights where heights[r][c] represents the height
+    above sea level of the cell at coordinate (r, c).
+
+    The island receives a lot of rain, and the rain water can flow to neighboring
+    cells directly north, south, east, and west if the neighboring cell's height
+    is less than or equal to the current cell's height. Water can flow from any
+    cell adjacent to an ocean into the ocean.
+
+    Return a 2D list of grid coordinates result where result[i] = [ri, ci] denotes that
+    rain water can flow from cell (ri, ci) to both the Pacific and Atlantic oceans.
+
+           Pacific
+    P   1  2  2  3 _5  A
+    a   3  2  3 _4 _4  t
+    c   2  4 _5  3  1  l
+    i  _6 _7  1  4  5  a
+    f  _5  1  1  2  4  n
+    i      Atlantic    t
+    c                  i
+                       c
+    Example 1:
+    Input: heights = [[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]]
+    Output: [[0,4],[1,3],[1,4],[2,2],[3,0],[3,1],[4,0]]
+
+    Example 2:
+    Input: heights = [[2,1],[1,2]]
+    Output: [[0,0],[0,1],[1,0],[1,1]]
+    """
+
+    def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
+        # O(mn) time and space
+        if not heights or not heights[0]:
+            return []
+
+        m, n = len(heights[0]), len(heights)
+
+        def bfs(starts):
+            queue = deque(starts)
+            visited = set(starts)
+            while queue:
+                x, y = queue.popleft()
+                for dx, dy in [(x, y + 1), (x, y - 1), (x - 1, y), (x + 1, y)]:
+                    if (
+                        0 <= dx < n
+                        and 0 <= dy < m
+                        and (dx, dy) not in visited
+                        and heights[dx][dy] >= heights[x][y]
+                    ):
+                        queue.append((dx, dy))
+                        visited.add((dx, dy))
+
+            return visited
+
+        pacific = [(0, i) for i in range(m)] + [(i, 0) for i in range(1, n)]
+        atlantic = [(n - 1, i) for i in range(m)] + [(i, m - 1) for i in range(n - 1)]
+
+        return bfs(pacific) & bfs(atlantic)
 
     """
     # - Number of Islands -
@@ -1329,7 +1393,7 @@ class Graph:
 
     def alienOrder(self, words: List[str]) -> str:
         # Step 0: create data structures + the in_degree of each unique letter to 0.
-        adj_list = defaultdict(set)
+        adj_list = defaultdict(set)  # type:ignore
         in_degree = Counter({c: 0 for word in words for c in word})
 
         # Step 1: We need to populate adj_list and in_degree.
@@ -1426,7 +1490,7 @@ class GraphUnion:
         if len(edges) != n - 1:
             return False
 
-        adj_list = [[] for _ in range(n)]
+        adj_list = [[] for _ in range(n)]  # type:ignore
         for A, B in edges:
             adj_list[A].append(B)
             adj_list[B].append(A)
@@ -1543,7 +1607,7 @@ class Interval:
         # O(nlogn) time, O(n) space
         if not intervals:
             return 0
-        free_rooms = []
+        free_rooms = []  # type:ignore
         intervals.sort(key=lambda x: x[0])
         heappush(free_rooms, intervals[0][1])
         for i in intervals[1:]:
@@ -1641,7 +1705,7 @@ class LinkedList:
             return False
         fast = slow = head
         while fast and fast.next:
-            fast = fast.next.next
+            fast = fast.next.next  # type:ignore
             slow = slow.next  # type: ignore
             if fast == slow:
                 return True
@@ -1766,7 +1830,7 @@ class LinkedList:
         fast = slow = dummy
         i = 0
         while fast:
-            fast = fast.next
+            fast = fast.next  # type:ignore
             if (i := i + 1) > n + 1:
                 slow = slow.next  # type: ignore
         slow.next = slow.next.next  # type: ignore
@@ -1812,14 +1876,14 @@ class LinkedList:
         slow = fast = head
         while fast and fast.next:
             slow = slow.next  # type: ignore
-            fast = fast.next.next
+            fast = fast.next.next  # type:ignore
 
         # reverse the second part of the list [Problem 206]
         # convert 1->2->3->4->5->6 into 1->2->3->4 and 6->5->4
         # reverse the second half in-place
         prev, curr = None, slow
         while curr:
-            curr.next, prev, curr = prev, curr, curr.next
+            curr.next, prev, curr = prev, curr, curr.next  # type:ignore
 
         # merge two sorted linked lists [Problem 21]
         # merge 1->2->3->4 and 6->5->4 into 1->6->2->5->3->4
@@ -2227,7 +2291,7 @@ class TreeNode:
         self.right = right
 
 
-TrieNodeType = Dict[str, "TrieNodeType"]
+TrieNodeType = Dict[str, "TrieNodeType"]  # type:ignore
 TrieNode: Callable[[], TrieNodeType] = lambda: defaultdict(TrieNode)
 
 
@@ -2747,11 +2811,12 @@ class Tree:
         node = root
         while node:
             if p.val > node.val and q.val > node.val:
-                node = node.right
+                node = node.right  # type:ignore
             elif p.val < node.val and q.val < node.val:
-                node = node.left
+                node = node.left  # type:ignore
             else:
                 return node
+        raise Exception
 
     """
     # - Implement Trie (Prefix Tree) -

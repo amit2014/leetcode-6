@@ -7,6 +7,6 @@ with open("leetcode.py") as f:
     count = 0
     for token_type, *_, line in tokenize.generate_tokens(f.readline):
         if token_type == tokenize.COMMENT and p.match(line):
-            print(line.strip().replace('# - ', ''))
+            print(line.strip().replace("# - ", ""))
             count += 1
 print(f"{count=}/75")
