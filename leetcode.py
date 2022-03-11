@@ -2305,7 +2305,34 @@ class String:
     def isAnagram(self, s: str, t: str) -> bool:
         return Counter(s) == Counter(t)
 
-    # - Group Anagrams - https://leetcode.com/problems/group-anagrams/
+    """
+    # - Group Anagrams -
+    # https://leetcode.com/problems/group-anagrams/
+    Given an array of strings strs, group the anagrams together. You can return
+    the answer in any order.
+
+    An Anagram is a word or phrase formed by rearranging the letters of a different
+    word or phrase, typically using all the original letters exactly once.
+
+    Example 1:
+    Input: strs = ["eat","tea","tan","ate","nat","bat"]
+    Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
+
+    Example 2:
+    Input: strs = [""]
+    Output: [[""]]
+
+    Example 3:
+    Input: strs = ["a"]
+    Output: [["a"]]
+    """
+
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        d: Dict[str, List[str]] = {}
+        for word in strs:
+            d.setdefault("".join(sorted(word)), []).append(word)
+        return list(d.values())
+
     """
     # - Valid Parentheses -
     # https://leetcode.com/problems/valid-parentheses/
