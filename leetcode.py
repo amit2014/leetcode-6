@@ -3456,46 +3456,58 @@ class Heap:
         """Calls heapq under the hood"""
         return [x for x, y in Counter(nums).most_common(k)]
 
+    """
+    # - Find Median from Data Stream -
+    # https://leetcode.com/problems/find-median-from-data-stream/
+    The median is the middle value in an ordered integer list. If the size of the
+    list is even, there is no middle value and the median is the mean of the two
+    middle values.
+
+    For example, for arr = [2,3,4], the median is 3.
+    For example, for arr = [2,3], the median is (2 + 3) / 2 = 2.5.
+
+    Implement the MedianFinder class:
+    MedianFinder() initializes the MedianFinder object.
+    void addNum(int num) adds the integer num from the data stream to the
+    data structure.
+    double findMedian() returns the median of all elements so far.
+    Answers within 10-5
+    of the actual answer will be accepted.
+
+    Example 1:
+    Input
+    ["MedianFinder", "addNum", "addNum", "findMedian", "addNum", "findMedian"]
+    [[], [1], [2], [], [3], []]
+    Output
+    [null, null, null, 1.5, null, 2.0]
+
+    Explanation
+    MedianFinder medianFinder = new MedianFinder();
+    medianFinder.addNum(1);    // arr = [1]
+    medianFinder.addNum(2);    // arr = [1, 2]
+    medianFinder.findMedian(); // return 1.5 (i.e., (1 + 2) / 2)
+    medianFinder.addNum(3);    // arr[1, 2, 3]
+    medianFinder.findMedian(); // return 2.0
+    """
+
     class MedianFinder:
-        """
-        # - Find Median from Data Stream -
-        # https://leetcode.com/problems/find-median-from-data-stream/
-        The median is the middle value in an ordered integer list. If the size of the
-        list is even, there is no middle value and the median is the mean of the two
-        middle values.
-
-        For example, for arr = [2,3,4], the median is 3.
-        For example, for arr = [2,3], the median is (2 + 3) / 2 = 2.5.
-
-        Implement the MedianFinder class:
-        MedianFinder() initializes the MedianFinder object.
-        void addNum(int num) adds the integer num from the data stream to the
-        data structure.
-        double findMedian() returns the median of all elements so far.
-        Answers within 10-5
-        of the actual answer will be accepted.
-
-        Example 1:
-        Input
-        ["MedianFinder", "addNum", "addNum", "findMedian", "addNum", "findMedian"]
-        [[], [1], [2], [], [3], []]
-        Output
-        [null, null, null, 1.5, null, 2.0]
-
-        Explanation
-        MedianFinder medianFinder = new MedianFinder();
-        medianFinder.addNum(1);    // arr = [1]
-        medianFinder.addNum(2);    // arr = [1, 2]
-        medianFinder.findMedian(); // return 1.5 (i.e., (1 + 2) / 2)
-        medianFinder.addNum(3);    // arr[1, 2, 3]
-        medianFinder.findMedian(); // return 2.0
-        """
-
-        def __init__(self):
-            ...
+        # O(logn) time, O(n) space
+        def __init__(self) -> None:
+            self.min_heap: List[int] = []
+            self.max_heap: List[int] = []
 
         def addNum(self, num: int) -> None:
-            ...
+            if not self.min_heap or num >= self.min_heap[0]:
+                heappush(self.min_heap, num)
+            else:
+                heappush(self.max_heap, -num)
+
+            if len(self.min_heap) > 1 + len(self.max_heap):
+                heappush(self.max_heap, -heappop(self.min_heap))
+            elif len(self.min_heap) < len(self.max_heap):
+                heappush(self.min_heap, -heappop(self.max_heap))
 
         def findMedian(self) -> float:
-            ...
+            if len(self.min_heap) > len(self.max_heap):
+                return self.min_heap[0]
+            return (self.min_heap[0] - self.max_heap[0]) / 2
