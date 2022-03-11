@@ -2281,7 +2281,52 @@ class String:
     """
 
     def minWindow(self, s: str, t: str) -> str:
-        ...
+        # TODO revisit, hard
+        # NOTE missing optimization
+        if not t or not s:
+            return ""
+        freq_t: Dict[str, int] = Counter(t)
+        full_count, required = 0, len(freq_t)
+        l, r = 0, 0
+        window_counts: Dict[str, int] = {}  # unique chars counts in current window
+        ans = inf, None, None  # (window length, left, right)
+        while r < len(s):
+            char_r = s[r]
+            window_counts[char_r] = window_counts.get(char_r, 0) + 1
+            if char_r in freq_t and window_counts[char_r] == freq_t[char_r]:
+                full_count += 1
+            while l <= r and full_count == required:
+                char_l = s[l]
+                if r - l + 1 < ans[0]:
+                    # smallest window
+                    ans = (r - l + 1, l, r)  # type: ignore
+                window_counts[char_l] -= 1
+                if char_l in freq_t and window_counts[char_l] < freq_t[char_l]:
+                    full_count -= 1
+                l += 1
+            r += 1
+        return "" if ans[0] == inf else s[ans[1] : ans[2] + 1]  # type: ignore
+
+    def minWindow_(self, s: str, t: str) -> str:
+        freq = Counter(t)
+
+        count = ii = jj = 0
+        queue: Deque[Tuple[int, str]] = deque()
+        ts: Set[str] = set(t)
+        for j, c in enumerate(s):
+            if c in ts:
+                queue.append((j, c))
+                freq[c] -= 1
+                if freq[c] == 0:
+                    count += 1  # enough c in s
+                while count == len(ts):
+                    i, c = queue.popleft()
+                    if not jj or j - i < jj - ii:
+                        ii, jj = i, j + 1
+                    if freq[c] == 0:
+                        count -= 1  # not enough c in s
+                    freq[c] += 1
+        return s[ii:jj]
 
     """
     # - Valid Anagram -
