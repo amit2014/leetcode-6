@@ -3312,14 +3312,27 @@ class Tree:
     """
 
     class WordDictionary:
+        # NOTE slow timeouts sometimes
         def __init__(self):
-            ...
+            self.trie = {}
 
         def addWord(self, word: str) -> None:
-            ...
+            node = self.trie
+            for ch in word:
+                node = node.setdefault(ch, {})
+            node["$"] = word
 
         def search(self, word: str) -> bool:
-            ...
+            def fn(node, i):
+                if not node:
+                    return False
+                if i == len(word):
+                    return node.get("$")
+                if word[i] == ".":
+                    return any(fn(node[k], i + 1) for k in node if k != "$")
+                return fn(node.get(word[i]), i + 1)
+
+            return fn(self.trie, 0)
 
     """
     # - Word Search II -
