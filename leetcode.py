@@ -5,9 +5,9 @@ from bisect import bisect_left
 from collections import Counter, defaultdict, deque
 from functools import lru_cache, reduce
 from heapq import heapify, heappop, heappush, nlargest
-from itertools import chain
-from math import comb, factorial, inf
-from typing import Callable, Deque, Dict, Final, List, Optional, Set, Tuple, Union, cast
+from itertools import chain, product
+from math import comb, inf
+from typing import Callable, Deque, Dict, Final, List, Optional, Set, Tuple, Union
 
 
 class Array:
@@ -2051,11 +2051,11 @@ class Matrix:
     def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
         m, n = len(matrix), len(matrix[0])
         ans: List[int] = []
-        i = j = 0  # position
-        di, dj = 0, 1  # direction
+        i = j = 0
+        di, dj = 0, 1
         for _ in range(m * n):
             ans.append(matrix[i][j])
-            matrix[i][j] = None  # type:ignore mark visited
+            matrix[i][j] = None  # type:ignore
             if not (
                 0 <= i + di < m
                 and 0 <= j + dj < n
@@ -2098,10 +2098,13 @@ class Matrix:
        [16,  7, 10, 11]]
     """
 
-    def rotate(self, matrix: List[List[int]]) -> None:
-        matrix[:] = list(zip(*matrix[::-1]))
+    # def rotate(self, matrix: List[List[int]]) -> None:
+    # matrix[:] = list(zip(*matrix[::-1]))
 
-    class rotate_worse:
+    def rotate(self, matrix: List[List[int]]) -> None:
+        matrix[:] = list(list(row) for row in zip(*matrix[::-1]))
+
+    class rotate_:
         def rotate(self, matrix: List[List[int]]) -> None:
             self.transpose(matrix)
             self.reflect(matrix)
@@ -2118,7 +2121,63 @@ class Matrix:
                 for j in range(n // 2):
                     matrix[i][j], matrix[i][-j - 1] = matrix[i][-j - 1], matrix[i][j]
 
-    # - Word Search - https://leetcode.com/problems/word-search/
+    """
+    # - Word Search -
+    # https://leetcode.com/problems/word-search/
+    Given an m x n grid of characters board and a string word, return true if
+    word exists in the grid.
+
+    The word can be constructed from letters of sequentially adjacent cells,
+    where adjacent cells are horizontally or vertically neighboring. The
+    same letter cell may not be used more than once.
+
+    Example 1:
+    Input: board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]],
+    word = "ABCCED"
+    Output: true
+
+    Example 2:
+    Input: board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]],
+    word = "SEE"
+    Output: true
+
+    Example 3:
+    Input: board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]],
+    word = "ABCB"
+    Output: false
+    """
+
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        # O(m*n*3^k) time, O(k) space
+        def dfs(index, i, j):
+            nonlocal found
+            if found:
+                return
+
+            if index == k:
+                found = True
+                return
+
+            if i < 0 or i >= m or j < 0 or j >= n:
+                return
+
+            temp = board[i][j]
+            if temp != word[index]:
+                return
+
+            board[i][j] = None  # type:ignore
+            for x, y in [[0, -1], [0, 1], [1, 0], [-1, 0]]:
+                dfs(index + 1, i + x, j + y)
+            board[i][j] = temp
+
+        found = False
+        m, n, k = len(board), len(board[0]), len(word)
+
+        for i, j in product(range(m), range(n)):
+            if found:
+                return True
+            dfs(0, i, j)
+        return found
 
 
 class String:
