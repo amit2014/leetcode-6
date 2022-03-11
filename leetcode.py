@@ -7,7 +7,7 @@ from functools import lru_cache, reduce
 from heapq import heapify, heappop, heappush, nlargest
 from itertools import chain
 from math import comb, factorial, inf
-from typing import Callable, Deque, Dict, Final, List, Optional, Set, Tuple, Union
+from typing import Callable, Deque, Dict, Final, List, Optional, Set, Tuple, Union, cast
 
 
 class Array:
@@ -2030,7 +2030,42 @@ class Matrix:
             for j in range(num_rows):
                 matrix[j][0] = 0
 
-    # - Spiral Matrix - https://leetcode.com/problems/spiral-matrix/
+    """
+    # - Spiral Matrix -
+    # https://leetcode.com/problems/spiral-matrix/
+    Given an m x n matrix, return all elements of the matrix in spiral order.
+
+	Example 1:
+	Input: [[ 1, 2, 3 ],
+	        [ 4, 5, 6 ],
+	        [ 7, 8, 9 ]]
+	Output: [1,2,3,6,9,8,7,4,5]
+
+	Example 2:
+	Input: [[1, 2, 3, 4],
+	        [5, 6, 7, 8],
+	        [9,10,11,12]]
+    Output: [1,2,3,4,8,12,11,10,9,5,6,7]
+    """
+
+    def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+        m, n = len(matrix), len(matrix[0])
+        ans: List[int] = []
+        i = j = 0  # position
+        di, dj = 0, 1  # direction
+        for _ in range(m * n):
+            ans.append(matrix[i][j])
+            matrix[i][j] = None  # type:ignore mark visited
+            if not (
+                0 <= i + di < m
+                and 0 <= j + dj < n
+                and matrix[i + di][j + dj] is not None
+            ):
+                di, dj = dj, -di  # rotate clockwise (di, dj = -dj, di for CCW)
+            i += di
+            j += dj
+        return ans
+
     # - Rotate Image - https://leetcode.com/problems/rotate-image/
     # - Word Search - https://leetcode.com/problems/word-search/
 
