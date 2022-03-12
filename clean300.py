@@ -16,24 +16,15 @@ questions = list(chunked(new, 3))
 questions_no_percent = [(question[0], question[2]) for question in questions]
 
 with open("someREADME.md.txt", "r") as f:
-    links = f.readlines()
+    somereadme = f.readlines()
 
 import re
-
-question_links = {}
-p = re.compile(r"\d{1,4} \|")
-p2 = re.compile(r"https\:\/\/.*\/\)")
-p3 = re.compile(r"(\[.*?\])")
-for link in links:
-    item = []
-    if p.match(link):
-        # print(link)
-        m = p2.search(link)
-        item.append(link[m.start() : m.end() - 1])
-    if m := p3.search(link):
-        item.append(m.group(1)[1:-1])
-    if len(item) == 2:
-        question_links[item[1].strip()] = item[0].strip()
+p = re.compile("(\[[\w ]+\])(\(https\:\/\/leetcode\.com\/problems\/.*?\))")
+q_links = {}
+for line in somereadme:
+    if (m := p.search(line)) != None:
+        # print(line)
+        q_links[m.group(1)[1:-1].strip()] = m.group(2)[1:-1].strip()
 
 count = 0
 #print(question_links)
@@ -41,8 +32,9 @@ with open('new-leetcode.py', 'w')  as f:
     for q in questions_no_percent:
         num, title = q[0].split('.')
         try:
-            link = question_links[title.strip()]
+            link = q_links[title.strip()]
         except:
+            print(title.strip())
             count += 1
             link = ''
         # print(num)
@@ -52,5 +44,6 @@ with open('new-leetcode.py', 'w')  as f:
         f.write(f'{tab}# - {title.strip()} -\n')
         f.write(f'{tab}# {link}\n')
         f.write(f'{tab}"""\n')
+        f.write(f'{tab}...\n')
 
 print(count)
