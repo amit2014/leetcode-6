@@ -43,7 +43,7 @@ class _1:
             if target - x in seen:
                 return [seen[target - x], i]
             seen[x] = i
-        raise Exception("No two distinct integers sum to target!")
+        raise RuntimeError("No two distinct integers sum to target!")
 
 
 class _146:
