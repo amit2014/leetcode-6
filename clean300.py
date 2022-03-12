@@ -35,7 +35,7 @@ with open("leetcode.py") as f:
     for token_type, *_, line in tokenize.generate_tokens(f.readline):
         # print(token_type, _, line)
         if token_type == 3 and len(line) > 100:
-            print(line)
+            # print(line)
             docs.append(line)
 
 doc_lines = [doc.splitlines() for doc in docs]
@@ -51,7 +51,7 @@ with open('new-leetcode.py', 'w')  as f:
     for q in questions_no_percent:
         num, title = q[0].split('.')
         try:
-            link = title_doc[title.strip()]
+            link = q_links[title.strip()]
             # print(repr(q_links[title.strip()]))
         except:
             # print(title.strip())
