@@ -223,8 +223,18 @@ class _588:
     ...
 class _253:
     """
-    # - Meeting Rooms II -
+    # - Meeting Rooms II (Leetcode Premium) -
     # https://leetcode.com/problems/meeting-rooms-ii/
+    Given an array of meeting time intervals intervals where intervals[i] =
+    [starti, endi], return the minimum number of conference rooms required.
+
+    Example 1:
+    Input: intervals = [[0,30],[5,10],[15,20]]
+    Output: 2
+
+    Example 2:
+    Input: intervals = [[7,10],[2,4]]
+    Output: 1
     """
     ...
 class _680:
@@ -775,8 +785,35 @@ class _48:
     ...
 class _269:
     """
-    # - Alien Dictionary -
+    # - Alien Dictionary (Leetcode Premium) -
     # https://leetcode.com/problems/alien-dictionary/
+    There is a new alien language that uses the English alphabet. However, the
+    order among the letters is unknown to you.
+
+    You are given a list of strings words from the alien language's dictionary, where
+    the strings in words are sorted lexicographically by the rules of this new language.
+
+    Return a string of the unique letters in the new alien language sorted in
+    lexicographically increasing order by the new language's rules. If there is no
+    solution, return "". If there are multiple solutions, return any of them.
+
+    A string `s` is lexicographically smaller than a string `t` if at the first letter where
+    they differ, the letter in `s` comes before the letter in `t` in the alien language. If
+    the first `min(s.length, t.length)` letters are the same, then `s` is smaller if and
+    only if `s.length < t.length`.
+
+    Example 1:
+    Input: words = ["wrt","wrf","er","ett","rftt"]
+    Output: "wertf"
+
+    Example 2:
+    Input: words = ["z","x"]
+    Output: "zx"
+
+    Example 3:
+    Input: words = ["z","x","z"]
+    Output: ""
+    Explanation: The order is invalid, so return "".
     """
     ...
 class _1268:
@@ -1069,7 +1106,25 @@ class _198:
     """
     # - House Robber -
     # https://leetcode.com/problems/house-robber/
-    """
+    You are a professional robber planning to rob houses along a street. Each
+    house has a certain amount of money stashed, the only constraint stopping
+    you from robbing each of them is that adjacent houses have security system
+    connected and it will automatically contact the police if two adjacent
+    houses were broken into on the same night. Given a list of non-negative
+    integers representing the amount of money of each house, determine the
+    maximum amount of money you can rob tonight without alerting the police.
+
+    Example 1:
+    Input: nums = [1,2,3,1]
+    Output: 4
+    Explanation: Rob house 1 (money = 1) and then rob house 3 (money = 3).
+    Total amount you can rob = 1 + 3 = 4.
+
+    Example 2:
+    Input: nums = [2,7,9,3,1]
+    Output: 12
+    Explanation: Rob house 1 (money = 2), rob house 3 (money = 9) and rob house
+    5 (money = 1). Total amount you can rob = 2 + 9 + 1 = 12."""
     ...
 class _926:
     """
@@ -1157,7 +1212,30 @@ class _70:
     """
     # - Climbing Stairs -
     # https://leetcode.com/problems/climbing-stairs/
-    """
+    You are climbing a staircase. It takes n steps to reach the top.
+
+    Each time you can either climb 1 or 2 steps. In how many distinct ways can
+    you climb to the top?
+
+    Example 1:
+
+    Input: n = 2
+    Output: 2
+    Explanation: There are two ways to climb to the top.
+    1. 1 step + 1 step
+    2. 2 steps
+
+    Example 2:
+
+    Input: n = 3
+    Output: 3
+    Explanation: There are three ways to climb to the top.
+    1. 1 step + 1 step + 1 step
+    2. 1 step + 2 steps
+    3. 2 steps + 1 step
+
+    Constraints:
+    1 <= n <= 45"""
     ...
 class _415:
     """
@@ -1463,6 +1541,34 @@ class _21:
     """
     # - Merge Two Sorted Lists -
     # https://leetcode.com/problems/merge-two-sorted-lists/
+    You are given the heads of two sorted linked lists list1 and list2.
+
+    Merge the two lists in a one sorted list. The list should be made by splicing
+    together the nodes of the first two lists.
+
+    Return the head of the merged linked list.
+
+    Example 1:
+    (1) -> (2) -> (4)
+    (1) -> (3) -> (4)
+
+            |
+            v
+
+    (1) -> (1) -> (2) -> (3) -> (4) -> (4)
+
+    Input: list1 = [1,2,4], list2 = [1,3,4]
+    Output: [1,1,2,3,4,4]
+
+    Example 2:
+
+    Input: list1 = [], list2 = []
+    Output: []
+
+    Example 3:
+
+    Input: list1 = [], list2 = [0]
+    Output: [0]
     """
     ...
 class _234:
@@ -1661,7 +1767,31 @@ class _62:
     """
     # - Unique Paths -
     # https://leetcode.com/problems/unique-paths/
-    """
+    There is a robot on an m x n grid. The robot is initially located at the top-left
+    corner (i.e., grid[0][0]). The robot tries to move to the bottom-right corner
+    (i.e., grid[m - 1][n - 1]). The robot can only move either down or right at any
+    point in time.
+
+    Given the two integers m and n, return the number of possible unique paths that the
+    robot can take to reach the bottom-right corner.
+
+    The test cases are generated so that the answer will be less than or equal to 2*109.
+
+    Example 1:
+    R ▢ ▢ ▢ ▢ ▢ ▢
+    ▢ ▢ ▢ ▢ ▢ ▢ ▢
+    ▢ ▢ ▢ ▢ ▢ ▢ S
+    Input: m = 3, n = 7
+    Output: 28
+
+    Example 2:
+    Input: m = 3, n = 2
+    Output: 3
+    Explanation: From the top-left corner, there are a total of 3 ways to reach the
+    bottom-right corner:
+    1. Right -> Down -> Down
+    2. Down -> Down -> Right
+    3. Down -> Right -> Down"""
     ...
 class _718:
     """
@@ -1840,7 +1970,34 @@ class _300:
     """
     # - Longest Increasing Subsequence -
     # https://leetcode.com/problems/longest-increasing-subsequence/
-    """
+    Given an integer array nums, return the length of the longest strictly
+    increasing subsequence.
+
+    A subsequence is a sequence that can be derived from an array by deleting
+    some or no elements without changing the order of the remaining elements.
+    For example, [3,6,2,7] is a subsequence of the array [0,3,1,6,2,2,7].
+
+    Example 1:
+    Input: nums = [10,9,2,5,3,7,101,18]
+    Output: 4
+    Explanation: The longest increasing subsequence is [2,3,7,101], therefore
+    the length is 4.
+
+    Example 2:
+    Input: nums = [0,1,0,3,2,3]
+    Output: 4
+
+    Example 3:
+    Input: nums = [7,7,7,7,7,7,7]
+    Output: 1
+
+    Constraints:
+
+    1 <= nums.length <= 2500
+    -104 <= nums[i] <= 104
+
+    Follow up: Can you come up with an algorithm that runs in O(n log(n)) time
+    complexity?"""
     ...
 class _642:
     """
@@ -1870,7 +2027,26 @@ class _91:
     """
     # - Decode Ways -
     # https://leetcode.com/problems/decode-ways/
-    """
+    A message containing letters from A-Z is being encoded to numbers using the
+    following mapping:
+
+    'A' -> 1
+    'B' -> 2
+    ...
+    'Z' -> 26
+
+    Given a non-empty string containing only digits, determine the total number
+    of ways to decode it.
+
+    Example 1:
+    Input: "12"
+    Output: 2
+    Explanation: It could be decoded as "AB" (1 2) or "L" (12).
+
+    Example 2:
+    Input: "226"
+    Output: 3
+    Explanation: It could be decoded as "BZ" (2 26), "VF" (22 6), or "BBF" (2 2 6)."""
     ...
 class _72:
     """
