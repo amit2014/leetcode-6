@@ -1,6 +1,3 @@
-138. Copy List with Random Pointer
-46.7%
-Medium
 1. Two Sum
 48.3%
 Easy

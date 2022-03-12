@@ -1,4 +1,3 @@
-138. Copy List with Random Pointer Medium
 1. Two Sum Easy
 146. LRU Cache Medium
 56. Merge Intervals Medium
