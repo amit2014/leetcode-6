@@ -1,3 +1,15 @@
+from __future__ import annotations
+
+import re
+from bisect import bisect_left
+from collections import Counter, defaultdict, deque
+from functools import lru_cache, reduce
+from heapq import heapify, heappop, heappush, nlargest
+from itertools import chain, product
+from math import comb, inf
+from typing import Callable, Deque, Dict, Final, List, Optional, Set, Tuple, Union
+
+
 class _1:
     """
     # - Two Sum -
@@ -24,7 +36,14 @@ class _1:
     Output: [0,1]
     """
 
-    ...
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        """O(n) time, O(n) space"""
+        seen: Dict[int, int] = {}
+        for i, x in enumerate(nums):
+            if target - x in seen:
+                return [seen[target - x], i]
+            seen[x] = i
+        raise Exception("No two distinct integers sum to target!")
 
 
 class _146:
