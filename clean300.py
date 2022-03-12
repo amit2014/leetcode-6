@@ -19,12 +19,23 @@ with open("someREADME.md.txt", "r") as f:
     somereadme = f.readlines()
 
 import re
-p = re.compile("(\[[\w ]+\])(\(https\:\/\/leetcode\.com\/problems\/.*?\))")
+p = re.compile("(\[[34\w \-\`\\(\)\\'\,]+\])(\(https\:\/\/leetcode\.com\/problems\/.*?\))")
+
 q_links = {}
 for line in somereadme:
     if (m := p.search(line)) != None:
         # print(line)
         q_links[m.group(1)[1:-1].strip()] = m.group(2)[1:-1].strip()
+
+
+import tokenize
+docs = []
+with open("leetcode.py") as f:
+    for token_type, *_, line in tokenize.generate_tokens(f.readline):
+        # print(token_type, _, line)
+        if token_type == 3 and len(line) > 100:
+            docs.append(line)
+
 
 count = 0
 #print(question_links)
