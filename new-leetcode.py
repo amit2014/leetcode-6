@@ -393,6 +393,36 @@ class _200:
                     fn(i, j, grid)
         return islands
 
+    def numIslands_(self, grid: List[List[str]]) -> int:
+        if len(grid) == 0:
+            return 0
+        m, n = len(grid), len(grid[0])
+        self.count = sum(grid[i][j] == "1" for i in range(m) for j in range(n))
+        parent = [i for i in range(m * n)]
+
+        def find(x):
+            if parent[x] != x:
+                return find(parent[x])
+            return parent[x]
+
+        def union(x, y):
+            xroot, yroot = find(x), find(y)
+            if xroot == yroot:
+                return
+            parent[xroot] = yroot
+            self.count -= 1
+
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == "0":
+                    continue
+                index = i * n + j
+                if j < n - 1 and grid[i][j + 1] == "1":
+                    union(index, index + 1)
+                if i < m - 1 and grid[i + 1][j] == "1":
+                    union(index, index + n)
+        return self.count
+
 
 class _4:
     """
