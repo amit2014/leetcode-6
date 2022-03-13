@@ -17,10 +17,86 @@ class ListNode:
     def __init__(
         self, key: int = 0, val: int = 0, prev: ListNode = None, next: ListNode = None
     ):
-        self.key = key
+        self.key = key  # TODO I don't need this
         self.val = val
         self.prev = prev
         self.next = next
+
+
+# class UnionFind {
+# public:
+#   UnionFind(vector<vector<char>>& grid) {
+#     count = 0;
+#     int m = grid.size();
+#     int n = grid[0].size();
+#       for (int i = 0; i < m; ++i) {
+#         for (int j = 0; j < n; ++j) {
+#           if (grid[i][j] == '1') {
+#             parent.push_back(i * n + j);
+#             ++count;
+#           }
+#           else parent.push_back(-1);
+#           rank.push_back(0);
+#         }
+#     }
+#   }
+
+#   int find(int i) { // path compression
+#     if (parent[i] != i) parent[i] = find(parent[i]);
+#     return parent[i];
+#   }
+
+#   void Union(int x, int y) { // union with rank
+#     int rootx = find(x);
+#     int rooty = find(y);
+#     if (rootx != rooty) {
+#       if (rank[rootx] > rank[rooty]) parent[rooty] = rootx;
+#       else if (rank[rootx] < rank[rooty]) parent[rootx] = rooty;
+#       else {
+#         parent[rooty] = rootx; rank[rootx] += 1;
+#       }
+#       --count;
+#     }
+#   }
+
+#   int getCount() const {
+#     return count;
+#   }
+
+# private:
+#   vector<int> parent;
+#   vector<int> rank;
+#   int count; // # of connected components
+# };
+
+
+class UnionFind:
+    def __init__(self, n: int):
+        # O(n) space
+        self.parent = [node for node in range(n)]
+        self.size = [1] * n
+
+    def find(self, A: int) -> int:
+        # O(inverse Ackermann function) time
+        while self.parent[A] != A:
+            A, self.parent[A] = self.parent[A], self.parent[self.parent[A]]
+        return A
+
+    def union(self, A: int, B: int) -> bool:
+        """True if a merge happened, False otherwise"""
+        # O(inverse Ackermann function) time
+        root_A = self.find(A)
+        root_B = self.find(B)
+
+        if root_A == root_B:
+            return False
+
+        if self.size[root_A] < self.size[root_B]:
+            root_A, root_B = root_B, root_A
+
+        self.parent[root_B] = root_A
+        self.size[root_A] += self.size[root_B]
+        return True
 
 
 #########################################################################################
@@ -290,7 +366,32 @@ class _200:
     Output: 3
     """
 
-    ...
+    def numIslands(self, grid: List[List[str]]) -> int:
+        # DFS O(mn) time and space
+        def fn(i, j, grid: List[List[str]]) -> None:
+            """Flood island with 0s."""
+            if (
+                i < 0
+                or j < 0
+                or i == len(grid)
+                or j == len(grid[0])
+                or grid[i][j] == "0"
+            ):
+                return
+            else:
+                grid[i][j] = "0"
+            fn(i, j + 1, grid)
+            fn(i, j - 1, grid)
+            fn(i + 1, j, grid)
+            fn(i - 1, j, grid)
+
+        islands = 0
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if grid[i][j] == "1":
+                    islands += 1
+                    fn(i, j, grid)
+        return islands
 
 
 class _4:
