@@ -323,7 +323,7 @@ class _200:
     """
 
     def numIslands(self, grid: List[List[str]]) -> int:
-        # DFS O(mn) time and space
+        # DFS method, O(mn) time and space
         def fn(i, j, grid: List[List[str]]) -> None:
             """Flood island with 0s."""
             if (
@@ -362,6 +362,9 @@ class _200:
     """
 
     def numIslands_(self, grid: List[List[str]]) -> int:
+        # UnionFind method, O(mn) time and space
+        # but each operation takes O(inverse Ackermann function) time
+        # which is essentially O(1), thus superior to DFS
         if len(grid) == 0:
             return 0
         m, n = len(grid), len(grid[0])
