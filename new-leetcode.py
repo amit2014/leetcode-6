@@ -23,58 +23,12 @@ class ListNode:
         self.next = next
 
 
-# class UnionFind {
-# public:
-#   UnionFind(vector<vector<char>>& grid) {
-#     count = 0;
-#     int m = grid.size();
-#     int n = grid[0].size();
-#       for (int i = 0; i < m; ++i) {
-#         for (int j = 0; j < n; ++j) {
-#           if (grid[i][j] == '1') {
-#             parent.push_back(i * n + j);
-#             ++count;
-#           }
-#           else parent.push_back(-1);
-#           rank.push_back(0);
-#         }
-#     }
-#   }
-
-#   int find(int i) { // path compression
-#     if (parent[i] != i) parent[i] = find(parent[i]);
-#     return parent[i];
-#   }
-
-#   void Union(int x, int y) { // union with rank
-#     int rootx = find(x);
-#     int rooty = find(y);
-#     if (rootx != rooty) {
-#       if (rank[rootx] > rank[rooty]) parent[rooty] = rootx;
-#       else if (rank[rootx] < rank[rooty]) parent[rootx] = rooty;
-#       else {
-#         parent[rooty] = rootx; rank[rootx] += 1;
-#       }
-#       --count;
-#     }
-#   }
-
-#   int getCount() const {
-#     return count;
-#   }
-
-# private:
-#   vector<int> parent;
-#   vector<int> rank;
-#   int count; // # of connected components
-# };
-
-
 class UnionFind:
-    def __init__(self, n: int):
+    def __init__(self, n: int, count: int):
         # O(n) space
-        self.parent = [node for node in range(n)]
+        self.parent = [i for i in range(n)]
         self.size = [1] * n
+        self.count = count
 
     def find(self, A: int) -> int:
         # O(inverse Ackermann function) time
@@ -96,6 +50,8 @@ class UnionFind:
 
         self.parent[root_B] = root_A
         self.size[root_A] += self.size[root_B]
+
+        self.count -= 1
         return True
 
 
@@ -393,24 +349,24 @@ class _200:
                     fn(i, j, grid)
         return islands
 
+    """
+    index = i * n + j
+    1 1
+    1 0
+
+    0,0 0,1
+    1,0 1,1
+
+    0*2+0 0*2+1    0 1
+    1*2+0 1*2+1    2 3
+    """
+
     def numIslands_(self, grid: List[List[str]]) -> int:
         if len(grid) == 0:
             return 0
         m, n = len(grid), len(grid[0])
-        self.count = sum(grid[i][j] == "1" for i in range(m) for j in range(n))
-        parent = [i for i in range(m * n)]
-
-        def find(x):
-            if parent[x] != x:
-                return find(parent[x])
-            return parent[x]
-
-        def union(x, y):
-            xroot, yroot = find(x), find(y)
-            if xroot == yroot:
-                return
-            parent[xroot] = yroot
-            self.count -= 1
+        count = sum(grid[i][j] == "1" for i in range(m) for j in range(n))
+        uf = UnionFind(m * n, count)
 
         for i in range(m):
             for j in range(n):
@@ -418,10 +374,10 @@ class _200:
                     continue
                 index = i * n + j
                 if j < n - 1 and grid[i][j + 1] == "1":
-                    union(index, index + 1)
+                    uf.union(index, index + 1)
                 if i < m - 1 and grid[i + 1][j] == "1":
-                    union(index, index + n)
-        return self.count
+                    uf.union(index, index + n)
+        return uf.count
 
 
 class _4:
