@@ -507,7 +507,15 @@ class _20:
     Output: false
     """
 
-    ...
+    def isValid(self, s: str) -> bool:
+        stack: List[str] = []
+        match = {"(": ")", "[": "]", "{": "}"}
+        for x in s:
+            if x in match:
+                stack.append(x)
+            elif not stack or match[stack.pop()] != x:
+                return False
+        return not stack
 
 
 class _53:
