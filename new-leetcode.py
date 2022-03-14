@@ -1,3 +1,5 @@
+"""Top 300 leetcode algorithm questions by frequency."""
+
 from __future__ import annotations
 
 import re
@@ -25,20 +27,20 @@ class ListNode:
 
 class UnionFind:
     def __init__(self, n: int, count: int):
-        # O(n) space
+        """O(n) space"""
         self.parent = [i for i in range(n)]
         self.size = [1] * n
         self.count = count
 
     def find(self, A: int) -> int:
-        # O(inverse Ackermann function) time
+        """O(inverse Ackermann function) time"""
         while self.parent[A] != A:
             A, self.parent[A] = self.parent[A], self.parent[self.parent[A]]
         return A
 
     def union(self, A: int, B: int) -> bool:
-        """True if a merge happened, False otherwise"""
-        # O(inverse Ackermann function) time
+        """O(inverse Ackermann function) time
+        True if a merge happened, False otherwise"""
         root_A = self.find(A)
         root_B = self.find(B)
 
@@ -387,9 +389,52 @@ class _4:
     """
     # - Median of Two Sorted Arrays -
     # https://leetcode.com/problems/median-of-two-sorted-arrays/
+    Given two sorted arrays nums1 and nums2 of size m and n respectively,
+    return the median of the two sorted arrays.
+
+    The overall run time complexity should be O(log (m+n)).
+
+    Example 1:
+    Input: nums1 = [1,3], nums2 = [2]
+    Output: 2.00000
+    Explanation: merged array = [1,2,3] and median is 2.
+
+    Example 2:
+    Input: nums1 = [1,2], nums2 = [3,4]
+    Output: 2.50000
+    Explanation: merged array = [1,2,3,4] and median is (2 + 3) / 2 = 2.5.
     """
 
-    ...
+    # https://www.youtube.com/watch?v=LPFhl65R7ww
+    # https://github.com/mission-peace/interview/blob/master/src/com/interview/binarysearch/MedianOfTwoSortedArrayOfDifferentLength.java
+
+    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+        """O(log(min(m,n)) time, O(m+n) space"""
+        x, y = sorted((nums1, nums2), key=len)
+        low, high = 0, len(x)
+
+        while low <= high:
+            x_partition = (low + high) // 2
+            y_partition = (len(x) + len(y) + 1) // 2 - x_partition
+
+            # four points of interest about the two partitions
+            max_l_x = x[x_partition - 1] if x_partition > 0 else -inf
+            max_l_y = y[y_partition - 1] if y_partition > 0 else -inf
+
+            min_r_x = x[x_partition] if x_partition < len(x) else inf
+            min_r_y = y[y_partition] if y_partition < len(y) else inf
+
+            if max_l_x <= min_r_y and max_l_y <= min_r_x:  # valid partition
+                if (len(x) + len(y)) % 2 == 0:  # even
+                    return (max(max_l_x, max_l_y) + min(min_r_x, min_r_y)) / 2
+                else:  # odd
+                    return max(max_l_x, max_l_y)
+            # binary search
+            elif max_l_x > min_r_y:
+                high = x_partition - 1
+            else:
+                low = x_partition + 1
+        raise RuntimeError("Couldn't find median of two sorted arrays!")
 
 
 class _121:
@@ -419,7 +464,13 @@ class _121:
     Explanation: In this case, no transactions are done and the max profit = 0.
     """
 
-    ...
+    def maxProfit(self, prices: List[int]) -> int:
+        """O(n) time, O(1) space"""
+        buy, profit = prices[0], 0
+        for price in prices:
+            buy = min(buy, price)
+            profit = max(profit, price - buy)
+        return profit
 
 
 class _1249:
