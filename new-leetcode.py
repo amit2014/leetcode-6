@@ -7,7 +7,7 @@ from bisect import bisect_left
 from collections import Counter, defaultdict, deque
 from functools import lru_cache, reduce
 from heapq import heapify, heappop, heappush, nlargest
-from itertools import chain, product
+from itertools import chain, product, zip_longest
 from math import comb, inf
 from typing import Callable, Deque, Dict, Final, List, Optional, Set, Tuple, Union
 
@@ -2024,9 +2024,35 @@ class _415:
     """
     # - Add Strings -
     # https://leetcode.com/problems/add-strings/
+    Given two non-negative integers, num1 and num2 represented as string,
+    return the sum of num1 and num2 as a string.
+
+    You must solve the problem without using any built-in library for
+    handling large integers (such as BigInteger). You must also not convert
+    the inputs to integers directly.
+
+    Example 1:
+    Input: num1 = "11", num2 = "123"
+    Output: "134"
+
+    Example 2:
+    Input: num1 = "456", num2 = "77"
+    Output: "533"
+
+    Example 3:
+    Input: num1 = "0", num2 = "0"
+    Output: "0"
     """
 
-    ...
+    def addStrings(self, num1: str, num2: str) -> str:
+        ans: List[int] = []
+        quotient = 0
+        for x, y in zip_longest(reversed(num1), reversed(num2), fillvalue="0"):
+            quotient, remainder = divmod(quotient + int(x) + int(y), 10)
+            ans.append(remainder)
+        if quotient:
+            ans.append(quotient)
+        return "".join(map(str, reversed(ans)))
 
 
 class _1209:
