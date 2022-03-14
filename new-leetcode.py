@@ -699,7 +699,16 @@ class _3:
     substring.
     """
 
-    ...
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        mp: Dict[str, int] = {}  # char -> highest_string_idx
+        ans = i = 0
+        for j in range(len(s)):
+            char = s[j]
+            if char in mp:
+                i = max(i, mp[char] + 1)
+            ans = max(ans, j - i + 1)
+            mp[char] = j
+        return ans
 
 
 class _815:
