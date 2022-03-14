@@ -581,7 +581,13 @@ class _53:
     Output: 23
     """
 
-    ...
+    def maxSubArray(self, nums: List[int]) -> int:
+        """O(n) time, O(1) space"""
+        cur = ans = nums[0]
+        for num in nums[1:]:
+            cur = max(num, cur + num)
+            ans = max(ans, cur)
+        return ans
 
 
 class _68:
