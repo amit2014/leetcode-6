@@ -20,7 +20,11 @@ DefaultDictTrie = lambda: defaultdict(DefaultDictTrie)  # type:ignore
 
 class ListNode:
     def __init__(
-        self, key: int = 0, val: int = 0, prev: ListNode = None, next: ListNode = None
+        self,
+        key: int = 0,
+        val: int = 0,
+        prev: Optional[ListNode] = None,
+        next: Optional[ListNode] = None,
     ):
         self.key = key  # TODO I don't need this
         self.val = val
@@ -509,19 +513,19 @@ class _1249:
 
     def minRemoveToMakeValid(self, s: str) -> str:
         """O(n) time and space"""
-        s = list(s)
+        list_s = list(s)
         stack: List[int] = []
-        for i, c in enumerate(s):
+        for i, c in enumerate(list_s):
             if c == "(":
                 stack.append(i)
             elif c == ")":
                 if stack:  # matching
                     stack.pop()
                 else:  # extra
-                    s[i] = ""
+                    list_s[i] = ""
         while stack:
-            s[stack.pop()] = ""
-        return "".join(s)
+            list_s[stack.pop()] = ""
+        return "".join(list_s)
 
 
 class _20:
@@ -751,7 +755,9 @@ class _815:
             for stop in stops:
                 mp[stop].add(bus)
 
-        queue = deque([(source, 0)])  # deque([(stop,bus_count)])
+        queue: Deque[Tuple[int, int]] = deque(
+            [(source, 0)]
+        )  # deque([(stop,bus_count)])
         visited_stops: Set[int] = set()
         visited_buses: Set[int] = set()
         while queue:

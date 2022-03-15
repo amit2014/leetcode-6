@@ -1,3 +1,6 @@
+[tool.ty]
+type_checker = "pyright"
+
 [tool.mypy]
 allow_redefinition = true
 
