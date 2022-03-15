@@ -12,7 +12,10 @@ from math import comb, inf
 from typing import Callable, Deque, Dict, Final, List, Optional, Set, Tuple, Union
 
 #########################################################################################
-# - Shared Classes -
+# - Common -
+
+# TODO pyright recusive type
+DefaultDictTrie = lambda: defaultdict(DefaultDictTrie)  # type:ignore
 
 
 class ListNode:
@@ -765,13 +768,78 @@ class _815:
         return -1
 
 
+class DictNode:
+    def __init__(self):
+        self.child = defaultdict(DictNode)
+        self.content = ""
+
+
 class _588:
     """
     # - Design In-Memory File System -
     # https://leetcode.com/problems/design-in-memory-file-system/
+    Design a data structure that simulates an in-memory file system.
+
+    Implement the FileSystem class:
+    - FileSystem() Initializes the object of the system.
+    - List<String> ls(String path)
+        - If path is a file path, returns a list that only contains this file's
+        name.
+        - If path is a directory path, returns the list of file and directory
+        names in this directory.
+    The answer should in lexicographic order.
+    - void mkdir(String path) Makes a new directory according to the given path.
+    The given directory path does not exist. If the middle directories in the
+    path do not exist, you should create them as well.
+    - void addContentToFile(String filePath, String content)
+        - If filePath does not exist, creates that file containing given content.
+        - If filePath already exists, appends the given content to original content.
+    - String readContentFromFile(String filePath) Returns the content in the file
+    at filePath.
+
+    Input
+    ["FileSystem", "ls" , "mkdir"   , "addContentToFile"   , "ls"    , "readContentFromFile"]
+    [[]          , ["/"], ["/a/b/c"], ["/a/b/c/d", "hello"], ["/"]   , ["/a/b/c/d"]]
+    Output
+    [null        , []   , null      , null                 , ["a"]   , "hello"]
+
+    Explanation
+    FileSystem fileSystem = new FileSystem();
+    fileSystem.ls("/");                         // return []
+    fileSystem.mkdir("/a/b/c");
+    fileSystem.addContentToFile("/a/b/c/d", "hello");
+    fileSystem.ls("/");                         // return ["a"]
+    fileSystem.readContentFromFile("/a/b/c/d"); // return "hello"
     """
 
-    ...
+    class FileSystem:
+        def __init__(self) -> None:
+            self.file_tree = DefaultDictTrie()  # TODO fix type hint
+            self.files: Dict[str, str] = defaultdict(str)
+
+        def ls(self, path: str) -> List[str]:
+            if path in self.files:
+                return path.split("/")[-1:]  # returns the last item as a List
+            path_node = self.file_tree
+            for token in path.split("/"):
+                if token in path_node:
+                    path_node = path_node[token]
+                elif token:
+                    return []
+            return sorted(path_node.keys())
+
+        def mkdir(self, path: str) -> None:
+            path_node = self.file_tree
+            for token in path.split("/"):
+                if token:
+                    path_node = path_node[token]
+
+        def addContentToFile(self, file_path: str, content: str) -> None:
+            self.mkdir(file_path)
+            self.files[file_path] += content
+
+        def readContentFromFile(self, file_path: str) -> str:
+            return self.files[file_path]
 
 
 class _253:
