@@ -14,8 +14,8 @@ from typing import Callable, Deque, Dict, Final, List, Optional, Set, Tuple, Uni
 #########################################################################################
 # - Common -
 
-# TODO pyright recusive type
-DefaultDictTrie = lambda: defaultdict(DefaultDictTrie)  # type:ignore
+TrieNodeType = Dict[str, "TrieNodeType"]
+DefaultDictTrie: Callable[[], TrieNodeType] = lambda: defaultdict(DefaultDictTrie)
 
 
 class ListNode:
@@ -755,9 +755,8 @@ class _815:
             for stop in stops:
                 mp[stop].add(bus)
 
-        queue: Deque[Tuple[int, int]] = deque(
-            [(source, 0)]
-        )  # deque([(stop,bus_count)])
+        # deque([(stop,bus_count)])
+        queue: Deque[Tuple[int, int]] = deque([(source, 0)])
         visited_stops: Set[int] = set()
         visited_buses: Set[int] = set()
         while queue:
@@ -772,12 +771,6 @@ class _815:
                             visited_stops.add(stop)
                             queue.append((stop, count + 1))
         return -1
-
-
-class DictNode:
-    def __init__(self):
-        self.child = defaultdict(DictNode)
-        self.content = ""
 
 
 class _588:
@@ -1336,9 +1329,45 @@ class _9:
     """
     # - Palindrome Number -
     # https://leetcode.com/problems/palindrome-number/
+    Given an integer x, return true if x is palindrome integer.
+
+    An integer is a palindrome when it reads the same backward as forward.
+
+    For example, 121 is a palindrome while 123 is not.
+
+    Example 1:
+    Input: x = 121
+    Output: true
+    Explanation: 121 reads as 121 from left to right and from right to left.
+
+    Example 2:
+    Input: x = -121
+    Output: false
+    Explanation: From left to right, it reads -121. From right to left, it becomes
+    121-. Therefore it is not a palindrome.
+
+    Example 3:
+    Input: x = 10
+    Output: false
+    Explanation: Reads 01 from right to left. Therefore it is not a palindrome.
     """
 
-    ...
+    def isPalindrome(self, x: int) -> bool:
+        """O(n) time, O(n) space"""
+        return str(x) == str(x)[::-1]
+
+    def isPalindrome_(self, x: int) -> bool:
+        """O(log10(n)) time, O(1) space"""
+        if x < 0 or (x % 10 == 0 and x != 0):  # negative number or trailing 0
+            return False
+
+        first_half, flipped_back_half = x, 0
+        while first_half > flipped_back_half:
+            flipped_back_half = flipped_back_half * 10 + first_half % 10
+            first_half //= 10
+
+        # ignore middle digit
+        return first_half == flipped_back_half or first_half == flipped_back_half // 10
 
 
 class _339:
