@@ -1,8 +1,8 @@
 """Display a binary tree from a BFS serialized array (LeetCode style).
 
-  Typical usage example:
+Typical usage example:
 
-    py make-tree.py [1,2]
+$ py make-tree.py [1,2]
       1
     2
 """
@@ -117,5 +117,5 @@ if __name__ == "__main__":
 
     clean_tree = clean_leetcode(sys.argv[1])
     tree_layers = print_tree(c.deserialize(clean_tree))
-    tree = "\n".join(["  ".join(layer) for layer in tree_layers])
+    tree = "\n".join([(" " * 4) + "  ".join(layer) for layer in tree_layers])
     print(tree)
