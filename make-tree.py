@@ -1,17 +1,17 @@
-"""Display a binary tree from a BFS serialized array.
+"""Display a binary tree from a BFS serialized array (LeetCode style).
 
   Typical usage example:
 
-    py make-tree.py [1,2,None] # no spaces between values!
+    py make-tree.py [1,2]
       1
     2
 """
 
 from __future__ import annotations
 
-from collections import deque
 import sys
-from typing import *
+from collections import deque
+from typing import *  # type:ignore
 
 
 class TreeNode:
@@ -26,26 +26,25 @@ class TreeNode:
         self.right = right
 
 
-class Printer:
-    def print_tree(self, root: Optional[TreeNode]) -> List[List[str]]:
-        def get_depth(node):
-            if not node:
-                return 0
-            return max(get_depth(node.left), get_depth(node.right)) + 1
+def print_tree(root: Optional[TreeNode]) -> List[List[str]]:
+    def get_depth(node):
+        if not node:
+            return 0
+        return max(get_depth(node.left), get_depth(node.right)) + 1
 
-        def insert_value(node, lo, hi, depth=0):
-            if not node:
-                return
-            mid = (lo + hi) // 2
-            output[depth][mid] = str(node.val)
-            insert_value(node.left, lo, mid, depth + 1)
-            insert_value(node.right, mid, hi, depth + 1)
+    def insert_value(node, lo, hi, depth=0):
+        if not node:
+            return
+        mid = (lo + hi) // 2
+        output[depth][mid] = str(node.val)
+        insert_value(node.left, lo, mid, depth + 1)
+        insert_value(node.right, mid, hi, depth + 1)
 
-        depth = get_depth(root)
-        output = [[""] * (2**depth - 1) for _ in range(depth)]
+    depth = get_depth(root)
+    output = [[""] * (2**depth - 1) for _ in range(depth)]
 
-        insert_value(root, 0, 2**depth - 1)
-        return output
+    insert_value(root, 0, 2**depth - 1)
+    return output
 
 
 class Codec:
@@ -87,14 +86,36 @@ class Codec:
             i += 1
         return root
 
-if __name__ == '__main__':
+
+def clean_leetcode(tree: str) -> str:
+    """
+    >>> clean_leetcode("[1,2,3,null,4]")
+    '1,2,3,None,4,None,None'
+    """
+    arr = tree[1:-1].replace("null", "None").split(",")
+    height, max_nodes = 0, 1
+    while len(arr) > max_nodes:
+        height += 1
+        max_nodes = 2 ** (height + 1) - 1
+
+    while len(arr) < max_nodes:
+        arr.append("None")
+
+    return ",".join(arr)
+
+
+if __name__ == "__main__":
+    # NOTE assuming max two digit inputs
+    import doctest
+
+    doctest.testmod()
     c = Codec()
     assert (
         c.serialize(c.deserialize("1,2,5,3,4,None,None,None,None,None,None"))
         == "1,2,5,3,4,None,None,None,None,None,None"
     )
-    tree_layers = Printer().print_tree(c.deserialize(sys.argv[1][1:-1]))
-    tree = '\n'.join(['  '.join(layer) for layer in tree_layers])
+
+    clean_tree = clean_leetcode(sys.argv[1])
+    tree_layers = print_tree(c.deserialize(clean_tree))
+    tree = "\n".join(["  ".join(layer) for layer in tree_layers])
     print(tree)
-    # TODO leetcode posts trees like [1,2] when it should be [1,2,None]
-    # NOTE assuming max two digit inputs
