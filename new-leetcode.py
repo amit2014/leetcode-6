@@ -843,7 +843,7 @@ class _588:
 
 class _253:
     """
-    # - Meeting Rooms II (Leetcode Premium) -
+    # - Meeting Rooms II -
     # https://leetcode.com/problems/meeting-rooms-ii/
     Given an array of meeting time intervals intervals where intervals[i] =
     [starti, endi], return the minimum number of conference rooms required.
@@ -1721,7 +1721,7 @@ class _48:
 
 class _269:
     """
-    # - Alien Dictionary (Leetcode Premium) -
+    # - Alien Dictionary -
     # https://leetcode.com/problems/alien-dictionary/
     There is a new alien language that uses the English alphabet. However, the
     order among the letters is unknown to you.
