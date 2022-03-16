@@ -1,3 +1,12 @@
+"""Display a binary tree from a BFS serialized array.
+
+  Typical usage example:
+
+    py make-tree.py [1,2,None] # no spaces between values!
+      1
+    2
+"""
+
 from __future__ import annotations
 
 from collections import deque
@@ -84,7 +93,7 @@ if __name__ == '__main__':
         c.serialize(c.deserialize("1,2,5,3,4,None,None,None,None,None,None"))
         == "1,2,5,3,4,None,None,None,None,None,None"
     )
-    tree_layers = Printer().print_tree(c.deserialize(sys.argv[1]))
+    tree_layers = Printer().print_tree(c.deserialize(sys.argv[1][1:-1]))
     tree = '\n'.join(['  '.join(layer) for layer in tree_layers])
     print(tree)
     # TODO leetcode posts trees like [1,2] when it should be [1,2,None]
