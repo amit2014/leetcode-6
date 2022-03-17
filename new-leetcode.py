@@ -32,6 +32,18 @@ class ListNode:
         self.next = next
 
 
+class TreeNode:
+    def __init__(
+        self,
+        val: int = 0,
+        left: Optional[TreeNode] = None,
+        right: Optional[TreeNode] = None,
+    ):
+        self.val = val
+        self.left = left
+        self.right = right
+
+
 class UnionFind:
     def __init__(self, n: int, count: int):
         """O(n) space"""
@@ -1485,9 +1497,32 @@ class _938:
     """
     # - Range Sum of BST -
     # https://leetcode.com/problems/range-sum-of-bst/
+    Given the root node of a binary search tree and two integers low and high,
+    return the sum of values of all nodes with a value in the inclusive range
+    [low, high].
+
+    Example 1:
+          10
+      5        15
+    3    7        18
+    Input: root = [10,5,15,3,7,null,18], low = 7, high = 15
+    Output: 32
+    Explanation: Nodes 7, 10, and 15 are in the range [7, 15]. 7 + 10 + 15 = 32.
+
+    Example 2:
+                  10
+          5                15
+      3        7        13        18
+    1        6
+    Input: root = [10,5,15,3,7,13,18,1,null,6], low = 6, high = 10
+    Output: 23
+    Explanation: Nodes 6, 7, and 10 are in the range [6, 10]. 6 + 7 + 10 = 23.
+
+    # NOTE All Node.val are unique.
     """
 
-    ...
+    def rangeSumBST(self, root: Optional[TreeNode], low: int, high: int) -> int:
+        ...
 
 
 class _71:
@@ -2728,9 +2763,39 @@ class _412:
     """
     # - Fizz Buzz -
     # https://leetcode.com/problems/fizz-buzz/
+    Given an integer n, return a string array answer (1-indexed) where:
+
+    answer[i] == "FizzBuzz" if i is divisible by 3 and 5.
+    answer[i] == "Fizz" if i is divisible by 3.
+    answer[i] == "Buzz" if i is divisible by 5.
+    answer[i] == i (as a string) if none of the above conditions are true.
+
+    Example 1:
+    Input: n = 3
+    Output: ["1","2","Fizz"]
+
+    Example 2:
+    Input: n = 5
+    Output: ["1","2","Fizz","4","Buzz"]
+
+    Example 3:
+    Input: n = 15
+    Output: ["1","2","Fizz","4","Buzz","Fizz","7","8","Fizz","Buzz","11","Fizz",
+    "13","14","FizzBuzz"]
     """
 
-    ...
+    def fizzBuzz(self, n: int) -> List[str]:
+        ans: List[str] = []
+        for i in range(1, n + 1):
+            if i % 15 == 0:
+                ans.append("FizzBuzz")
+            elif i % 3 == 0:
+                ans.append("Fizz")
+            elif i % 5 == 0:
+                ans.append("Buzz")
+            else:
+                ans.append(str(i))
+        return ans
 
 
 class _767:
