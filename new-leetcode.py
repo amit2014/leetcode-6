@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 from bisect import bisect_left
-from collections import Counter, defaultdict, deque
+from collections import Counter, OrderedDict, defaultdict, deque
 from functools import lru_cache, reduce
 from heapq import heapify, heappop, heappush, nlargest
 from itertools import chain, groupby, product, zip_longest
@@ -2453,42 +2453,43 @@ class _716:
                 self.push(item)
             return mx
 
-    # class MaxStack:
-
-    #     def __init__(self):
-    #         """
-    #         initialize your data structure here.
-    #         """
-    #         self.k = 0              # key
-    #         self.pq = []            # priority queue
-    #         self.od = OrderedDict() # ordered dict
+    # TODO this passses leetcode but doesn't typecheck need to fix
+    #      and isnt popmax/peepmax nlogn?
+    # class MaxStack_:
+    #     """O(logn) time popmax, O(1) time others, O(n) space"""
+    #     def __init__(self) -> None:
+    #         self.key = 0
+    #         self.heap = []
+    #         self.od = OrderedDict()
 
     #     def push(self, x: int) -> None:
-    #         heappush(self.pq, (-x, self.k))
-    #         self.od[self.k] = x
-    #         self.k -= 1
+    #         heappush(self.heap, (-x, self.key))
+    #         self.od[self.key] = x
+    #         self.key -= 1
 
     #     def pop(self) -> int:
     #         k, x = self.od.popitem(last=True)
     #         return x
 
     #     def top(self) -> int:
-    #         k, x = self.od.popitem(last=True)
-    #         self.od[k] = x
+    #         key, x = self.od.popitem(last=True)
+    #         self.od[key] = x
     #         return x
 
     #     def peekMax(self) -> int:
-    #         while self.pq:
-    #             x, k = heappop(self.pq)
-    #             if k in self.od: break
-    #         heappush(self.pq, (x, k))
+    #         while self.heap:
+    #             x, key = heappop(self.heap)
+    #             if key in self.od:
+    #                 break
+    #         heappush(self.heap, (x, key))
     #         return -x
 
     #     def popMax(self) -> int:
-    #         while self.pq:
-    #             x, k = heappop(self.pq)
-    #             if k in self.od: break
-    #         self.od.pop(k)
+    #         while self.heap:
+    #             x, key = heappop(self.heap)
+    #             if key in self.od:
+    #                 break
+    #         self.od.pop(key)
     #         return -x
 
 
