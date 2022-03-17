@@ -1614,7 +1614,8 @@ class _347:
     """
     # - Top K Frequent Elements -
     # https://leetcode.com/problems/top-k-frequent-elements/
-    Given an integer array nums and an integer k, return the k most frequent elements. You may return the answer in any order.
+    Given an integer array nums and an integer k, return the k most frequent
+    elements. You may return the answer in any order.
 
     Example 1:
     Input: nums = [1,1,1,2,2,3], k = 2
@@ -1625,7 +1626,22 @@ class _347:
     Output: [1]
     """
 
-    ...
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        """Bucket sort O(n) time, O(n) space"""
+        bucket: List[List[int]] = [[] for _ in range(len(nums))]
+        count = Counter(nums).items()
+        for num, freq in count:
+            bucket[freq - 1].append(num)
+        return list(chain(*bucket))[::-1][:k]
+
+    def topKFrequent_(self, nums: List[int], k: int) -> List[int]:
+        """Heapq way, O(nlogn) or nlogk time, O(n) space"""
+        count = Counter(nums)
+        return nlargest(k, count.keys(), key=count.__getitem__)
+
+    def topKFrequent__(self, nums: List[int], k: int) -> List[int]:
+        """Calls heapq under the hood"""
+        return [x for x, y in Counter(nums).most_common(k)]
 
 
 class _443:
