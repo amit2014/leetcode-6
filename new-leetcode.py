@@ -1522,7 +1522,33 @@ class _938:
     """
 
     def rangeSumBST(self, root: Optional[TreeNode], low: int, high: int) -> int:
-        ...
+        def dfs(node):
+            nonlocal ans
+            if node:
+                if low <= node.val <= high:
+                    ans += node.val
+                if low < node.val:
+                    dfs(node.left)
+                if node.val < high:
+                    dfs(node.right)
+
+        ans = 0
+        dfs(root)
+        return ans
+
+    def rangeSumBST_(self, root: Optional[TreeNode], low: int, high: int) -> int:
+        ans = 0
+        queue: Deque[Optional[TreeNode]] = deque([root])
+        while queue:
+            node = queue.popleft()
+            if node:
+                if low <= node.val <= high:
+                    ans += node.val
+                if low < node.val:
+                    queue.append(node.left)
+                if node.val < high:
+                    queue.append(node.right)
+        return ans
 
 
 class _71:
