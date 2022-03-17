@@ -1,6 +1,8 @@
 junk*
 .leetcode*
 temp.py
+node_module*
+package-lock.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
