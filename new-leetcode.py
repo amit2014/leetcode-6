@@ -3639,6 +3639,7 @@ class _1710:
     """
 
     def maximumUnits(self, boxTypes: List[List[int]], truckSize: int) -> int:
+        """O(nlogn) time O(n) space"""
         ans = 0
         for boxes, units in sorted(boxTypes, key=lambda x: x[1], reverse=True):
             boxes = min(boxes, truckSize)
