@@ -3361,9 +3361,49 @@ class _234:
     # NOTE only use node.val and node.next of ListNode
 
     def isPalindrome(self, head: Optional[ListNode]) -> bool:
-        ...
-        # TODO after reverse singly linked list
+        """Maintain list method: O(n) time O(1) space"""
 
+        def middleNode(head: ListNode) -> ListNode:
+            slow = fast = head
+            while fast.next and fast.next.next: # in a->b->c->d, want b
+                slow = slow.next
+                fast = fast.next.next
+            return slow
+
+        def reverseList(head: ListNode) -> ListNode:
+            prev, curr = None, head
+            while curr:
+                curr.next, prev, curr = prev, curr, curr.next
+            return prev
+
+        mid = middleNode(head)
+        tail = reverseList(mid.next) # reverse second half
+        _head, _tail = head, tail
+        ans = True
+        while ans and _tail is not None:
+            if _head.val != _tail.val:
+                ans = False # don't early out so we can restore list
+            _head = _head.next
+            _tail = _tail.next
+        mid.next = reverseList(tail) # restore list
+        return ans
+
+    # def isPalindrome_(self, head: Optional[ListNode]) -> bool:
+    #     """Destroy list method: O(n) time O(1) space"""
+    #     fast = slow = head
+    #     while fast and fast.next:
+    #         fast = fast.next.next
+    #         slow = slow.next
+
+    #     prev = None
+    #     while slow:
+    #         slow.next, slow, prev = prev, slow.next, slow
+
+    #     while prev and head.val == prev.val:
+    #         head = head.next
+    #         prev = prev.next
+
+    #     return not prev
 
 class _289:
     """
