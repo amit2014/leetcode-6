@@ -938,19 +938,7 @@ class _5:
     """
     # - Longest Palindromic Substring -
     # https://leetcode.com/problems/longest-palindromic-substring/
-    Given a string s, return the longest palindromic substring in s.
-
-    Example 1:
-    Input: s = "babad"
-    Output: "bab"
-    Explanation: "aba" is also a valid answer.
-
-    Example 2:
-    Input: s = "cbbd"
-    Output: "bb"
     """
-
-    ...
 
 
 class _380:
@@ -2953,7 +2941,8 @@ class _605:
     NOTE There are no two adjacent flowers in flowerbed.
     """
 
-    def canPlaceFlowers_(self, flowerbed: List[int], n: int) -> bool:
+    def canPlaceFlowers(self, flowerbed: List[int], n: int) -> bool:
+        """O(n) time O(1) space"""
         for i, x in enumerate(flowerbed):
             if (
                 x == 0
@@ -2962,6 +2951,8 @@ class _605:
             ):
                 n -= 1
                 flowerbed[i] = 1
+                if n <= 0:
+                    return True
         return n <= 0
 
 
@@ -3352,9 +3343,26 @@ class _234:
     """
     # - Palindrome Linked List -
     # https://leetcode.com/problems/palindrome-linked-list/
+    Given the head of a singly linked list, return true if it is a palindrome.
+
+    Example 1:
+    1->2->2->1
+    Input: head = [1,2,2,1]
+    Output: true
+
+    Example 2:
+    1->2
+    Input: head = [1,2]
+    Output: false
+
+    NOTE 0 <= Node.val <= 9
     """
 
-    ...
+    # NOTE only use node.val and node.next of ListNode
+
+    def isPalindrome(self, head: Optional[ListNode]) -> bool:
+        ...
+        # TODO after reverse singly linked list
 
 
 class _289:
@@ -3781,9 +3789,40 @@ class _206:
     """
     # - Reverse Linked List -
     # https://leetcode.com/problems/reverse-linked-list/
+    Given the head of a singly linked list, reverse the list, and return the reversed list.
+
+    Example 1:
+    1->2->3->4->5
+    1<-2<-3<-4<-5
+    Input: head = [1,2,3,4,5]
+    Output: [5,4,3,2,1]
+
+    Example 2:
+    Input: head = [1,2]
+    Output: [2,1]
+
+    Example 3:
+    Input: head = []
+    Output: []
     """
 
-    ...
+    # NOTE only use node.val and node.next of ListNode
+
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        """Iterative method: O(n) time O(1) space"""
+        prev, curr = None, head
+        while curr:
+            curr.next, prev, curr = prev, curr, curr.next
+        return prev
+
+    def reverseList_(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        """Recursive method: O(n) time O(n) space"""
+        if not head or not head.next:
+            return head
+        tail = self.reverseList(head.next)
+        head.next.next = head
+        head.next = None
+        return tail
 
 
 class _935:
