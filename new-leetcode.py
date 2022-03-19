@@ -1,4 +1,4 @@
-"""Top 300 leetcode algorithm questions by frequency."""
+"""Top 300 + 1 leetcode algorithm questions by frequency."""
 
 from __future__ import annotations
 
@@ -3858,6 +3858,34 @@ class _44:
     """
 
     ...
+
+
+class _169:
+    """
+    # - Majority Element -
+    # https://leetcode.com/problems/majority-element/
+    Given an array nums of size n, return the majority element.
+
+    The majority element is the element that appears more than ⌊n / 2⌋ times.
+    You may assume that the majority element always exists in the array.
+
+    Example 1:
+    Input: nums = [3,2,3]
+    Output: 3
+
+    Example 2:
+    Input: nums = [2,2,1,1,1,2,2]
+    Output: 2
+    """
+
+    def majorityElement_(self, nums: List[int]) -> int:
+        """Dictionary method: O(n) time O(n) space"""
+        counts: Dict[int, int] = {}  # {num:count}
+        for num in nums:
+            counts[num] = counts.get(num, 0) + 1
+            if counts[num] > len(nums) // 2:
+                return num
+        raise RuntimeError("Couldn't find majority element in array.")
 
 
 class _359:
