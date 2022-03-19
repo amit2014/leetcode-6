@@ -3878,6 +3878,18 @@ class _169:
     Output: 2
     """
 
+    def majorityElement(self, nums: List[int]) -> int:
+        """Boyer-Moore method: O(n) time O(1) space"""
+        ans = vote = 0
+        for x in nums:
+            if vote == 0:
+                ans = x
+            if x == ans:
+                vote += 1
+            else:
+                vote -= 1
+        return ans
+
     def majorityElement_(self, nums: List[int]) -> int:
         """Dictionary method: O(n) time O(n) space"""
         counts: Dict[int, int] = {}  # {num:count}
