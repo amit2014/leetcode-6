@@ -2755,6 +2755,11 @@ class _509:
     """
 
     def fib(self, N: int) -> int:
+        """O(logn) time O(1) space"""
+        golden_ratio = (1 + (5**0.5)) / 2
+        return round((golden_ratio**N) / (5**0.5))
+
+    def fib_(self, N: int) -> int:
         """O(n) time, O(1) space"""
         if N <= 1:
             return N
