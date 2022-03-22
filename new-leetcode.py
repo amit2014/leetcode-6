@@ -4047,11 +4047,11 @@ class _283:
     """
 
     def moveZeroes(self, nums: List[int]) -> None:
-        ii = 0
-        for i in range(len(nums)):
-            if nums[i]:
-                nums[i], nums[ii] = nums[ii], nums[i]
-                ii += 1
+        i = 0
+        for j in range(len(nums)):
+            if nums[j]:
+                nums[j], nums[i] = nums[i], nums[j]
+                i += 1
 
 
 class _1004:
