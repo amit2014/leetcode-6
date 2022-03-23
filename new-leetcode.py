@@ -4764,6 +4764,9 @@ class _349:
     """
 
     def intersection(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        """O(max(m,n)) avg case O(m*n) worst case time O(m+n) space"""
+        # NOTE The worse case is if the set decays into linear searching buckets
+        #      https://wiki.python.org/moin/TimeComplexity#set
         return list(set(nums1) & set(nums2))
 
 
