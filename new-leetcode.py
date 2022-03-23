@@ -1,4 +1,4 @@
-"""Top 300 + 1 leetcode algorithm questions by frequency."""
+"""Top 300 + 2 leetcode algorithm questions by frequency."""
 
 from __future__ import annotations
 
@@ -5456,3 +5456,43 @@ class _953:
     """
 
     ...
+
+
+#########################################################################################
+# - Sub 300 (most of them at least) -
+
+
+class _977:
+    """
+    # - Squares of a Sorted Array -
+    # https://leetcode.com/problems/squares-of-a-sorted-array/
+    Given an integer array nums sorted in non-decreasing order, return an array
+    of the squares of each number sorted in non-decreasing order.
+
+    Example 1:
+    Input: nums = [-4,-1,0,3,10]
+    Output: [0,1,9,16,100]
+    Explanation: After squaring, the array becomes [16,1,0,9,100].
+    After sorting, it becomes [0,1,9,16,100].
+
+    Example 2:
+    Input: nums = [-7,-3,2,3,11]
+    Output: [4,9,9,49,121]
+
+    NOTE nums is sorted in non-decreasing order.
+    """
+
+    def sortedSquares(self, nums: List[int]) -> List[int]:
+        """O(n) time O(n) space"""
+        n = len(nums)
+        ans = [0] * n
+        left, right = 0, n - 1
+        for i in reversed(range(n)):
+            if abs(nums[left]) < abs(nums[right]):
+                square = nums[right]
+                right -= 1
+            else:
+                square = nums[left]
+                left += 1
+            ans[i] = square**2
+        return ans
