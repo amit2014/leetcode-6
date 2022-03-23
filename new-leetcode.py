@@ -4751,9 +4751,20 @@ class _349:
     """
     # - Intersection of Two Arrays -
     # https://leetcode.com/problems/intersection-of-two-arrays/
+    Given two integer arrays nums1 and nums2, return an array of their intersection. Each element in the result must be unique and you may return the result in any order.
+
+    Example 1:
+    Input: nums1 = [1,2,2,1], nums2 = [2,2]
+    Output: [2]
+
+    Example 2:
+    Input: nums1 = [4,9,5], nums2 = [9,4,9,8,4]
+    Output: [9,4]
+    Explanation: [4,9] is also accepted.
     """
 
-    ...
+    def intersection(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        return list(set(nums1) & set(nums2))
 
 
 class _2008:
@@ -5125,9 +5136,66 @@ class _346:
     """
     # - Moving Average from Data Stream -
     # https://leetcode.com/problems/moving-average-from-data-stream/
+    Given a stream of integers and a window size, calculate the moving average of
+    all integers in the sliding window.
+
+    Implement the MovingAverage class:
+    * MovingAverage(int size) Initializes the object with the size of the window size.
+    * double next(int val) Returns the moving average of the last size values of the
+    stream.
+
+    Example 1:
+    Input
+    ["MovingAverage", "next", "next", "next", "next"]
+    [[3], [1], [10], [3], [5]]
+    Output
+    [null, 1.0, 5.5, 4.66667, 6.0]
+
+    Explanation
+    MovingAverage movingAverage = new MovingAverage(3);
+    movingAverage.next(1); // return 1.0 = 1 / 1
+    movingAverage.next(10); // return 5.5 = (1 + 10) / 2
+    movingAverage.next(3); // return 4.66667 = (1 + 10 + 3) / 3
+    movingAverage.next(5); // return 6.0 = (10 + 3 + 5) / 3
     """
 
-    ...
+    class MovingAverage:
+        """Queue method: O(1) time O(n) space"""
+
+        def __init__(self, size: int):
+            self.nums = deque()
+            self.size = size
+            self.window_sum = 0
+
+        def next(self, val: int) -> float:
+            self.nums.append(val)
+            self.window_sum += val
+            if len(self.nums) > self.size:
+                self.window_sum -= self.nums.popleft()
+            return self.window_sum / len(self.nums)
+
+    class MovingAverage_:
+        """Circular queue (array) method: O(1) time O(n) space"""
+
+        # NOTE tail = (head + 1) mod size
+        #      in a circular queue:
+        #   -> [ ] [H] | [T] [ ] <-
+        #   |                     |
+        #   -----------------------
+
+        def __init__(self, size: int):
+            self.size = size
+            self.arr = [0] * self.size
+            self.head = self.window_sum = 0
+            self.count = 0
+
+        def next(self, val: int) -> float:
+            self.count += 1
+            tail = (self.head + 1) % self.size
+            self.window_sum = self.window_sum - self.arr[tail] + val
+            self.head = (self.head + 1) % self.size  # head eats tail
+            self.arr[self.head] = val
+            return self.window_sum / min(self.size, self.count)
 
 
 class _1275:
