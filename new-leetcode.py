@@ -4706,9 +4706,62 @@ class _202:
     """
     # - Happy Number -
     # https://leetcode.com/problems/happy-number/
+    Write an algorithm to determine if a number n is happy.
+
+    A happy number is a number defined by the following process:
+    * Starting with any positive integer, replace the number by the sum of the
+    squares of its digits.
+    * Repeat the process until the number equals 1 (where it will stay), or it
+    loops endlessly in a cycle which does not include 1.
+    * Those numbers for which this process ends in 1 are happy.
+
+    Return true if n is a happy number, and false if not.
+
+    Example 1:
+    Input: n = 19
+    Output: true
+    Explanation:
+    1^2 + 9^2 = 82
+    8^2 + 2^2 = 68
+    6^2 + 8^2 = 100
+    1^2 + 0^2 + 0^2 = 1
+
+    Example 2:
+    Input: n = 2
+    Output: false
     """
 
-    ...
+    def fn(self, n: int) -> int:
+        """O(logn) time O(1) space"""
+        # NOTE Finding the next value for a given number has a cost of O(logn)
+        # because we are processing each digit in the number, and the number of
+        # digits in a number is given by logn.
+        ans = 0
+        while n > 0:
+            n, digit = divmod(n, 10)
+            ans += digit**2
+        return ans
+
+    def isHappy(self, n: int) -> bool:
+        """Floyd's cycle detection method: O(logn) space O(1) space"""
+        slow = n
+        fast = self.fn(n)
+        while fast != 1 and slow != fast:
+            slow = self.fn(slow)
+            fast = self.fn(self.fn(fast))
+        return fast == 1
+
+    def isHappy_(self, n: int) -> bool:
+        """Hashset method: O(logn) time O(logn) space"""
+        seen = set()
+        while n != 1 and n not in seen:
+            # NOTE we dont have to deal with the case where the number always increases
+            # because we know it always decreases or loops
+            # thus notice the number of digits in n will shrink by 1 each iteration
+            # meaning n decreases by logn.
+            seen.add(n)
+            n = self.fn(n)
+        return n == 1
 
 
 class _862:
