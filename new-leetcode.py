@@ -4001,34 +4001,56 @@ class _706:
 
     # this question is too open ended, don't think too hard about it
 
+    class MyHashMap:
+        w: Final = 32
+        k: Final = 10
+        M: Final = 2**k
+        W: Final = 2**w
+        a: Final = round(2 / (1 + (5 ** (1 / 2))) * W)
 
-class MyHashSet:
-    w: Final = 32
-    k: Final = 10
-    M: Final = 2**k
-    W: Final = 2**w
-    a: Final = round(2 / (1 + (5 ** (1 / 2))) * W)
+        def __init__(self) -> None:
+            # NOTE this doesn't implement rehashing, it's a fixed size hashmap
+            self.arr = [[] for _ in range(self.M)]
 
-    def __init__(self) -> None:
-        self.arr = [[] for _ in range(self.M)]
+        def _hash(self, key: int) -> int:
+            # fibonnaci hashing, good for the low number range given
+            return ((self.a * key) & (self.W - 1)) >> (self.w - self.k)
 
-    def _hash(self, key: int) -> int:
-        # fibonnaci hashing, good for the low number range given
-        return ((self.a * key) & (self.W - 1)) >> (self.w - self.k)
+        def put(self, key: int, value: int) -> None:
+            h = self._hash(key)
+            for i, (k, v) in enumerate(self.arr[h]):
+                if k == key:
+                    self.arr[h][i] = (k, value)
+                    return
+            self.arr[h].append((key, value))
 
-    def add(self, key: int) -> None:
-        h = self._hash(key)
-        if key not in self.arr[h]:
-            self.arr[h].append(key)
+        def get(self, key: int) -> int:
+            h = self._hash(key)
+            for i, (k, v) in enumerate(self.arr[h]):
+                if k == key:
+                    return v
+            return -1
 
-    def remove(self, key: int) -> None:
-        h = self._hash(key)
-        if key in self.arr[h]:
-            self.arr[h].remove(key)
+        def remove(self, key: int) -> None:
+            h = self._hash(key)
+            for i, (k, v) in enumerate(self.arr[h]):
+                if k == key:
+                    self.arr[h].remove((k, v))
 
-    def contains(self, key: int) -> bool:
-        h = self._hash(key)
-        return key in self.arr[h]
+    # 705 hashset
+    # def add(self, key: int) -> None:
+    #     h = self._hash(key)
+    #     if key not in self.arr[h]:
+    #         self.arr[h].append(key)
+
+    # def remove(self, key: int) -> None:
+    #     h = self._hash(key)
+    #     if key in self.arr[h]:
+    #         self.arr[h].remove(key)
+
+    # def contains(self, key: int) -> bool:
+    #     h = self._hash(key)
+    #     return key in self.arr[h]
 
 
 class _283:
