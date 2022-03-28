@@ -971,9 +971,30 @@ class _560:
     """
     # - Subarray Sum Equals K -
     # https://leetcode.com/problems/subarray-sum-equals-k/
+    Given an array of integers nums and an integer k, return the total number of
+    subarrays whose sum equals to k.
+
+    Example 1:
+    Input: nums = [1,1,1], k = 2
+    Output: 2
+
+    Example 2:
+    Input: nums = [1,2,3], k = 3
+    Output: 2
     """
 
-    ...
+    # NOTE this one is simple, but I don't fully gronk it
+
+    def subarraySum(self, nums: List[int], k: int) -> int:
+        """O(n) time O(n) space"""
+        count = sum = 0
+        mp: Dict[int, int] = {0: 1}  # {sum: count of sum}
+        for num in nums:
+            sum += num
+            if sum - k in mp:
+                count += mp[sum - k]
+            mp[sum] = mp.get(sum, 0) + 1
+        return count
 
 
 class _811:
