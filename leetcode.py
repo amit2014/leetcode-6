@@ -1269,7 +1269,7 @@ class Graph:
                         visited.add((dx, dy))
             return visited
 
-        pacific = [(0, i) for i in range(len_cols)] + [
+        pacific = [(0, i) for i in range(len_cols)] + [  # type: ignore
             (i, 0) for i in range(1, len_rows)
         ]  # top and left edges
         atlantic = [(len_rows - 1, i) for i in range(len_cols)] + [

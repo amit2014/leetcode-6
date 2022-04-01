@@ -117,5 +117,7 @@ if __name__ == "__main__":
 
     clean_tree = clean_leetcode(sys.argv[1])
     tree_layers = print_tree(c.deserialize(clean_tree))
-    tree = "\n".join([(" " * 4) + " ".join([f"{x:2}" for x in layer]) for layer in tree_layers])
+    tree = "\n".join(
+        [(" " * 4) + " ".join([f"{x:2}" for x in layer]) for layer in tree_layers]
+    )
     print(tree)

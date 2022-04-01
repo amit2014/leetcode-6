@@ -12,7 +12,7 @@ with open("leetcode.py") as f:
 
 with open(".leetcode.py") as f:
     for token_type, *_, line in tokenize.generate_tokens(f.readline):
-        if token_type == tokenize.COMMENT and len(token_type) > 50:
+        if token_type == tokenize.COMMENT and len(token_type) > 50:  # type: ignore
             print(line)
 
 # print(f"{count=}/75")
