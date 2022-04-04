@@ -9,7 +9,7 @@ from functools import lru_cache, reduce
 from heapq import heapify, heappop, heappush, nlargest
 from itertools import chain, groupby, product, zip_longest
 from math import comb, inf
-from random import random
+from random import choice, random, shuffle
 from typing import Callable, Deque, Dict, Final, List, Optional, Set, Tuple, Union
 
 #########################################################################################
@@ -1157,9 +1157,70 @@ class _215:
     """
     # - Kth Largest Element in an Array -
     # https://leetcode.com/problems/kth-largest-element-in-an-array/
+    Given an integer array nums and an integer k, return the kth largest element in
+    the array.
+
+    Note that it is the kth largest element in the sorted order, not the kth distinct
+    element.
+
+    Example 1:
+    Input: nums = [3,2,1,5,6,4], k = 2
+    Output: 5
+
+    Example 2:
+    Input: nums = [3,2,3,1,2,4,5,5,6], k = 4
+    Output: 4
     """
 
-    ...
+    # NOTE Quickselect uses the same overall approach as quicksort, choosing one element as a pivot and partitioning the data in two based on the pivot, accordingly as less than or greater than the pivot. However, instead of recursing into both sides, as in quicksort, quickselect only recurses into one side – the side with the element it is searching for. This reduces the average complexity from O(nlogn) to O(n), with a worst case of O(n^2).
+
+    # TODO I only understand the recursive one
+    # btw... these perform worse than
+    #   return sorted(nums)[-k]
+
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        """Quickselect method recursive"""
+        pivot = choice(nums)
+
+        greater = [x for x in nums if x > pivot]
+        equal = [x for x in nums if x == pivot]
+        less = [x for x in nums if x < pivot]
+
+        if k <= len(greater):
+            return self.findKthLargest(greater, k)
+        elif k > len(greater) + len(equal):
+            return self.findKthLargest(less, k - len(greater) - len(equal))
+        else:
+            return equal[0]
+
+    def findKthLargest_(self, nums: List[int], k: int) -> int:
+        """Quickselect method iterative"""
+
+        def partition(lo, hi):
+            """Return partition of nums[lo:hi]"""
+            i, j = lo + 1, hi - 1
+            while i <= j:
+                if nums[i] < nums[lo]:
+                    i += 1
+                elif nums[j] > nums[lo]:
+                    j -= 1
+                else:
+                    nums[i], nums[j] = nums[j], nums[i]
+                    i += 1
+                    j -= 1
+            nums[lo], nums[j] = nums[j], nums[lo]
+            return j
+
+        shuffle(nums)
+        lo, hi = 0, len(nums)
+        while True:
+            mid = partition(lo, hi)
+            if mid + k < len(nums):
+                lo = mid + 1
+            elif mid + k == len(nums):
+                return nums[mid]
+            else:
+                hi = mid
 
 
 class _227:
