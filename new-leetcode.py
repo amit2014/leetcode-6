@@ -2131,7 +2131,53 @@ class _48:
        [16,  7, 10, 11]]
     """
 
-    ...
+    # tuples accepted version
+    # def rotate(self, matrix) -> None:
+    # matrix[:] = list(zip(*matrix[::-1]))
+
+    # peter norvig's transpose
+    # >>> mat
+    # [[1, 2], [3, 4]]
+    # >>> list(zip(*mat))
+    # [(1, 3), (2, 4)]
+
+    # >>> def _(n):
+    # ...     for i in range(n):
+    # ...             for j in range(n//2):
+    # ...                     print(i,j,-j-1)
+    # ...
+    # >>> _(5)
+    # 0 0 -1
+    # 0 1 -2
+    # 1 0 -1
+    # 1 1 -2
+    # 2 0 -1
+    # 2 1 -2
+    # 3 0 -1
+    # 3 1 -2
+    # 4 0 -1
+    # 4 1 -2
+
+    def rotate(self, matrix: List[List[int]]) -> None:
+        matrix[:] = list(list(row) for row in zip(*matrix[::-1]))
+
+    class rotate_:
+        # this is the "noooo stop being clever !!1" solution:
+        def rotate(self, matrix: List[List[int]]) -> None:
+            self.transpose(matrix)
+            self.reflect(matrix)
+
+        def transpose(self, matrix):
+            n = len(matrix)
+            for i in range(n):
+                for j in range(i + 1, n):
+                    matrix[j][i], matrix[i][j] = matrix[i][j], matrix[j][i]
+
+        def reflect(self, matrix):
+            n = len(matrix)
+            for i in range(n):
+                for j in range(n // 2):
+                    matrix[i][j], matrix[i][-j - 1] = matrix[i][-j - 1], matrix[i][j]
 
 
 class _269:
