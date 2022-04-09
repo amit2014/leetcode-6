@@ -1116,6 +1116,8 @@ class _314:
 
     def verticalOrder_(self, root: TreeNode) -> List[List[int]]:
         """O(n) time O(n) space"""
+        if root is None:
+            return []
         ans = defaultdict(list)
         min_ = max_ = 0
         queue: Deque[Tuple[Optional[TreeNode], int]] = deque([(root, 0)])
