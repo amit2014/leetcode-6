@@ -1075,9 +1075,59 @@ class _314:
     """
     # - Binary Tree Vertical Order Traversal -
     # https://leetcode.com/problems/binary-tree-vertical-order-traversal/
+    Given the root of a binary tree, return the vertical order traversal of its node's
+    values. (i.e., from top to bottom, column by column).
+
+    If two nodes are in the same row and column, the order should be from left to right.
+
+    Example 1:
+             3
+       9           20
+                15    7
+    Input: root = [3,9,20,null,null,15,7]
+    Output: [[9],[3,15],[20],[7]]
+
+    Example 2:
+             3
+       9           8
+    4     0     1     7
+    Input: root = [3,9,8,4,0,1,7]
+    Output: [[4],[9],[3,0,1],[8],[7]]
+
+    Example 3:
+                         3
+             9                       8
+       4           0           1           7
+                      2     5
+    Input: root = [3,9,8,4,0,1,7,null,null,null,2,5]
+    Output: [[4],[9,5],[3,0,1],[8,2],[7]]
     """
 
-    ...
+    def verticalOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        """O(nlogn) time O(n) space"""
+        ans = defaultdict(list)
+        queue: List[Tuple[Optional[TreeNode], int]] = [(root, 0)]
+        for node, k in queue:
+            if node:
+                ans[k].append(node.val)
+                queue.append((node.left, k - 1))
+                queue.append((node.right, k + 1))
+        return [ans[k] for k in sorted(ans)]
+
+    def verticalOrder_(self, root: TreeNode) -> List[List[int]]:
+        """O(n) time O(n) space"""
+        ans = defaultdict(list)
+        min_ = max_ = 0
+        queue: Deque[Tuple[Optional[TreeNode], int]] = deque([(root, 0)])
+        while queue:
+            node, k = queue.popleft()
+            if node:
+                ans[k].append(node.val)
+                min_ = min(min_, k)
+                max_ = max(max_, k)
+                queue.append((node.left, k - 1))
+                queue.append((node.right, k + 1))
+        return [ans[k] for k in range(min_, max_ + 1)]
 
 
 class _394:
