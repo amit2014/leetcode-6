@@ -1515,9 +1515,41 @@ class _22:
     """
     # - Generate Parentheses -
     # https://leetcode.com/problems/generate-parentheses/
+    Given n pairs of parentheses, write a function to generate all combinations of
+    well-formed parentheses.
+
+    Example 1:
+    Input: n = 3
+    Output: ["((()))","(()())","(())()","()(())","()()()"]
+
+    Example 2:
+    Input: n = 1
+    Output: ["()"]
     """
 
-    ...
+    # http://www.geometer.org/mathcircles/catalan.pdf
+    """
+    We know that in any zbalanced set, the first character has to be “(”. We also know
+    that somewhere in the set is the matching “)” for that opening one. In between that
+    pair of parentheses is a balanced set of parentheses, and to the right of it is
+    another balanced set:
+        (A)B
+    where A is a balanced set of parentheses and so is B. Both A and B can contain up to
+    n - 1 pairs of parentheses, but if A contains k pairs, then B contains n - k - 1
+    pairs. Notice that we will allow either A or B to contain zero pairs, and that there
+    is exactly one way to do so: don't write down any parentheses.
+    """
+
+    @lru_cache(maxsize=None)
+    def generateParenthesis(self, n: int) -> List[str]:
+        if n == 0:
+            return [""]
+        ans = []
+        for k in range(n):
+            for x in self.generateParenthesis(n - k - 1):
+                for y in self.generateParenthesis(k):
+                    ans.append(f"({x}){y}")
+        return ans
 
 
 class _1570:
@@ -1910,9 +1942,54 @@ class _71:
     """
     # - Simplify Path -
     # https://leetcode.com/problems/simplify-path/
+    Given a string path, which is an absolute path (starting with a slash '/') to a file
+    or directory in a Unix-style file system, convert it to the simplified canonical
+    path.
+
+    In a Unix-style file system, a period '.' refers to the current directory, a double
+    period '..' refers to the directory up a level, and any multiple consecutive slashes
+    (i.e. '//') are treated as a single slash '/'. For this problem, any other format of
+    periods such as '...' are treated as file/directory names.
+
+    The canonical path should have the following format:
+    * The path starts with a single slash '/'.
+    * Any two directories are separated by a single slash '/'.
+    * The path does not end with a trailing '/'.
+    * The path only contains the directories on the path from the root directory to the
+    target file or directory (i.e., no period '.' or double period '..')
+
+    Return the simplified canonical path.
+
+    Example 1:
+    Input: path = "/home/"
+    Output: "/home"
+    Explanation: Note that there is no trailing slash after the last directory name.
+
+    Example 2:
+    Input: path = "/../"
+    Output: "/"
+    Explanation: Going one level up from the root directory is a no-op, as the root
+    level is the highest level you can go.
+
+    Example 3:
+    Input: path = "/home//foo/"
+    Output: "/home/foo"
+    Explanation: In the canonical path, multiple consecutive slashes are replaced by a
+    single one.
+
+    NOTE path consists of English letters, digits, period '.', slash '/' or '_'.
+    NOTE path is a valid absolute Unix path.
     """
 
-    ...
+    def simplifyPath(self, path: str) -> str:
+        stack = []
+        for x in path.split("/"):
+            if x == "..":
+                if stack:
+                    stack.pop()
+            elif x and x != ".":
+                stack.append(x)
+        return "/" + "/".join(stack)
 
 
 class _217:
