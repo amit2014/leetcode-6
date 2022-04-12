@@ -2544,9 +2544,40 @@ class _366:
     """
     # - Find Leaves of Binary Tree -
     # https://leetcode.com/problems/find-leaves-of-binary-tree/
+    Given the root of a binary tree, collect a tree's nodes as if you were doing this:
+
+    Collect all the leaf nodes.
+    Remove all the leaf nodes.
+    Repeat until the tree is empty.
+
+    Example 1:
+             1
+       2           3
+    4     5
+    Input: root = [1,2,3,4,5]
+    Output: [[4,5,3],[2],[1]]
+    Explanation:
+    [[3,5,4],[2],[1]] and [[3,4,5],[2],[1]] are also considered correct answers since
+    per each level it does not matter the order on which elements are returned.
+
+    Example 2:
+    Input: root = [1]
+    Output: [[1]]
     """
 
-    ...
+    def findLeaves(self, root: Optional[TreeNode]) -> List[List[int]]:
+        """O(n) time and space"""
+
+        def height(node):
+            if not node:
+                return 0
+            h = 1 + max(height(node.left), height(node.right))
+            seen[h].append(node.val)
+            return h
+
+        seen: Dict[int, List[int]] = defaultdict(list)
+        height(root)
+        return list(seen.values())
 
 
 class _124:
