@@ -27,7 +27,6 @@ Success ✨🍰✨
 # Requirements
 1) Have MySQL installed and create a database called `leetcode`.
 2) Put your MySQL database connection and Leetcode details in `config.ini` (a lot of SQL questions are premium on Leetcode).
-3) Download the appropriate zip for `chromedriver` from [here](https://sites.google.com/chromium.org/driver/), and put the extracted `chromedriver` file in your home path (if you download the wrong version, Selenium will tell you which to download use instead).
 
 The `config.ini` should look like this:
 ```
