@@ -5,18 +5,23 @@ Load Leetcode's SQL Schema into your MySQL database in one command:
 # Example
 
 ```
-$ chmod +x load.py
-$ ./load.py https://leetcode.com/problems/second-highest-salary/
----------- loading link
----------- successfully connected to MySQL leetcode db!
----------- successfully downloaded SQL Schema!
----------- recreating schema in MySQL's leetcode database
-Executing: Create table If Not Exists Employee (Id int, Salary int)
-Executing: Truncate table Employee
-Executing: insert into Employee (Id, Salary) values ('1', '100')
-Executing: insert into Employee (Id, Salary) values ('2', '200')
-Executing: insert into Employee (Id, Salary) values ('3', '300')
----------- finished without errors!
+$ py load.py https://leetcode.com/problems/report-contiguous-dates
+in cache
+Create table If Not Exists Failed (fail_date date)
+Create table If Not Exists Succeeded (success_date date)
+Truncate table Failed
+insert into Failed (fail_date) values ('2018-12-28')
+insert into Failed (fail_date) values ('2018-12-29')
+insert into Failed (fail_date) values ('2019-01-04')
+insert into Failed (fail_date) values ('2019-01-05')
+Truncate table Succeeded
+insert into Succeeded (success_date) values ('2018-12-30')
+insert into Succeeded (success_date) values ('2018-12-31')
+insert into Succeeded (success_date) values ('2019-01-01')
+insert into Succeeded (success_date) values ('2019-01-02')
+insert into Succeeded (success_date) values ('2019-01-03')
+insert into Succeeded (success_date) values ('2019-01-06')
+Success ✨🍰✨
 ```
 
 # Requirements
