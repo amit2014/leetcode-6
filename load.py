@@ -245,5 +245,3 @@ if __name__ == "__main__":
         print("Success ✨🍰✨")
     except IndexError:
         print("Pass link to this script as the first argument")
-    except Exception:
-        print('Unknown error')
