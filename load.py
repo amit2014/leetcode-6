@@ -12,11 +12,10 @@ from typing import Dict, List, Union
 import selenium
 from mysql.connector import Error, MySQLConnection
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.utils import ChromeType
 
@@ -71,7 +70,9 @@ def get_SQL_schema_from_leetcode(link: str, username: str, password: str) -> str
     #  You need to download and extract the right one and put it on your path
 
     # TODO remove sleeps with waits for elements
-    chrome_service = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
+    chrome_service = Service(
+        ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
+    )
     driver = webdriver.Chrome(service=chrome_service)
     driver.get(link)
     # driver.minimize_window()

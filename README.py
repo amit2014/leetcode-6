@@ -7,7 +7,8 @@ def file_contents(filename: str) -> str:
         ans = f.read()
     return ans.strip()
 
-def shell_output(cmd: str, dir='.') -> str:
+
+def shell_output(cmd: str, dir=".") -> str:
     cwd = os.getcwd()
     os.chdir(dir)
     try:
@@ -19,10 +20,11 @@ def shell_output(cmd: str, dir='.') -> str:
         f.write(cmd + " >> TEMP 2>&1")
     subprocess.run(["bash", "TEMP.sh"])
     ans = file_contents("TEMP")
-    #print("\n\n\n\n", ans)
+    # print("\n\n\n\n", ans)
     subprocess.run(["rm", "TEMP", "TEMP.sh"])
     os.chdir(cwd)
     return ans
+
 
 EXAMPLE_LOAD_CMD = "py load.py https://leetcode.com/problems/report-contiguous-dates"
 EXAMPLE_LOAD_OUTPUT = shell_output(EXAMPLE_LOAD_CMD)
@@ -56,5 +58,5 @@ user = yrom1
 password = ...
 ```"""
 
-with open('README.md', 'w') as f:
+with open("README.md", "w") as f:
     f.write(README)
