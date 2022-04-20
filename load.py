@@ -229,7 +229,8 @@ def main() -> None:
     delete_tables(get_show_tables())
 
     name = link[link.find("problems") + len("problems") + 1 :]
-
+    if name[-1] == '/':
+        name = name[:-1]
     if name in [file.stem for file in list((Path(".") / "schemas").glob("*"))]:
         print("in cache")
         with open(f"./schemas/{name}", "r") as f:
