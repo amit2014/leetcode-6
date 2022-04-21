@@ -2,5 +2,5 @@
 set -eou pipefail
 git add leetcode.sql
 git add ./schemas/*
-git commit leetcode.sql -m "SELECT 'em all, Leetcodemon!"
+git commit -u -m "SELECT 'em all, Leetcodemon!"
 git push
