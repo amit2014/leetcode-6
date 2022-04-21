@@ -6849,6 +6849,24 @@ On 2021-08-24, the first and last call of this day for user 8 was with user 4. U
 Similarly, user 4 on 2021-08-24 had their first and last call with user 8. User 4 should be included in the answer.
 On 2021-08-11, user 1 and 5 had a call. This call was the only call for both of them on this day. Since this call is the first and last call of the day for both of them, they should both be included in the answer.
 */
+with all_calls as (
+select caller_id, recipient_id, call_time from Calls
+union
+select recipient_id, caller_id, call_time from Calls
+), user_call as (
+select caller_id user_id
+	, date(call_time) call_date
+	, min(call_time) first_call
+	, max(call_time) last_call
+from all_calls
+group by 1, 2
+)
+select distinct uc.user_id
+from user_call uc
+	inner join all_calls ac
+		on (ac.caller_id = uc.user_id and (ac.call_time = first_call or ac.call_time = last_call))
+group by uc.user_id, uc.first_call, uc.last_call
+having count(distinct recipient_id) = 1
 
 /*
 1978. Employees Whose Manager Left the Company Easy
