@@ -6730,8 +6730,44 @@ having count(employee_id) < 2
 order by employee_id
 
 
+/*
 1972. First and Last Call On the Same Day (Hard)
 -- https://leetcode.com/problems/first-and-last-call-on-the-same-day
+Write an SQL query to report the IDs of the users whose first and last calls on any day were with the same person. Calls are counted regardless of being the caller or the recipient.
+
+Return the result table in any order.
+
+The query result format is in the following example.
+
+Example 1:
+
+Input:
+Calls table:
++-----------+--------------+---------------------+
+| caller_id | recipient_id | call_time           |
++-----------+--------------+---------------------+
+| 8         | 4            | 2021-08-24 17:46:07 |
+| 4         | 8            | 2021-08-24 19:57:13 |
+| 5         | 1            | 2021-08-11 05:28:44 |
+| 8         | 3            | 2021-08-17 04:04:15 |
+| 11        | 3            | 2021-08-17 13:07:00 |
+| 8         | 11           | 2021-08-17 22:22:22 |
++-----------+--------------+---------------------+
+Output:
++---------+
+| user_id |
++---------+
+| 1       |
+| 4       |
+| 5       |
+| 8       |
++---------+
+Explanation:
+On 2021-08-24, the first and last call of this day for user 8 was with user 4. User 8 should be included in the answer.
+Similarly, user 4 on 2021-08-24 had their first and last call with user 8. User 4 should be included in the answer.
+On 2021-08-11, user 1 and 5 had a call. This call was the only call for both of them on this day. Since this call is the first and last call of the day for both of them, they should both be included in the answer.
+*/
+
 /*
 1978. Employees Whose Manager Left the Company Easy
 -- https://leetcode.com/problemsemployees-whose-manager-left-the-company
@@ -6776,7 +6812,52 @@ order by employee_id
 1990. Count the Number of Experiments Medium
 2004. The Number of Seniors and Juniors to Join the Company Hard
 2010. The Number of Seniors and Juniors to Join the Company II Hard
+
+/*
 2020. Number of Accounts That Did Not Stream Medium
+Write an SQL query to report the number of accounts that bought a subscription in 2021 but did not have any stream session.
+
+The query result format is in the following example.
+
+Example 1:
+
+Input:
+Subscriptions table:
++------------+------------+------------+
+| account_id | start_date | end_date   |
++------------+------------+------------+
+| 9          | 2020-02-18 | 2021-10-30 |
+| 3          | 2021-09-21 | 2021-11-13 |
+| 11         | 2020-02-28 | 2020-08-18 |
+| 13         | 2021-04-20 | 2021-09-22 |
+| 4          | 2020-10-26 | 2021-05-08 |
+| 5          | 2020-09-11 | 2021-01-17 |
++------------+------------+------------+
+Streams table:
++------------+------------+-------------+
+| session_id | account_id | stream_date |
++------------+------------+-------------+
+| 14         | 9          | 2020-05-16  |
+| 16         | 3          | 2021-10-27  |
+| 18         | 11         | 2020-04-29  |
+| 17         | 13         | 2021-08-08  |
+| 19         | 4          | 2020-12-31  |
+| 13         | 5          | 2021-01-05  |
++------------+------------+-------------+
+Output:
++----------------+
+| accounts_count |
++----------------+
+| 2              |
++----------------+
+Explanation: Users 4 and 9 did not stream in 2021.
+User 11 did not subscribe in 2021.
+*/
+SELECT COUNT(account_id) accounts_count
+FROM Subscriptions
+WHERE YEAR(start_date) <= 2021 AND YEAR(end_date) >= 2021
+	AND account_id NOT IN (SELECT account_id FROM Streams WHERE YEAR(stream_date) = 2021)
+
 /*
 2026. Low-Quality Problems Easy
 Write an SQL query to report the IDs of the low-quality problems. A LeetCode problem is low-quality if the like percentage of the problem (number of likes divided by the total number of votes) is strictly less than 60%.
