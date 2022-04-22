@@ -1,10 +1,11 @@
 [tool.ty]
 type_checker = "pyright"
 
-[tool.mypy]
-allow_redefinition = true
-
 [tool.pyright]
+
+[tool.mypy]
+ignore_missing_imports = true
+allow_redefinition = true
 
 [tool.isort]
 profile = "black"

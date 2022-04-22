@@ -2,6 +2,7 @@
 temp.py
 node_module*
 package-lock.json
+junk*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
