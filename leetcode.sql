@@ -118,7 +118,7 @@ FROM Person p
         ON p.PersonId = a.PersonId;
 
 /*
--- 181. Employees Earning More Than Their Managers (Easy)
+181. Employees Earning More Than Their Managers (Easy)
 -- https://leetcode.com/problems/employees-earning-more-than-their-managers/
 Write an SQL query to find the employees who earn more than their managers.
 
@@ -217,16 +217,17 @@ In the Sales department:
 - There is no third-highest salary as there are only two employees
 */
 
-SELECT
-  d.Name AS Department,
-  e1.Name AS Employee,
-  e1.Salary
-FROM
-  Department d INNER JOIN Employee e1 ON d.Id = e1.DepartmentId
+SELECT d.Name Department
+    , e1.Name Employee
+    , e1.Salary
+FROM Department d
+    INNER JOIN Employee e1
+        ON d.Id = e1.DepartmentId
 WHERE (
-  SELECT COUNT(DISTINCT e2.Salary)
-  FROM Employee e2
-  WHERE e2.Salary > e1.Salary AND e1.DepartmentId = e2.DepartmentId
+    SELECT COUNT(DISTINCT e2.Salary)
+    FROM Employee e2
+    WHERE e2.Salary > e1.Salary
+        AND e1.DepartmentId = e2.DepartmentId
 ) < 3;
 
 /*
