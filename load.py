@@ -15,7 +15,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.utils import ChromeType
 
@@ -73,7 +73,7 @@ def get_SQL_schema_from_leetcode(link: str, username: str, password: str) -> str
     chrome_service = Service(
         ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
     )
-    driver = webdriver.Chrome(service=chrome_service)
+    driver = webdriver.Chrome(service=chrome_service)  # type:ignore
     driver.get(link)
     # driver.minimize_window()
     try:
@@ -98,7 +98,7 @@ def get_SQL_schema_from_leetcode(link: str, username: str, password: str) -> str
             time.sleep(3)
         except:
             pass
-    except selenium.common.exceptions.TimeoutException:
+    except selenium.common.exceptions.TimeoutException:  # type:ignore
         pass
     sql_schema_button_link = driver.find_element_by_link_text("SQL Schema")
     sql_schema_button_link.click()
@@ -136,11 +136,11 @@ def execute(command: Union[str, List[str]]) -> None:
             print("Executing:", null_command)
         return null_command
 
-    try:
-        dbconfig = read_config()
-        conn = MySQLConnection(**dbconfig)
-        cursor = conn.cursor()
+    dbconfig = read_config()
+    conn = MySQLConnection(**dbconfig)
+    cursor = conn.cursor()
 
+    try:
         if isinstance(command, str):
             null_command = swap_None_to_null(command)
             cursor.execute(null_command)
@@ -153,12 +153,6 @@ def execute(command: Union[str, List[str]]) -> None:
             conn.commit()
         else:
             raise ValueError("Expected str or list[str].")
-
-    except Error as e:
-        if not None:
-            print(f"{command=}")
-        raise e
-
     finally:
         cursor.close()
         conn.close()
@@ -173,19 +167,16 @@ def get_show_tables() -> List[str]:
     #  This actually requires the leetcode database to exist
     #  because of how we create the conn.
     tableList = []
+    dbconfig = read_config()
+    conn = MySQLConnection(**dbconfig)
+    cursor = conn.cursor()
     try:
-        dbconfig = read_config()
-        conn = MySQLConnection(**dbconfig)
-        cursor = conn.cursor()
         cursor.execute(f"show tables")
         row = cursor.fetchone()
 
         while row is not None:
             tableList.append(row)
             row = cursor.fetchone()
-
-    except Error as e:
-        print(e)
 
     finally:
         cursor.close()
@@ -201,15 +192,13 @@ def delete_tables(table_list: List[str]) -> None:
         table_list: A list of tables in the leetcode database.
     """
     for table in table_list:
+
+        dbconfig = read_config()
+        conn = MySQLConnection(**dbconfig)
+        cursor = conn.cursor()
         try:
-            dbconfig = read_config()
-            conn = MySQLConnection(**dbconfig)
-            cursor = conn.cursor()
             cursor.execute(f"drop table {table[0]}")
             conn.commit()
-
-        except Error as e:
-            print(e)
 
         finally:
             cursor.close()
@@ -229,7 +218,7 @@ def main() -> None:
     delete_tables(get_show_tables())
 
     name = link[link.find("problems") + len("problems") + 1 :]
-    if name[-1] == '/':
+    if name[-1] == "/":
         name = name[:-1]
     if name in [file.stem for file in list((Path(".") / "schemas").glob("*"))]:
         print("in cache")
