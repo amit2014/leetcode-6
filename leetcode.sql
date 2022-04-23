@@ -20,10 +20,10 @@ For example, given the above Employee table, the query should return 200 as the 
 */
 
 SELECT (
-  SELECT DISTINCT Salary
-  FROM Employee
-  ORDER BY Salary DESC
-  LIMIT 1 OFFSET 1
+SELECT DISTINCT Salary
+FROM Employee
+ORDER BY Salary DESC
+LIMIT 1 OFFSET 1
 ) SecondHighestSalary;
 
 /*
@@ -51,42 +51,71 @@ CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
 BEGIN
 DECLARE M INT;
 SET M = N - 1;
-  RETURN (
-      -- Write your MySQL query statement below.
-      SELECT (SELECT DISTINCT Salary FROM Employee ORDER BY Salary DESC LIMIT M, 1)
-  );
+RETURN (
+    SELECT (SELECT DISTINCT Salary FROM Employee ORDER BY Salary DESC LIMIT M, 1)
+);
 END;
+
+-- This is an example that actually runs in MySQL:
+/*
+DELIMITER $$
+CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+READS SQL DATA
+BEGIN
+DECLARE M INT;
+SET M = N - 1;
+RETURN (
+    SELECT (SELECT DISTINCT Salary FROM Employee ORDER BY Salary DESC LIMIT M, 1)
+);
+END$$
+DELIMITER ;
+*/
 
 /*
 175. Combine Two Tables (Easy)
 -- https://leetcode.com/problems/combine-two-tables/
-+-------------+---------+
-| Column Name | Type    |
-+-------------+---------+
-| PersonId    | int     |
-| FirstName   | varchar |
-| LastName    | varchar |
-+-------------+---------+
-PersonId is the primary key column for this table.
-Table: Address
+Write an SQL query to report the first name, last name, city, and state of each person in the Person table. If the address of a personId is not present in the Address table, report null instead.
 
-+-------------+---------+
-| Column Name | Type    |
-+-------------+---------+
-| AddressId   | int     |
-| PersonId    | int     |
-| City        | varchar |
-| State       | varchar |
-+-------------+---------+
-AddressId is the primary key column for this table.
+Return the result table in any order.
 
-Write a SQL query for a report that provides the following information for each person in the Person table, regardless if there is an address for each of those people:
+The query result format is in the following example.
+
+Example 1:
+
+Input:
+Person table:
++----------+----------+-----------+
+| personId | lastName | firstName |
++----------+----------+-----------+
+| 1        | Wang     | Allen     |
+| 2        | Alice    | Bob       |
++----------+----------+-----------+
+Address table:
++-----------+----------+---------------+------------+
+| addressId | personId | city          | state      |
++-----------+----------+---------------+------------+
+| 1         | 2        | New York City | New York   |
+| 2         | 3        | Leetcode      | California |
++-----------+----------+---------------+------------+
+Output:
++-----------+----------+---------------+----------+
+| firstName | lastName | city          | state    |
++-----------+----------+---------------+----------+
+| Allen     | Wang     | Null          | Null     |
+| Bob       | Alice    | New York City | New York |
++-----------+----------+---------------+----------+
+Explanation:
+There is no address in the address table for the personId = 1 so we return null in their city and state.
+addressId = 1 contains information about the address of personId = 2.
 */
 
-SELECT
-  FirstName, LastName, City, State
-FROM
-  Person LEFT JOIN Address ON Person.PersonId = Address.PersonId;
+SELECT FirstName
+    , LastName
+    , City
+    , State
+FROM Person p
+    LEFT JOIN Address a
+        ON p.PersonId = a.PersonId;
 
 /*
 -- 181. Employees Earning More Than Their Managers (Easy)
