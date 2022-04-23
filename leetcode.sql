@@ -349,27 +349,20 @@ Result table:
 1 is the only number that appears consecutively for at least three times.
 */
 
-SELECT
-  DISTINCT L1.Num AS ConsecutiveNums
-FROM
-  Logs L1,
-  Logs L2,
-  Logs L3
-WHERE
-  L1.Id = L2.Id - 1
-  AND L2.Id = L3.Id - 1
-  AND L1.Num = L2.Num
-  AND L2.Num = L3.Num;
+SELECT DISTINCT L1.Num ConsecutiveNums
+FROM Logs L1, Logs L2, Logs L3
+WHERE L1.Id = L2.Id - 1
+    AND L2.Id = L3.Id - 1
+    AND L1.Num = L2.Num
+    AND L2.Num = L3.Num;
 
-SELECT
-  DISTINCT Num AS ConsecutiveNums
+SELECT DISTINCT Num ConsecutiveNums
 FROM (
-  SELECT
-  Num,
-  @counter := IF(@prev = Num, @counter + 1, 1) AS how_many_cnt_in_a_row,
-  @prev := Num
-  FROM Logs y, (SELECT @counter:=1, @prev:=NULL) vars
-) sq
+    SELECT Num
+    , @counter := IF(@prev = Num, @counter + 1, 1) how_many_cnt_in_a_row
+    , @prev := Num
+    FROM Logs y, (SELECT @counter:=1, @prev:=NULL) vars
+) temp
 WHERE how_many_cnt_in_a_row >= 3;
 
 /*
