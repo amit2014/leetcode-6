@@ -119,42 +119,48 @@ FROM Person p
 
 /*
 -- 181. Employees Earning More Than Their Managers (Easy)
-https://leetcode.com/problems/employees-earning-more-than-their-managers/
-The Employee table holds all employees including their managers. Every employee has an Id, and there is also a column for the manager Id.
+-- https://leetcode.com/problems/employees-earning-more-than-their-managers/
+Write an SQL query to find the employees who earn more than their managers.
 
+Return the result table in any order.
+
+The query result format is in the following example.
+
+Example 1:
+
+Input:
+Employee table:
 +----+-------+--------+-----------+
-| Id | Name  | Salary | ManagerId |
+| id | name  | salary | managerId |
 +----+-------+--------+-----------+
 | 1  | Joe   | 70000  | 3         |
 | 2  | Henry | 80000  | 4         |
-| 3  | Sam   | 60000  | NULL      |
-| 4  | Max   | 90000  | NULL      |
+| 3  | Sam   | 60000  | Null      |
+| 4  | Max   | 90000  | Null      |
 +----+-------+--------+-----------+
-Given the Employee table, write a SQL query that finds out employees who earn more than their managers. For the above table, Joe is the only employee who earns more than his manager.
-
+Output:
 +----------+
 | Employee |
 +----------+
 | Joe      |
 +----------+
+Explanation: Joe is the only employee who earns more than his manager.
 */
 
-SELECT
-  e.Name AS Employee
-FROM
-  Employee e LEFT JOIN Employee b ON e.ManagerId=b.Id
-WHERE
-  e.Salary > b.Salary;
+SELECT e1.Name Employee
+FROM Employee e1
+    LEFT JOIN Employee e2
+        ON e1.ManagerId = e2.Id
+WHERE e1.Salary > e2.Salary;
 
-SELECT
-  Name AS Employee
-FROM
-  Employee e
+SELECT Name Employee
+FROM Employee e
 WHERE e.ManagerId IS NOT NULL
-  AND e.Salary > (
-    SELECT Salary
-    FROM Employee
-    WHERE e.ManagerId = Id);
+    AND e.Salary > (
+        SELECT Salary
+        FROM Employee
+        WHERE e.ManagerId = id
+    );
 
 /*
 185. Department Top Three Salaries (Hard)
