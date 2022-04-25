@@ -467,21 +467,20 @@ did not score lowest
 order by student_id */
 
 WITH student_ranking as (
-  SELECT
-    s.student_id,
-    student_name,
-    RANK() OVER (PARTITION BY exam_id ORDER BY SCORE /*ASC*/) low,
-    RANK() OVER (PARTITION BY exam_id ORDER BY SCORE DESC) high
-  FROM Exam e
-  INNER JOIN Student s ON s.student_id = e.student_id
+SELECT s.student_id
+    , student_name
+    , RANK() OVER (PARTITION BY exam_id ORDER BY SCORE) low
+    , RANK() OVER (PARTITION BY exam_id ORDER BY SCORE DESC) high
+FROM Exam e
+    INNER JOIN Student s
+        ON s.student_id = e.student_id
 )
-SELECT
-  student_id,
-  student_name
-FROM
-  student_ranking
+SELECT student_id
+    , student_name
+FROM student_ranking
 GROUP BY 1
-HAVING MIN(low) > 1 AND MIN(high) > 1
+HAVING MIN(low) > 1
+    AND MIN(high) > 1
 ORDER BY 1;
 
 
