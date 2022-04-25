@@ -1,32 +1,25 @@
-# Schema Loader
+# load.py
+Load Leetcode's SQL Schema into your MySQL database in ~~one~~ two commands
+(you may have to hit enter if there's a captcha):
 
-Load Leetcode's SQL Schema into your MySQL database in one command:
+    Typical usage example:
 
-# Example
+    $ py load.py https://leetcode.com/problems/report-contiguous-dates
+    in cache
+    Create table If Not Exists Failed (fail_date date)
+    [...]
+    insert into Succeeded (success_date) values ('2019-01-06')
+    Success ✨🍰✨
 
-```
-$ py load.py https://leetcode.com/problems/report-contiguous-dates
-in cache
-Create table If Not Exists Failed (fail_date date)
-Create table If Not Exists Succeeded (success_date date)
-Truncate table Failed
-insert into Failed (fail_date) values ('2018-12-28')
-insert into Failed (fail_date) values ('2018-12-29')
-insert into Failed (fail_date) values ('2019-01-04')
-insert into Failed (fail_date) values ('2019-01-05')
-Truncate table Succeeded
-insert into Succeeded (success_date) values ('2018-12-30')
-insert into Succeeded (success_date) values ('2018-12-31')
-insert into Succeeded (success_date) values ('2019-01-01')
-insert into Succeeded (success_date) values ('2019-01-02')
-insert into Succeeded (success_date) values ('2019-01-03')
-insert into Succeeded (success_date) values ('2019-01-06')
-Success ✨🍰✨
-```
-
-# Requirements
+Requirements:
 1) Have MySQL installed and create a database called `leetcode`.
-2) Put your MySQL database connection and Leetcode details in `config.ini` (a lot of SQL questions are premium on Leetcode).
+2) Put your MySQL database connection and Leetcode details in `config.ini` (a
+    lot of SQL questions are premium on Leetcode).
+    NOTE:   I often forget to do this and see my password as `***` in Selenium.
+            So update your password in config.ini!
+            You can also use `git update-index --assume-unchanged config.ini` to
+            have git not track the config with your passwords, etc...
+3) Install the requirements.txt file
 
 The `config.ini` should look like this:
 ```
@@ -40,3 +33,18 @@ password = password
 user = yrom1
 password = ...
 ```
+
+Because filling out captchas is really annoying (althought it only happens
+every once in a while for me) they are cached in a folder called `schemas`.
+
+
+---
+
+# make_tree.py
+Display a binary tree from a BFS serialized array (LeetCode style).
+
+Typical usage example:
+
+    $ py make-tree.py [1,2]
+          1
+        2

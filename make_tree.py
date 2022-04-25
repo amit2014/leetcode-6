@@ -2,9 +2,9 @@
 
 Typical usage example:
 
-$ py make-tree.py [1,2]
-      1
-    2
+    $ py make-tree.py [1,2]
+          1
+        2
 """
 
 from __future__ import annotations
