@@ -470,7 +470,7 @@ did not score highest
 did not score lowest
 order by student_id */
 
-WITH student_ranking as (
+WITH cte as (
 SELECT s.student_id
     , student_name
     , RANK() OVER (PARTITION BY exam_id ORDER BY SCORE) low
@@ -480,13 +480,12 @@ FROM Exam e
         ON s.student_id = e.student_id
 )
 SELECT student_id
-    , student_name
-FROM student_ranking
+    , any_value(student_name)
+FROM cte
 GROUP BY 1
 HAVING MIN(low) > 1
     AND MIN(high) > 1
 ORDER BY 1;
-
 
 /*
 610. Triangle Judgement (Easy)
