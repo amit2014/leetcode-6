@@ -356,12 +356,16 @@ WHERE L1.Id = L2.Id - 1
     AND L1.Num = L2.Num
     AND L2.Num = L3.Num;
 
+-- NOTE A user-defined variable can hold a single value only. If the SELECT
+--      statement returns multiple values, the variable will take the value
+--      of the last row in the result.
+
 SELECT DISTINCT Num ConsecutiveNums
 FROM (
     SELECT Num
     , @counter := IF(@prev = Num, @counter + 1, 1) how_many_cnt_in_a_row
     , @prev := Num
-    FROM Logs y, (SELECT @counter:=1, @prev:=NULL) vars
+    FROM Logs y, (SELECT @counter := 1, @prev := NULL) vars
 ) temp
 WHERE how_many_cnt_in_a_row >= 3;
 

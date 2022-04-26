@@ -19,7 +19,7 @@ for table in list(input["headers"].keys()):
         command += f"insert into {table} values {row};\n"  # TODO column names
 # print(command)
 
-from load import execute
+from load_schema import execute
 
 # with open('testoutput.txt', 'r') as f:
 #     cmds = f.read()
