@@ -1,10 +1,12 @@
 """Display a binary tree from a BFS serialized array (LeetCode style).
 
-Typical usage example:
+    Typical usage example:
 
-    $ py make-tree.py [1,2]
-          1
-        2
+    $ py make_tree.py [3,9,8,4,0,1,7,null,null,null,2,5]
+                             3
+                 9                       8
+           4           0           1           7
+                          2     5
 """
 
 from __future__ import annotations

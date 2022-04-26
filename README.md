@@ -20,22 +20,20 @@ Requirements:
             You can also use `git update-index --assume-unchanged config.ini` to
             have git not track the config with your passwords, etc...
 3) Install the requirements.txt file
+4) Because filling out captchas is really annoying (althought it only happens
+    every once in a while for me) they are cached in a folder called `schemas`.
 
 The `config.ini` should look like this:
-```
-[mysql]
-host = localhost
-database = leetcode
-user = root
-password = password
 
-[leetcode]
-user = yrom1
-password = ...
-```
+    [mysql]
+    host = localhost
+    database = leetcode
+    user = root
+    password = password
 
-Because filling out captchas is really annoying (althought it only happens
-every once in a while for me) they are cached in a folder called `schemas`.
+    [leetcode]
+    user = yrom1
+    password = ...
 
 
 ---
@@ -43,8 +41,10 @@ every once in a while for me) they are cached in a folder called `schemas`.
 # make_tree.py
 Display a binary tree from a BFS serialized array (LeetCode style).
 
-Typical usage example:
+    Typical usage example:
 
-    $ py make-tree.py [1,2]
-          1
-        2
+    $ py make_tree.py [3,9,8,4,0,1,7,null,null,null,2,5]
+                             3
+                 9                       8
+           4           0           1           7
+                          2     5
