@@ -23,7 +23,7 @@ SELECT (
 SELECT DISTINCT Salary
 FROM Employee
 ORDER BY Salary DESC
-LIMIT 1 OFFSET 1
+LIMIT 1, 1
 ) SecondHighestSalary;
 
 /*
@@ -305,17 +305,17 @@ Output:
 Explanation: Max and Jim both have the highest salary in the IT department and Henry has the highest salary in the Sales department.
 */
 
-SELECT d.Name Department
-    , e.Name Employee
-    , e.Salary
+SELECT d.name Department
+    , e.name Employee
+    , e.salary
 FROM Employee e
     INNER JOIN Department d
-        ON e.DepartmentId = d.Id
-WHERE (DepartmentId, Salary) IN (
-    SELECT DepartmentId
-        , MAX(Salary)
+        ON e.departmentId = d.Id
+WHERE (departmentId, salary) IN (
+    SELECT departmentId
+        , MAX(salary)
     FROM Employee
-    GROUP BY DepartmentId
+    GROUP BY departmentId
     );
 
 /*
