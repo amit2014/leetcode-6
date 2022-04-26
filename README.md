@@ -1,10 +1,10 @@
-# load.py
+# load_schema.py
 Load Leetcode's SQL Schema into your MySQL database in ~~one~~ two commands
 (you may have to hit enter if there's a captcha):
 
     Typical usage example:
 
-    $ py load.py https://leetcode.com/problems/report-contiguous-dates
+    $ py load_schema.py https://leetcode.com/problems/report-contiguous-dates
     in cache
     Create table If Not Exists Failed (fail_date date)
     [...]

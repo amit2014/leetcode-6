@@ -4,7 +4,7 @@
 
     Typical usage example:
 
-    $ py load.py https://leetcode.com/problems/report-contiguous-dates
+    $ py load_schema.py https://leetcode.com/problems/report-contiguous-dates
     in cache
     Create table If Not Exists Failed (fail_date date)
     [...]

@@ -1,5 +1,5 @@
 FILES = [
-    "load",
+    "load_schema",
     "make_tree",
 ]
 
