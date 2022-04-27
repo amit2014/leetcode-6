@@ -35,7 +35,6 @@ The `config.ini` should look like this:
     password = ...
 """
 
-import os
 import re
 import sys
 import time
@@ -44,9 +43,8 @@ from pathlib import Path
 from typing import Dict, List, Union
 
 import selenium
-from mysql.connector import Error, MySQLConnection
+from mysql.connector import MySQLConnection
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
