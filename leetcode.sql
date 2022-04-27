@@ -852,28 +852,6 @@ ORDER BY id ASC;
 /*
 1225. Report Contiguous Dates (Hard)
 -- https://leetcode.com/problems/report-contiguous-dates
-
-Table: Failed
-
-+--------------+---------+
-| Column Name  | Type    |
-+--------------+---------+
-| fail_date    | date    |
-+--------------+---------+
-fail_date is the primary key for this table.
-This table contains the days of failed tasks.
-
-
-Table: Succeeded
-
-+--------------+---------+
-| Column Name  | Type    |
-+--------------+---------+
-| success_date | date    |
-+--------------+---------+
-success_date is the primary key for this table.
-This table contains the days of succeeded tasks.
-
 A system is running one task every day. Every task is independent of the previous tasks. The tasks can fail or succeed.
 
 Write an SQL query to generate a report of period_state for each continuous interval of days in the period from 2019-01-01 to 2019-12-31.
@@ -921,7 +899,38 @@ From 2019-01-01 to 2019-01-03 all tasks succeeded and the system state was "succ
 From 2019-01-04 to 2019-01-05 all tasks failed and the system state was "failed".
 From 2019-01-06 to 2019-01-06 all tasks succeeded and the system state was "succeeded".
 */
+/*
+query
+| period_state | start_date   | end_date     |
+every continuous interval (grouped days by success/failure)
+    between 2019-01-01 to 2019-12-31
+*/
 
+WITH t AS (
+SELECT fail_date day
+    , 'failed' status
+    , RANK() OVER (ORDER BY fail_date) rank_date
+FROM Failed
+WHERE fail_date BETWEEN '2019-01-01'
+    AND '2019-12-31'
+UNION
+SELECT success_date day
+    , 'succeeded' status
+    , RANK() OVER (ORDER BY success_date) rank_date
+FROM Succeeded
+WHERE success_date BETWEEN '2019-01-01'
+    AND '2019-12-31'
+), q as (
+SELECT *
+    , RANK() OVER (ORDER BY day) - rank_date delta_increase_rate
+FROM t
+)
+SELECT status period_state
+    , MIN(day) start_date
+    , MAX(day) end_date
+FROM q
+GROUP BY delta_increase_rate, status
+ORDER BY start_date;
 
 615. Average Salary: Departments VS Company (Hard)
 
