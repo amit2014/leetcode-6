@@ -114,7 +114,7 @@ def get_SQL_schema_from_leetcode(link: str, username: str, password: str) -> str
         textUserName.clear()
         textUserName.send_keys(username)
         WebDriverWait(driver, 10).until(
-            lambda s: s.driver.find_element(
+            lambda s: s.find_element(
                 by=By.ID, value="id_password"
             ).is_displayed()
         )
