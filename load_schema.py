@@ -1,4 +1,3 @@
-#!/usr/bin/env -S python3 -W ignore::DeprecationWarning
 """Load Leetcode's SQL Schema into your MySQL database in ~~one~~ two commands
 (you may have to hit enter if there's a captcha):
 
@@ -49,6 +48,7 @@ from mysql.connector import Error, MySQLConnection
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
@@ -101,9 +101,6 @@ def get_SQL_schema_from_leetcode(link: str, username: str, password: str) -> str
         The SQL schema for that leetcode database problem from the given link.
     """
 
-    #  https://sites.google.com/a/chromium.org/chromedriver/downloads
-    #  You need to download and extract the right one and put it on your path
-
     # TODO remove sleeps with waits for elements
     chrome_service = Service(
         ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
@@ -113,32 +110,34 @@ def get_SQL_schema_from_leetcode(link: str, username: str, password: str) -> str
     # driver.minimize_window()
     try:
         WebDriverWait(driver, 10).until(
-            lambda s: s.find_element_by_id("id_login").is_displayed()
+            lambda s: s.find_element(by=By.ID, value="id_login").is_displayed()
         )
-        textUserName = driver.find_element_by_id("id_login")
+        textUserName = driver.find_element(by=By.ID, value="id_login")
         textUserName.clear()
         textUserName.send_keys(username)
         WebDriverWait(driver, 10).until(
-            lambda s: s.find_element_by_id("id_password").is_displayed()
+            lambda s: s.driver.find_element(
+                by=By.ID, value="id_password"
+            ).is_displayed()
         )
-        textPassword = driver.find_element_by_id("id_password")
+        textPassword = driver.find_element(by=By.ID, value="id_password")
         textPassword.clear()
         textPassword.send_keys(password)
         textPassword.send_keys(Keys.RETURN)
-        input("do captcha then hit ENTER")
+        input("Do captcha if it shows up then/otherwise hit ENTER")
         # TODO logic flow clean up, this is messing from many hotfixs
         try:
-            textPassword = driver.find_element_by_id("id_password")
+            textPassword = driver.find_element(by=By.ID, value="id_password")
             textPassword.send_keys(Keys.RETURN)
             time.sleep(3)
         except:
             pass
     except selenium.common.exceptions.TimeoutException:  # type:ignore
         pass
-    sql_schema_button_link = driver.find_element_by_link_text("SQL Schema")
+    sql_schema_button_link = driver.find_element(by=By.LINK_TEXT, value="SQL Schema")
     sql_schema_button_link.click()
     time.sleep(3)
-    sql_schema_div = driver.find_element_by_class_name("lc-modal-body__jO0c")
+    sql_schema_div = driver.find_element(by=By.CLASS_NAME, value="lc-modal-body__jO0c")
     return sql_schema_div.text
 
 
