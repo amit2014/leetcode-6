@@ -581,13 +581,10 @@ On 2013-10-03:
   - The Cancellation Rate is (1 / 2) = 0.50
 */
 
-SELECT
-    Request_at AS Day,
-    ROUND(COUNT(IF(Status REGEXP '^cancelled', TRUE, NULL)) / COUNT(*), 2) AS `Cancellation Rate`
+SELECT Request_at Day
+    , ROUND(COUNT(IF(Status REGEXP '^cancelled', TRUE, NULL)) / COUNT(*), 2) `Cancellation Rate`
 FROM Trips
-WHERE
-    Request_at BETWEEN '2013-10-01' AND '2013-10-03'
-    /* neither driver nor client can be banned */
+WHERE Request_at BETWEEN '2013-10-01' AND '2013-10-03'
     AND Driver_Id NOT IN (
         SELECT Users_Id
         FROM Users
@@ -598,11 +595,63 @@ WHERE
         FROM Users
         WHERE Banned = 'Yes'
     )
-/* Write a SQL query to find the cancellation rate [...] each day [...] */
-GROUP BY Request_at
-;
+GROUP BY Request_at;
 
+/*
 597. Friend Requests I: Overall Acceptance Rate (Easy)
+https://leetcode.com/problems/friend-requests-i-overall-acceptance-rate/
+
+Write an SQL query to find the overall acceptance rate of requests, which is the number of acceptance divided by the number of requests. Return the answer rounded to 2 decimals places.
+
+Note that:
+
+The accepted requests are not necessarily from the table friend_request. In this case, Count the total accepted requests (no matter whether they are in the original requests), and divide it by the number of requests to get the acceptance rate.
+It is possible that a sender sends multiple requests to the same receiver, and a request could be accepted more than once. In this case, the ‘duplicated’ requests or acceptances are only counted once.
+If there are no requests at all, you should return 0.00 as the accept_rate.
+The query result format is in the following example.
+
+Example 1:
+
+Input:
+FriendRequest table:
++-----------+------------+--------------+
+| sender_id | send_to_id | request_date |
++-----------+------------+--------------+
+| 1         | 2          | 2016/06/01   |
+| 1         | 3          | 2016/06/01   |
+| 1         | 4          | 2016/06/01   |
+| 2         | 3          | 2016/06/02   |
+| 3         | 4          | 2016/06/09   |
++-----------+------------+--------------+
+RequestAccepted table:
++--------------+-------------+-------------+
+| requester_id | accepter_id | accept_date |
++--------------+-------------+-------------+
+| 1            | 2           | 2016/06/03  |
+| 1            | 3           | 2016/06/08  |
+| 2            | 3           | 2016/06/08  |
+| 3            | 4           | 2016/06/09  |
+| 3            | 4           | 2016/06/10  |
++--------------+-------------+-------------+
+Output:
++-------------+
+| accept_rate |
++-------------+
+| 0.8         |
++-------------+
+Explanation:
+There are 4 unique accepted requests, and there are 5 requests in total. So the rate is 0.80.
+
+Follow up:
+Could you write a query to return the acceptance rate for every month?
+Could you write a query to return the cumulative acceptance rate for every day?
+*/
+SELECT ROUND(IFNULL(
+    (SELECT COUNT(*) FROM (SELECT DISTINCT requester_id, accepter_id FROM RequestAccepted) temp)
+    /
+    (SELECT COUNT(*) FROM (SELECT DISTINCT sender_id, send_to_id FROM FriendRequest) temp)
+    , 0)
+    , 2) accept_rate;
 
 /*
 1270. All People Report to the Given Manager (Medium)
