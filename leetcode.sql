@@ -803,7 +803,52 @@ delete from Person where id not in (
     ) t
 );
 
+/*
 626. Exchange Seats (Medium)
+-- https://leetcode.com/problems/exchange-seats/
+Write an SQL query to swap the seat id of every two consecutive students. If the number of students is odd, the id of the last student is not swapped.
+
+Return the result table ordered by id in ascending order.
+
+The query result format is in the following example.
+
+Example 1:
+
+Input:
+Seat table:
++----+---------+
+| id | student |
++----+---------+
+| 1  | Abbot   |
+| 2  | Doris   |
+| 3  | Emerson |
+| 4  | Green   |
+| 5  | Jeames  |
++----+---------+
+Output:
++----+---------+
+| id | student |
++----+---------+
+| 1  | Doris   |
+| 2  | Abbot   |
+| 3  | Green   |
+| 4  | Emerson |
+| 5  | Jeames  |
++----+---------+
+Explanation:
+Note that if the number of students is odd, there is no need to change the last one's seat.
+*/
+
+SELECT CASE
+        WHEN id mod 2 != 0 AND records != id THEN id + 1
+        WHEN id mod 2 != 0 AND records = id THEN id
+        ELSE id - 1
+    END id
+    , student
+FROM seat
+    , (SELECT COUNT(*) records FROM seat) seat_records
+ORDER BY id ASC;
+
 /*
 1225. Report Contiguous Dates (Hard)
 -- https://leetcode.com/problems/report-contiguous-dates
