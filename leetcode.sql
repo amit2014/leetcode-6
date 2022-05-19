@@ -790,10 +790,9 @@ Explanation: john@example.com is repeated two times. We keep the row with the sm
 -- the goal is to avoid an error where you delete based on yourself while deleting
 -- ERROR 1093 (HY000): You can't specify target table 'Person' for update in FROM clause
 
-DELETE p1 FROM Person p1,
-    Person p2
-WHERE
-    p1.Email = p2.Email AND p1.Id > p2.Id;
+delete p1
+from Person p1, Person p2
+where p1.Email = p2.Email and p1.Id > p2.Id;
 
 delete from Person where id not in (
     select t.id from ( -- sauce, explicit temp table creation
@@ -839,14 +838,14 @@ Explanation:
 Note that if the number of students is odd, there is no need to change the last one's seat.
 */
 
-SELECT CASE
+SELECT
+    CASE
         WHEN id mod 2 != 0 AND records != id THEN id + 1
         WHEN id mod 2 != 0 AND records = id THEN id
         ELSE id - 1
     END id
     , student
-FROM seat
-    , (SELECT COUNT(*) records FROM seat) seat_records
+FROM seat, (SELECT COUNT(*) records FROM seat) seat_records
 ORDER BY id ASC;
 
 /*
@@ -913,7 +912,7 @@ SELECT fail_date day
 FROM Failed
 WHERE fail_date BETWEEN '2019-01-01'
     AND '2019-12-31'
-UNION
+UNION -- WHY NOT UNION ALL
 SELECT success_date day
     , 'succeeded' status
     , RANK() OVER (ORDER BY success_date) rank_date
@@ -987,6 +986,8 @@ query
     each dept. each month
 */
 
+-- I WAS HERE LAST MARKER (didnt finish this question)
+
 WITH cte AS(
 /*
 +-------------+---------------+-----------+-----------------------+--------------------+
@@ -1002,22 +1003,26 @@ WITH cte AS(
 */
 
 -- TODO CLEANUP
+-- TODO why can we partition by the pay_date, cant people be paid at different times
 
-SELECT
-    s.employee_id,
+SELECT s.employee_id,
     department_id,
     SUBSTRING(pay_date, 1, 7) AS pay_month,
     AVG(amount) OVER(PARTITION BY pay_date, department_id) AS avg_department_salary,
     AVG(amount) OVER(PARTITION BY pay_date) AS avg_company_salary
-FROM salary s INNER JOIN employee e ON s.employee_id = e.employee_id
+FROM salary s
+    INNER JOIN employee e
+        ON s.employee_id = e.employee_id
 )
-
-SELECT
-    pay_month, department_id,
-    ANY_VALUE(CASE WHEN avg_department_salary > avg_company_salary THEN 'higher'
-    WHEN avg_department_salary < avg_company_salary THEN 'lower'
-    WHEN avg_department_salary = avg_company_salary THEN 'same'
-    END) AS comparison
+SELECT pay_month
+    , department_id,
+    ANY_VALUE(
+        CASE
+            WHEN avg_department_salary > avg_company_salary THEN 'higher'
+            WHEN avg_department_salary < avg_company_salary THEN 'lower'
+            WHEN avg_department_salary = avg_company_salary THEN 'same'
+        END
+    ) AS comparison
 FROM cte
 GROUP BY pay_month, department_id
 ;
