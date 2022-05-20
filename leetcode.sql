@@ -986,25 +986,9 @@ query
     each dept. each month
 */
 
--- I WAS HERE LAST MARKER (didnt finish this question)
-
-WITH cte AS(
-/*
-+-------------+---------------+-----------+-----------------------+--------------------+
-| employee_id | department_id | pay_month | avg_department_salary | avg_company_salary |
-+-------------+---------------+-----------+-----------------------+--------------------+
-|           1 |             1 | 2017-02   |             7000.0000 |          7000.0000 |
-|           2 |             2 | 2017-02   |             7000.0000 |          7000.0000 |
-|           3 |             2 | 2017-02   |             7000.0000 |          7000.0000 |
-|           1 |             1 | 2017-03   |             9000.0000 |          8333.3333 |
-|           2 |             2 | 2017-03   |             8000.0000 |          8333.3333 |
-|           3 |             2 | 2017-03   |             8000.0000 |          8333.3333 |
-+-------------+---------------+-----------+-----------------------+--------------------+
-*/
-
--- TODO CLEANUP
 -- TODO why can we partition by the pay_date, cant people be paid at different times
 
+WITH cte AS(
 SELECT s.employee_id,
     department_id,
     SUBSTRING(pay_date, 1, 7) AS pay_month,
@@ -1014,18 +998,14 @@ FROM salary s
     INNER JOIN employee e
         ON s.employee_id = e.employee_id
 )
-SELECT pay_month
-    , department_id,
-    ANY_VALUE(
-        CASE
-            WHEN avg_department_salary > avg_company_salary THEN 'higher'
-            WHEN avg_department_salary < avg_company_salary THEN 'lower'
-            WHEN avg_department_salary = avg_company_salary THEN 'same'
-        END
-    ) AS comparison
-FROM cte
-GROUP BY pay_month, department_id
-;
+SELECT DISTINCT pay_month
+    , department_id
+    , CASE
+        WHEN avg_department_salary > avg_company_salary THEN 'higher'
+        WHEN avg_department_salary < avg_company_salary THEN 'lower'
+        WHEN avg_department_salary = avg_company_salary THEN 'same'
+    END comparison
+FROM cte;
 
 /*
 1511. Customer Order Frequency (Easy)
