@@ -1071,7 +1071,7 @@ HAVING SUM(IF(LEFT(order_date, 7) = '2020-06', quantity, 0) * price) >= 100
 
 /*
 627. Swap Salary (Easy)
---https://leetcode.com/problems/swap-salary
+-- https://leetcode.com/problems/swap-salary
 Write an SQL query to swap all 'f' and 'm' values (i.e., change all 'f' values to 'm' and vice versa) with a single update statement and no intermediate temporary tables.
 
 Note that you must write a single update statement, do not write any select statement for this problem.
@@ -1103,11 +1103,101 @@ Explanation:
 (1, A) and (3, C) were changed from 'm' to 'f'.
 (2, B) and (4, D) were changed from 'f' to 'm'.
 */
+
 UPDATE Salary SET sex = CASE sex WHEN 'm' THEN 'f' ELSE 'm' END;
 UPDATE Salary SET sex = IF(sex='m', 'f', 'm');
 
-
+/*
 569. Median Employee Salary (Hard)
+-- https://leetcode.com/problems/median-employee-salary/
+Write an SQL query to find the median salary of each company.
+
+Return the result table in any order.
+
+The query result format is in the following example.
+
+Example 1:
+
+Input:
+Employee table:
++----+---------+--------+
+| id | company | salary |
++----+---------+--------+
+| 1  | A       | 2341   |
+| 2  | A       | 341    |
+| 3  | A       | 15     |
+| 4  | A       | 15314  |
+| 5  | A       | 451    |
+| 6  | A       | 513    |
+| 7  | B       | 15     |
+| 8  | B       | 13     |
+| 9  | B       | 1154   |
+| 10 | B       | 1345   |
+| 11 | B       | 1221   |
+| 12 | B       | 234    |
+| 13 | C       | 2345   |
+| 14 | C       | 2645   |
+| 15 | C       | 2645   |
+| 16 | C       | 2652   |
+| 17 | C       | 65     |
++----+---------+--------+
+Output:
++----+---------+--------+
+| id | company | salary |
++----+---------+--------+
+| 5  | A       | 451    |
+| 6  | A       | 513    |
+| 12 | B       | 234    |
+| 9  | B       | 1154   |
+| 14 | C       | 2645   |
++----+---------+--------+
+
+Follow up: Could you solve it without using any built-in or window functions?
+*/
+
+/*
+query
+|Id   | Company    | Salary |
+median salary of each company
+*/
+
+WITH cte AS (
+SELECT *
+    , ROW_NUMBER() OVER(PARTITION BY COMPANY ORDER BY Salary ASC, Id ASC) AS RN_ASC
+    , ROW_NUMBER() OVER(PARTITION BY COMPANY ORDER BY Salary DESC, Id DESC) AS RN_DESC
+FROM Employee
+)
+SELECT Id
+    , Company
+    , Salary
+FROM cte
+WHERE ABS(CAST(RN_ASC AS SIGNED) - CAST(RN_DESC AS SIGNED)) BETWEEN 0 AND 1
+ORDER BY Company, Salary;
+
+/*
++------+---------+--------+--------+---------+-------------------------------------------------------+
+| Id   | Company | Salary | RN_ASC | RN_DESC | ABS(CAST(RN_ASC AS SIGNED) - CAST(RN_DESC AS SIGNED)) |
++------+---------+--------+--------+---------+-------------------------------------------------------+
+|    4 | A       |  15314 |      6 |       1 |                                                     5 |
+|    1 | A       |   2341 |      5 |       2 |                                                     3 |
+|    6 | A       |    513 |      4 |       3 |                                                     1 |
+|    5 | A       |    451 |      3 |       4 |                                                     1 |
+|    2 | A       |    341 |      2 |       5 |                                                     3 |
+|    3 | A       |     15 |      1 |       6 |                                                     5 |
+|   10 | B       |   1345 |      6 |       1 |                                                     5 |
+|   11 | B       |   1221 |      5 |       2 |                                                     3 |
+|    9 | B       |   1154 |      4 |       3 |                                                     1 |
+|   12 | B       |    234 |      3 |       4 |                                                     1 |
+|    7 | B       |     15 |      2 |       5 |                                                     3 |
+|    8 | B       |     13 |      1 |       6 |                                                     5 |
+|   16 | C       |   2652 |      5 |       1 |                                                     4 |
+|   15 | C       |   2645 |      4 |       2 |                                                     2 |
+|   14 | C       |   2645 |      3 |       3 |                                                     0 |
+|   13 | C       |   2345 |      2 |       4 |                                                     2 |
+|   17 | C       |     65 |      1 |       5 |                                                     4 |
++------+---------+--------+--------+---------+-------------------------------------------------------+
+*/
+
 1164. Product Price at a Given Date (Medium)
 -- https://leetcode.com/problems/product-price-at-a-given-date
 1699. Number of Calls Between Two Persons (Medium)
