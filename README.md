@@ -48,3 +48,13 @@ Display a binary tree from a BFS serialized array (LeetCode style).
                  9                       8
            4           0           1           7
                           2     5
+
+
+---
+
+# title_to_link.py
+Turn leetcode title into leetcode link.
+
+    Typical usage example:
+        $ py title_to_link.py Median Employee Salary
+        https://leetcode.com/problems/median-employee-salary/
