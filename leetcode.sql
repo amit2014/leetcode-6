@@ -1294,8 +1294,75 @@ SELECT IF(from_id < to_id, from_id, to_id) AS person1
 FROM Calls
 GROUP BY person1, person2;
 
+/*
 1398. Customers Who Bought Products A and B but Not C (Medium)
 -- https://leetcode.com/problems/customers-who-bought-products-a-and-b-but-not-c
+Write an SQL query to report the customer_id and customer_name of customers who bought products "A", "B" but did not buy the product "C" since we want to recommend them to purchase this product.
+
+Return the result table ordered by customer_id.
+
+The query result format is in the following example.
+
+Example 1:
+
+Input:
+Customers table:
++-------------+---------------+
+| customer_id | customer_name |
++-------------+---------------+
+| 1           | Daniel        |
+| 2           | Diana         |
+| 3           | Elizabeth     |
+| 4           | Jhon          |
++-------------+---------------+
+Orders table:
++------------+--------------+---------------+
+| order_id   | customer_id  | product_name  |
++------------+--------------+---------------+
+| 10         |     1        |     A         |
+| 20         |     1        |     B         |
+| 30         |     1        |     D         |
+| 40         |     1        |     C         |
+| 50         |     2        |     A         |
+| 60         |     3        |     A         |
+| 70         |     3        |     B         |
+| 80         |     3        |     D         |
+| 90         |     4        |     C         |
++------------+--------------+---------------+
+Output:
++-------------+---------------+
+| customer_id | customer_name |
++-------------+---------------+
+| 3           | Elizabeth     |
++-------------+---------------+
+Explanation: Only the customer_id with id 3 bought the product A and B but not the product C.
+*/
+
+/*
+a few tricks, when chaining WHERE IN, do:
+WHERE x IN (...) *AND* y IN (...)...
+*/
+
+SELECT customer_id
+    , customer_name
+FROM Customers
+WHERE customer_id IN (
+        SELECT customer_id
+        FROM Orders
+        WHERE product_name='A'
+    )
+    AND customer_id IN (
+        SELECT customer_id
+        FROM Orders
+        WHERE product_name='B'
+    )
+    AND customer_id NOT IN (
+        SELECT customer_id
+        FROM Orders
+        WHERE product_name='C'
+    )
+ORDER BY customer_id;
+
 1384. Total Sales Amount by Year (Hard)
 -- https://leetcode.com/problems/total-sales-amount-by-year
 1336. Number of Transactions per Visit (Hard)
