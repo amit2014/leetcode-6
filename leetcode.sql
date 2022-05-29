@@ -1427,8 +1427,8 @@ where period_start < period_end
 select cte.product_id
     , p.product_name
     , date_format(cte.period_start, "%Y") report_year
-    , count(cte.period_start) * cte.average_daily_sales total_amount
-from cte cte
+    , count(cte.period_start) * any_value(cte.average_daily_sales) total_amount
+from cte
     join Product p
         on p.product_id = cte.product_id
 group by 1, 2, 3
