@@ -19,8 +19,10 @@ Requirements:
             You can also use `git update-index --assume-unchanged config.ini` to
             have git not track the config with your passwords, etc...
 3) Install the requirements.txt file
-4) Because filling out captchas is really annoying (althought it only happens
+4) Because filling out captchas is really annoying (although it only happens
     every once in a while for me) they are cached in a folder called `schemas`.
+    THIS FOLDER MUST EXIST!
+5) Chrome must be up to date. You may need to manually update it.
 
 The `config.ini` should look like this:
 
