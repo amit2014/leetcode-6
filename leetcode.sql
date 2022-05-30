@@ -1637,11 +1637,12 @@ WITH cte AS (
 SELECT id
     , visit_date
     , people
-    , LEAD(people, 1) OVER (ORDER BY id) nxt
-    , LEAD(people, 2) OVER (ORDER BY id) nxt2
-    , LAG(people, 1) OVER (ORDER BY id) pre
-    , LAG(people, 2) OVER (ORDER BY id) pre2
+    , LEAD(people, 1) OVER w nxt
+    , LEAD(people, 2) OVER w nxt2
+    , LAG(people, 1) OVER w pre
+    , LAG(people, 2) OVER w pre2
 FROM Stadium
+WINDOW w AS (ORDER BY id)
 )
 SELECT id
     , visit_date
