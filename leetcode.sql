@@ -1652,8 +1652,53 @@ WHERE (cte.people >= 100 AND cte.nxt >= 100 AND cte.nxt2 >= 100)
     OR (cte.people >= 100 AND cte.nxt >= 100 AND cte.pre >= 100)
     OR (cte.people >= 100 AND cte.pre >= 100 AND cte.pre2 >= 100);
 
+/*
 183. Customers Who Never Order (Easy)
 -- https://leetcode.com/problems/customers-who-never-order
+Write an SQL query to report all customers who never order anything.
+
+Return the result table in any order.
+
+The query result format is in the following example.
+
+Example 1:
+
+Input:
+Customers table:
++----+-------+
+| id | name  |
++----+-------+
+| 1  | Joe   |
+| 2  | Henry |
+| 3  | Sam   |
+| 4  | Max   |
++----+-------+
+Orders table:
++----+------------+
+| id | customerId |
++----+------------+
+| 1  | 3          |
+| 2  | 1          |
++----+------------+
+Output:
++-----------+
+| Customers |
++-----------+
+| Henry     |
+| Max       |
++-----------+
+*/
+
+SELECT c.name Customers
+FROM Customers c
+WHERE c.id NOT IN (SELECT customerId from Orders);
+
+SELECT name Customers
+FROM Customers c
+    LEFT JOIN Orders o
+        ON c.Id = o.CustomerId
+WHERE o.CustomerId IS NULL;
+
 1159. Market Analysis II (Hard)
 -- https://leetcode.com/problems/market-analysis-ii
 1369. Get the Second Most Recent Activity (Hard)
