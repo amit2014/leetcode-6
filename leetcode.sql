@@ -1568,7 +1568,89 @@ WHERE rnk = 1;
 -- this is unneeded to pass:
 -- GROUP BY customer_id, product_id;
 
+/*
 601. Human Traffic of Stadium (Hard)
+-- https://leetcode.com/problems/human-traffic-of-stadium/
+Write an SQL query to display the records with three or more rows with consecutive id's, and the number of people is greater than or equal to 100 for each.
+
+Return the result table ordered by visit_date in ascending order.
+
+The query result format is in the following example.
+
+Example 1:
+
+Input:
+Stadium table:
++------+------------+-----------+
+| id   | visit_date | people    |
++------+------------+-----------+
+| 1    | 2017-01-01 | 10        |
+| 2    | 2017-01-02 | 109       |
+| 3    | 2017-01-03 | 150       |
+| 4    | 2017-01-04 | 99        |
+| 5    | 2017-01-05 | 145       |
+| 6    | 2017-01-06 | 1455      |
+| 7    | 2017-01-07 | 199       |
+| 8    | 2017-01-09 | 188       |
++------+------------+-----------+
+Output:
++------+------------+-----------+
+| id   | visit_date | people    |
++------+------------+-----------+
+| 5    | 2017-01-05 | 145       |
+| 6    | 2017-01-06 | 1455      |
+| 7    | 2017-01-07 | 199       |
+| 8    | 2017-01-09 | 188       |
++------+------------+-----------+
+Explanation:
+The four rows with ids 5, 6, 7, and 8 have consecutive ids and each of them has >= 100 people attended. Note that row 8 was included even though the visit_date was not the next day after row 7.
+The rows with ids 2 and 3 are not included because we need at least three consecutive ids.
+*/
+
+/*
+query
+| id   | visit_date | people    |
+where
+    3+ consecutive id's
+    >100 ppl for each
+visit_date ASC
+*/
+
+-- NOTE: this solution makes me want to vomit
+
+SELECT DISTINCT S1.*
+FROM stadium S1
+    JOIN stadium S2
+    JOIN stadium S3
+    ON ((S1.id = S2.id - 1 AND S1.id = S3.id -2)
+    OR (S3.id = S1.id - 1 AND S3.id = S2.id -2)
+    OR (S3.id = S2.id - 1 AND S3.id = S1.id -2))
+WHERE S1.people >= 100
+    AND S2.people >= 100
+    AND S3.people >= 100
+ORDER BY S1.id;
+
+-- NOTE: the genius that wrote this also uses leading commas
+-- notice the correlation between leading commas, and genius.
+
+WITH cte AS (
+SELECT id
+    , visit_date
+    , people
+    , LEAD(people, 1) OVER (ORDER BY id) nxt
+    , LEAD(people, 2) OVER (ORDER BY id) nxt2
+    , LAG(people, 1) OVER (ORDER BY id) pre
+    , LAG(people, 2) OVER (ORDER BY id) pre2
+FROM Stadium
+)
+SELECT id
+    , visit_date
+    , people
+FROM cte
+WHERE (cte.people >= 100 AND cte.nxt >= 100 AND cte.nxt2 >= 100)
+    OR (cte.people >= 100 AND cte.nxt >= 100 AND cte.pre >= 100)
+    OR (cte.people >= 100 AND cte.pre >= 100 AND cte.pre2 >= 100);
+
 183. Customers Who Never Order (Easy)
 -- https://leetcode.com/problems/customers-who-never-order
 1159. Market Analysis II (Hard)
