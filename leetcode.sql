@@ -1699,8 +1699,107 @@ FROM Customers c
         ON c.Id = o.CustomerId
 WHERE o.CustomerId IS NULL;
 
+/*
 1159. Market Analysis II (Hard)
 -- https://leetcode.com/problems/market-analysis-ii
+Write an SQL query to find for each user whether the brand of the second item (by date) they sold is their favorite brand. If a user sold less than two items, report the answer for that user as no. It is guaranteed that no seller sold more than one item on a day.
+
+Return the result table in any order.
+
+The query result format is in the following example.
+
+Example 1:
+
+Input:
+Users table:
++---------+------------+----------------+
+| user_id | join_date  | favorite_brand |
++---------+------------+----------------+
+| 1       | 2019-01-01 | Lenovo         |
+| 2       | 2019-02-09 | Samsung        |
+| 3       | 2019-01-19 | LG             |
+| 4       | 2019-05-21 | HP             |
++---------+------------+----------------+
+Orders table:
++----------+------------+---------+----------+-----------+
+| order_id | order_date | item_id | buyer_id | seller_id |
++----------+------------+---------+----------+-----------+
+| 1        | 2019-08-01 | 4       | 1        | 2         |
+| 2        | 2019-08-02 | 2       | 1        | 3         |
+| 3        | 2019-08-03 | 3       | 2        | 3         |
+| 4        | 2019-08-04 | 1       | 4        | 2         |
+| 5        | 2019-08-04 | 1       | 3        | 4         |
+| 6        | 2019-08-05 | 2       | 2        | 4         |
++----------+------------+---------+----------+-----------+
+Items table:
++---------+------------+
+| item_id | item_brand |
++---------+------------+
+| 1       | Samsung    |
+| 2       | Lenovo     |
+| 3       | LG         |
+| 4       | HP         |
++---------+------------+
+Output:
++-----------+--------------------+
+| seller_id | 2nd_item_fav_brand |
++-----------+--------------------+
+| 1         | no                 |
+| 2         | yes                |
+| 3         | yes                |
+| 4         | no                 |
++-----------+--------------------+
+Explanation:
+The answer for the user with id 1 is no because they sold nothing.
+The answer for the users with id 2 and 3 is yes because the brands of their second sold items are their favorite brands.
+The answer for the user with id 4 is no because the brand of their second sold item is not their favorite brand.
+*/
+
+/*
+query
+| seller_id | 2nd_item_fav_brand |
+'yes'/'no' for each seller_id if the second item they sold is their favorite_brand
+    if they have no sold two items, report 'no'
+*/
+
+WITH cte AS (
+SELECT seller_id
+    , item_id
+    , RANK() OVER (PARTITION BY seller_id ORDER BY order_date) `rank`
+FROM Orders
+), cte2 as (
+SELECT seller_id
+    , item_id
+FROM cte
+WHERE `rank` = 2
+)
+/* SELECT * FROM cte2;
++-----------+---------+
+| seller_id | item_id |
++-----------+---------+
+|         2 |       1 |
+|         3 |       3 |
+|         4 |       2 |
++-----------+---------+
+*/
+SELECT DISTINCT U.user_id seller_id
+    , CASE WHEN I.item_brand = U.favorite_brand THEN 'yes' ELSE 'no' END '2nd_item_fav_brand'
+FROM cte2
+    RIGHT JOIN Users U
+        ON cte2.seller_id = U.user_id
+    LEFT JOIN Items I
+        ON cte2.item_id = I.item_id;
+/* SELECT * FROM cte2 RIGHT JOIN......;
++-----------+---------+---------+------------+----------------+---------+------------+
+| seller_id | item_id | user_id | join_date  | favorite_brand | item_id | item_brand |
++-----------+---------+---------+------------+----------------+---------+------------+
+|      NULL |    NULL |       1 | 2019-01-01 | Lenovo         |    NULL | NULL       |
+|         2 |       1 |       2 | 2019-02-09 | Samsung        |       1 | Samsung    |
+|         3 |       3 |       3 | 2019-01-19 | LG             |       3 | LG         |
+|         4 |       2 |       4 | 2019-05-21 | HP             |       2 | Lenovo     |
++-----------+---------+---------+------------+----------------+---------+------------+
+*/
+
 1369. Get the Second Most Recent Activity (Hard)
 -- https://leetcode.com/problems/get-the-second-most-recent-activity
 1741. Find Total Time Spent by Each Employee (Easy)
