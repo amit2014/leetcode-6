@@ -2357,10 +2357,18 @@ WHERE AggData.Golds >= 3
 
 /*
 585. Investments in 2016 (Medium)
-Write an SQL query to report the sum of all total investment values in 2016 tiv_2016, for all policyholders who:
+-- https://leetcode.com/problems/investments-in-2016/
 
-have the same tiv_2015 value as one or more other policyholders, and
-are not located in the same city like any other policyholder (i.e., the (lat, lon) attribute pairs must be unique).
+-- NOTE
+-- pid is the policyholder's policy ID.
+-- tiv_2015 is the total investment value in 2015 and tiv_2016 is the total investment value in 2016.
+-- lat is the latitude of the policy holder's city.
+-- lon is the longitude of the policy holder's city.
+
+Write an SQL query to report the sum of all total investment values in 2016 tiv_2016, for all policyholders who:
+* have the same tiv_2015 value as one or more other policyholders, and
+* are not located in the same city like any other policyholder (i.e., the (lat, lon) attribute pairs must be unique).
+
 Round tiv_2016 to two decimal places.
 
 The query result format is in the following example.
@@ -2392,15 +2400,14 @@ So, the result is the sum of tiv_2016 of the first and last record, which is 45.
 */
 
 WITH cte AS(
-    SELECT *,
-    COUNT(*) OVER(PARTITION BY TIV_2015) AS CNT1,
-    COUNT(*) OVER(PARTITION BY LAT, LON) AS CNT2
-    FROM Insurance
+SELECT *
+    , COUNT(*) OVER(PARTITION BY TIV_2015) AS COUNT1
+    , COUNT(*) OVER(PARTITION BY LAT, LON) AS COUNT2
+FROM Insurance
 )
-SELECT ROUND(SUM(TIV_2016),2) AS TIV_2016
+SELECT ROUND(SUM(TIV_2016), 2) AS TIV_2016
 FROM cte
-WHERE CNT1 >= 2 AND CNT2 = 1;
-
+WHERE COUNT1 >= 2 AND COUNT2 = 1;
 
 596. Classes More Than 5 Students (Easy)
 1112. Highest Grade For Each Student (Medium)
