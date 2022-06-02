@@ -2020,17 +2020,56 @@ LCHouse2: 2 units of LC-TV + 2 units of LC-KeyChain.
 LCHouse3: 1 unit of LC-T-Shirt.
           Total volume: 1*800 = 800 cubic feet.
 */
-select
-    W.name warehouse_name
+
+select W.name warehouse_name
     , sum(W.units * P.Width * P.Length * P.Height) volume
 from Warehouse W
     inner join Products P
         on W.product_id = P.product_id
 group by W.name
 
-
+/*
 1083. Sales Analysis II (Easy)
 -- https://leetcode.com/problems/product-sales-analysis-ii
+Write an SQL query that reports the total quantity sold for every product id.
+
+Return the resulting table in any order.
+
+The query result format is in the following example.
+
+Example 1:
+
+Input:
+Sales table:
++---------+------------+------+----------+-------+
+| sale_id | product_id | year | quantity | price |
++---------+------------+------+----------+-------+
+| 1       | 100        | 2008 | 10       | 5000  |
+| 2       | 100        | 2009 | 12       | 5000  |
+| 7       | 200        | 2011 | 15       | 9000  |
++---------+------------+------+----------+-------+
+Product table:
++------------+--------------+
+| product_id | product_name |
++------------+--------------+
+| 100        | Nokia        |
+| 200        | Apple        |
+| 300        | Samsung      |
++------------+--------------+
+Output:
++--------------+----------------+
+| product_id   | total_quantity |
++--------------+----------------+
+| 100          | 22             |
+| 200          | 15             |
++--------------+----------------+
+*/
+
+select product_id
+    , sum(quantity) total_quantity
+from Sales
+group by product_id;
+
 1651. Hopper Company Queries III (Hard)
 -- https://leetcode.com/problems/hopper-company-queries-iii
 1479. Sales by Day of the Week (Hard)
