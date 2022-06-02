@@ -2246,10 +2246,9 @@ ORDER BY i.item_category;
 1811. Find Interview Candidates (Medium)
 -- https://leetcode.com/problems/find-interview-candidates
 Write an SQL query to report the name and the mail of all interview candidates. A user is an interview candidate if at least one of these two conditions is true:
-
-The user won any medal in three or more consecutive contests.
-The user won the gold medal in three or more different contests (not necessarily consecutive).
-Return the result table in any order.
+* The user won any medal in three or more consecutive contests.
+* The user won the gold medal in three or more different contests (not necessarily consecutive).
+* Return the result table in any order.
 
 The query result format is in the following example.
 
@@ -2294,20 +2293,45 @@ Bob won a medal in 3 consecutive contests (190, 191, and 192), so we include him
 Alice won a medal in 3 consecutive contests (191, 192, and 193), so we include her in the result table.
 Quarz won a medal in 5 consecutive contests (190, 191, 192, 193, and 194), so we include them in the result table.
 */
-WITH cte
-AS ( SELECT Users.user_id ,
-            Users.name ,
-            Users.mail ,
-            Contests.contest_id ,
-            CASE WHEN Users.user_id = Contests.gold_medal THEN 1 ELSE 0 END AS gold ,
-            CASE WHEN Users.user_id = Contests.silver_medal THEN 1 ELSE 0 END AS silver ,
-            CASE WHEN Users.user_id = Contests.bronze_medal THEN 1 ELSE 0 END AS bronze ,
-            LAG (Contests.contest_id, 2) OVER ( PARTITION BY Users.user_id ORDER BY Contests.contest_id ) AS prevprev
-     FROM Users
-       LEFT JOIN Contests
-         ON Users.user_id = Contests.gold_medal
-            OR Users.user_id = Contests.silver_medal
-            OR Users.user_id = Contests.bronze_medal )
+
+with cte as (
+select user_id
+    , name
+    , mail
+    , contest_id
+    , user_id = gold_medal as gold
+    , user_id = silver_medal as silver
+    , user_id = bronze_medal as bronze
+    , lag(contest_id, 2) over (partition by user_id order by contest_id) as prevprev
+from Users
+    left join Contests
+        on user_id = gold_medal
+        or user_id = silver_medal
+        or user_id = bronze_medal
+)
+select name, mail
+from cte
+group by user_id, name, mail
+having sum(gold) >= 3
+    or sum(contest_id - prevprev = 2) > 0;
+
+-- TODO redo below with ctes
+
+WITH cte AS (
+SELECT Users.user_id
+    , Users.name
+    , Users.mail
+    , Contests.contest_id
+    , CASE WHEN Users.user_id = Contests.gold_medal THEN 1 ELSE 0 END AS gold
+    , CASE WHEN Users.user_id = Contests.silver_medal THEN 1 ELSE 0 END AS silver
+    , CASE WHEN Users.user_id = Contests.bronze_medal THEN 1 ELSE 0 END AS bronze
+    , LAG (Contests.contest_id, 2) OVER ( PARTITION BY Users.user_id ORDER BY Contests.contest_id ) AS prevprev
+FROM Users
+    LEFT JOIN Contests
+        ON Users.user_id = Contests.gold_medal
+        OR Users.user_id = Contests.silver_medal
+        OR Users.user_id = Contests.bronze_medal
+)
 SELECT Candidates.name,
        Candidates.mail
 FROM (
@@ -2329,8 +2353,7 @@ FROM (
      ) AS AggData
 WHERE AggData.Golds >= 3
       OR AggData.Consecutives >= 1
-) AS Candidates
-;
+) AS Candidates;
 
 /*
 585. Investments in 2016 (Medium)
