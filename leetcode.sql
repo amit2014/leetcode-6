@@ -1931,7 +1931,43 @@ FROM Person
 GROUP BY email
 HAVING COUNT(email) > 1;
 
+/*
 612. Shortest Distance in a Plane (Medium)
+-- https://leetcode.com/problems/shortest-distance-in-a-plane/
+The distance between two points p1(x1, y1) and p2(x2, y2) is sqrt((x2 - x1)2 + (y2 - y1)2).
+
+Write an SQL query to report the shortest distance between any two points from the Point2D table. Round the distance to two decimal points.
+
+The query result format is in the following example.
+
+Example 1:
+
+Input:
+Point2D table:
++----+----+
+| x  | y  |
++----+----+
+| -1 | -1 |
+| 0  | 0  |
+| -1 | -2 |
++----+----+
+Output:
++----------+
+| shortest |
++----------+
+| 1.00     |
++----------+
+Explanation: The shortest distance is 1.00 from point (-1, -1) to (-1, 2).
+*/
+
+WITH cte AS (
+SELECT SQRT(POWER(t1.x - t2.x, 2) + POWER(t1.y - t2.y, 2)) AS path
+FROM Point2D t1, Point2D t2
+)
+SELECT ROUND(MIN(path), 2) AS shortest
+FROM cte
+WHERE path != 0;
+
 /*
 1571. Warehouse Manager (Easy)
 -- https://leetcode.com/problems/warehouse-manager
