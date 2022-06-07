@@ -2453,8 +2453,54 @@ FROM courses
 GROUP BY class
 HAVING COUNT(DISTINCT student) >= 5;
 
+/*
 1112. Highest Grade For Each Student (Medium)
 -- https://leetcode.com/problems/highest-grade-for-each-student
+Write a SQL query to find the highest grade with its corresponding course for each student. In case of a tie, you should find the course with the smallest course_id.
+
+Return the result table ordered by student_id in ascending order.
+
+The query result format is in the following example.
+
+Example 1:
+
+Input:
+Enrollments table:
++------------+-------------------+
+| student_id | course_id | grade |
++------------+-----------+-------+
+| 2          | 2         | 95    |
+| 2          | 3         | 95    |
+| 1          | 1         | 90    |
+| 1          | 2         | 99    |
+| 3          | 1         | 80    |
+| 3          | 2         | 75    |
+| 3          | 3         | 82    |
++------------+-----------+-------+
+Output:
++------------+-------------------+
+| student_id | course_id | grade |
++------------+-----------+-------+
+| 1          | 2         | 99    |
+| 2          | 2         | 95    |
+| 3          | 3         | 82    |
++------------+-----------+-------+
+*/
+
+WITH cte AS (
+SELECT student_id
+    , course_id
+    , grade
+    , MAX(grade) OVER (PARTITION BY student_id) AS max_grade
+FROM Enrollments
+)
+SELECT ANY_VALUE(student_id) student_id
+    , MIN(course_id) AS course_id
+    , ANY_VALUE(grade) grade
+FROM cte
+WHERE max_grade = grade
+GROUP BY student_id;
+
 1783. Grand Slam Titles (Medium)
 -- https://leetcode.com/problems/grand-slam-titles
 1241. Number of Comments per Post (Easy)
