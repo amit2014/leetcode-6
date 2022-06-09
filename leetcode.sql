@@ -2542,8 +2542,6 @@ Player 2 (Federer) won 5 titles: Wimbledon (2020), US_open (2019, 2020), and Au_
 Player 3 (Novak) did not win anything, we did not include them in the result table.
 */
 
--- TODO fix only full group by
-
 SELECT ANY_VALUE(player_id) player_id
     , ANY_VALUE(player_name) player_name
     , SUM(player_id = Wimbledon)
@@ -2558,8 +2556,64 @@ FROM Players
         OR player_id = Au_open
 GROUP BY player_id;
 
+/*
 1241. Number of Comments per Post (Easy)
 -- https://leetcode.com/problems/number-of-comments-per-post
+Write an SQL query to find the number of comments per post. The result table should contain post_id and its corresponding number_of_comments.
+
+The Submissions table may contain duplicate comments. You should count the number of unique comments per post.
+
+The Submissions table may contain duplicate posts. You should treat them as one post.
+
+The result table should be ordered by post_id in ascending order.
+
+The query result format is in the following example.
+
+Example 1:
+
+Input:
+Submissions table:
++---------+------------+
+| sub_id  | parent_id  |
++---------+------------+
+| 1       | Null       |
+| 2       | Null       |
+| 1       | Null       |
+| 12      | Null       |
+| 3       | 1          |
+| 5       | 2          |
+| 3       | 1          |
+| 4       | 1          |
+| 9       | 1          |
+| 10      | 2          |
+| 6       | 7          |
++---------+------------+
+Output:
++---------+--------------------+
+| post_id | number_of_comments |
++---------+--------------------+
+| 1       | 3                  |
+| 2       | 2                  |
+| 12      | 0                  |
++---------+--------------------+
+Explanation:
+The post with id 1 has three comments in the table with id 3, 4, and 9. The comment with id 3 is repeated in the table, we counted it only once.
+The post with id 2 has two comments in the table with id 5 and 10.
+The post with id 12 has no comments in the table.
+The comment with id 6 is a comment on a deleted post with id 7 so we ignored it.
+*/
+
+SELECT sub_id AS post_id
+    , (
+    SELECT COUNT(DISTINCT(child.sub_id))
+    FROM Submissions child
+    WHERE child.parent_id = parent.sub_id
+    ) AS number_of_comments
+FROM Submissions parent
+WHERE parent.parent_id IS NULL
+GROUP BY parent.sub_id
+ORDER BY 1;
+
 1285. Find the Start and End Number of Continuous Ranges (Medium)
 -- https://leetcode.com/problems/find-the-start-and-end-number-of-continuous-ranges
 595. Big Countries (Easy)
