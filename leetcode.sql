@@ -2705,7 +2705,60 @@ SELECT name
 FROM World
 WHERE area > 3000000 OR population > 25000000;
 
+/*
 603. Consecutive Available Seats (Easy)
+-- https://leetcode.com/problems/consecutive-available-seats/
+Write an SQL query to report all the consecutive available seats in the cinema.
+
+Return the result table ordered by seat_id in ascending order.
+
+The test cases are generated so that more than two seats are consecutively available.
+
+The query result format is in the following example.
+
+Example 1:
+
+Input:
+Cinema table:
++---------+------+
+| seat_id | free |
++---------+------+
+| 1       | 1    |
+| 2       | 0    |
+| 3       | 1    |
+| 4       | 1    |
+| 5       | 1    |
++---------+------+
+Output:
++---------+
+| seat_id |
++---------+
+| 3       |
+| 4       |
+| 5       |
++---------+
+*/
+
+with cte as(
+select seat_id
+    , free
+    , seat_id - row_number() over (order by seat_id) as grouper
+from cinema
+where free = 1
+)
+select seat_id
+from cte
+where grouper in (select grouper from cte group by grouper having count(*) >= 2)
+order by seat_id;
+
+SELECT DISTINCT a.seat_id
+FROM cinema a
+    INNER JOIN cinema b
+        ON ABS(a.seat_id - b.seat_id) = 1
+        AND a.free = true
+        AND b.free = true
+ORDER BY a.seat_id;
+
 620. Not Boring Movies (Easy)
 1841. League Statistics (Medium)
 -- https://leetcode.com/problems/league-statistics
