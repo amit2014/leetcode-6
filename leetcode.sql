@@ -3076,8 +3076,62 @@ WHERE action = 'report'
     AND action_date = '2019-07-04'
 GROUP BY extra;
 
+/*
 1077. Project Employees III (Medium)
 -- https://leetcode.com/problems/project-employees-iii
+Write an SQL query that reports the most experienced employees in each project. In case of a tie, report all employees with the maximum number of experience years.
+
+Return the result table in any order.
+
+The query result format is in the following example.
+
+Example 1:
+
+Input:
+Project table:
++-------------+-------------+
+| project_id  | employee_id |
++-------------+-------------+
+| 1           | 1           |
+| 1           | 2           |
+| 1           | 3           |
+| 2           | 1           |
+| 2           | 4           |
++-------------+-------------+
+Employee table:
++-------------+--------+------------------+
+| employee_id | name   | experience_years |
++-------------+--------+------------------+
+| 1           | Khaled | 3                |
+| 2           | Ali    | 2                |
+| 3           | John   | 3                |
+| 4           | Doe    | 2                |
++-------------+--------+------------------+
+Output:
++-------------+---------------+
+| project_id  | employee_id   |
++-------------+---------------+
+| 1           | 1             |
+| 1           | 3             |
+| 2           | 1             |
++-------------+---------------+
+Explanation: Both employees with id 1 and 3 have the most experience among the employees of the first project. For the second project, the employee with id 1 has the most experience.
+*/
+
+SELECT p.project_id
+    , e.employee_id
+FROM project p
+    INNER JOIN employee e
+        ON e.employee_id = p.employee_id
+WHERE (p.project_id, e.experience_years) IN (
+    SELECT p.project_id
+        , MAX(e.experience_years)
+    FROM project p
+        INNER JOIN employee e
+            ON e.employee_id = p.employee_id
+    GROUP BY project_id
+);
+
 /*
 1322. Ads Performance (Easy)
 -- https://leetcode.com/problems/ads-performance
