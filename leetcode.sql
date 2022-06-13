@@ -2993,9 +2993,89 @@ FROM Activity
 WHERE activity_date >= ('2019-07-27' - INTERVAL 29 DAY)
     AND activity_date <= '2019-07-27';
 
+/*
 618. Students Report By Geography (Hard)
+-- https://leetcode.com/problems/students-report-by-geography/
+A school has students from Asia, Europe, and America.
+
+Write an SQL query to pivot the continent column in the Student table so that each name is sorted alphabetically and displayed underneath its corresponding continent. The output headers should be America, Asia, and Europe, respectively.
+
+The test cases are generated so that the student number from America is not less than either Asia or Europe.
+
+The query result format is in the following example.
+
+Example 1:
+
+Input:
+Student table:
++--------+-----------+
+| name   | continent |
++--------+-----------+
+| Jane   | America   |
+| Pascal | Europe    |
+| Xi     | Asia      |
+| Jack   | America   |
++--------+-----------+
+Output:
++---------+------+--------+
+| America | Asia | Europe |
++---------+------+--------+
+| Jack    | Xi   | Pascal |
+| Jane    | null | null   |
++---------+------+--------+
+
+Follow up: If it is unknown which continent has the most students, could you write a query to generate the student report?
+*/
+
+-- TODO
+
+/*
 1113. Reported Posts (Easy)
 -- https://leetcode.com/problems/reported-posts
+Write an SQL query that reports the number of posts reported yesterday for each report reason. Assume today is 2019-07-05.
+
+Return the result table in any order.
+
+The query result format is in the following example.
+
+Example 1:
+
+Input:
+Actions table:
++---------+---------+-------------+--------+--------+
+| user_id | post_id | action_date | action | extra  |
++---------+---------+-------------+--------+--------+
+| 1       | 1       | 2019-07-01  | view   | null   |
+| 1       | 1       | 2019-07-01  | like   | null   |
+| 1       | 1       | 2019-07-01  | share  | null   |
+| 2       | 4       | 2019-07-04  | view   | null   |
+| 2       | 4       | 2019-07-04  | report | spam   |
+| 3       | 4       | 2019-07-04  | view   | null   |
+| 3       | 4       | 2019-07-04  | report | spam   |
+| 4       | 3       | 2019-07-02  | view   | null   |
+| 4       | 3       | 2019-07-02  | report | spam   |
+| 5       | 2       | 2019-07-04  | view   | null   |
+| 5       | 2       | 2019-07-04  | report | racism |
+| 5       | 5       | 2019-07-04  | view   | null   |
+| 5       | 5       | 2019-07-04  | report | racism |
++---------+---------+-------------+--------+--------+
+Output:
++---------------+--------------+
+| report_reason | report_count |
++---------------+--------------+
+| spam          | 1            |
+| racism        | 2            |
++---------------+--------------+
+Explanation: Note that we only care about report reasons with non-zero number of reports.
+*/
+
+SELECT DISTINCT extra AS report_reason
+    , COUNT(DISTINCT post_id) AS report_count
+FROM Actions
+WHERE action = 'report'
+    AND action_date = '2019-07-04'
+GROUP BY extra;
+
 1077. Project Employees III (Medium)
 -- https://leetcode.com/problems/project-employees-iii
 /*
