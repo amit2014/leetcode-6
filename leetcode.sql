@@ -2876,7 +2876,80 @@ FROM cte
 GROUP BY T.team_name
 ORDER BY points DESC, goal_diff DESC, T.team_name;
 
+/*
 608. Tree Node (Medium)
+-- https://leetcode.com/problems/tree-node/
+Each node in the tree can be one of three types:
+
+"Leaf": if the node is a leaf node.
+"Root": if the node is the root of the tree.
+"Inner": If the node is neither a leaf node nor a root node.
+Write an SQL query to report the type of each node in the tree.
+
+Return the result table ordered by id in ascending order.
+
+The query result format is in the following example.
+
+Example 1:
+    1
+   / \
+  2   3
+ /\
+4  5
+Input:
+Tree table:
++----+------+
+| id | p_id |
++----+------+
+| 1  | null |
+| 2  | 1    |
+| 3  | 1    |
+| 4  | 2    |
+| 5  | 2    |
++----+------+
+Output:
++----+-------+
+| id | type  |
++----+-------+
+| 1  | Root  |
+| 2  | Inner |
+| 3  | Leaf  |
+| 4  | Leaf  |
+| 5  | Leaf  |
++----+-------+
+Explanation:
+Node 1 is the root node because its parent node is null and it has child nodes 2 and 3.
+Node 2 is an inner node because it has parent node 1 and child node 4 and 5.
+Nodes 3, 4, and 5 are leaf nodes because they have parent nodes and they do not have child nodes.
+
+Example 2:
+  1
+
+Input:
+Tree table:
++----+------+
+| id | p_id |
++----+------+
+| 1  | null |
++----+------+
+Output:
++----+-------+
+| id | type  |
++----+-------+
+| 1  | Root  |
++----+-------+
+Explanation: If there is only one node on the tree, you only need to output its root attributes.
+*/
+
+SELECT id AS `Id`
+    , CASE
+        WHEN tree.id = (SELECT temp.id FROM tree temp WHERE temp.p_id IS NULL) THEN 'Root'
+        WHEN tree.id IN (SELECT temp.p_id FROM tree temp) THEN 'Inner'
+        ELSE 'Leaf'
+    END AS Type
+FROM tree
+ORDER BY `Id`;
+
 1142. User Activity for the Past 30 Days II (Easy)
 -- https://leetcode.com/problems/user-activity-for-the-past-30-days-ii
 618. Students Report By Geography (Hard)
