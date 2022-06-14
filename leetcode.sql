@@ -3138,20 +3138,17 @@ WHERE (p.project_id, e.experience_years) IN (
 A company is running Ads and wants to calculate the performance of each Ad.
 
 Performance of the Ad is measured using Click-Through Rate (CTR) where:
-https://assets.leetcode.com/uploads/2020/01/17/sql1.png
 
-CTR = { 0
-            if ad total clicks + ad total views = 0
-        ad total clicks / (ad total clicks + ad total views) * 100
-            otherwise
+CTR = if ad total clicks + ad total views = 0 -> 0
+      otherwise -> ad total clicks / (ad total clicks + ad total views) * 100
+
+NOTE if confused see https://assets.leetcode.com/uploads/2020/01/17/sql1.png
 
 Write an SQL query to find the ctr of each Ad. Round ctr to two decimal points.
 
 Return the result table ordered by ctr in descending order and by ad_id in ascending order in case of a tie.
 
 The query result format is in the following example.
-
-
 
 Example 1:
 
@@ -3187,13 +3184,12 @@ for ad_id = 3, ctr = (1/(1+1)) * 100 = 50.00
 for ad_id = 5, ctr = 0.00, Note that ad_id = 5 has no clicks or views.
 Note that we do not care about Ignored Ads.
 */
-select
-    ad_id
+
+select ad_id
     , round(ifnull((sum(action = 'Clicked') / (sum(action = 'Clicked') + sum(action = 'Viewed'))) * 100, 0), 2) as ctr
 from Ads
 group by ad_id
-order by ctr desc, ad_id
-;
+order by ctr desc, ad_id;
 
 586. Customer Placing the Largest Number of Orders (Easy)
 1097. Game Play Analysis V (Hard)
