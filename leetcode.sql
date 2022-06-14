@@ -3191,9 +3191,99 @@ from Ads
 group by ad_id
 order by ctr desc, ad_id;
 
+/*
 586. Customer Placing the Largest Number of Orders (Easy)
+-- https://leetcode.com/problems/customer-placing-the-largest-number-of-orders/
+Write an SQL query to find the customer_number for the customer who has placed the largest number of orders.
+
+The test cases are generated so that exactly one customer will have placed more orders than any other customer.
+
+The query result format is in the following example.
+
+Example 1:
+
+Input:
+Orders table:
++--------------+-----------------+
+| order_number | customer_number |
++--------------+-----------------+
+| 1            | 1               |
+| 2            | 2               |
+| 3            | 3               |
+| 4            | 3               |
++--------------+-----------------+
+Output:
++-----------------+
+| customer_number |
++-----------------+
+| 3               |
++-----------------+
+Explanation:
+The customer with number 3 has two orders, which is greater than either customer 1 or 2 because each of them only has one order.
+So the result is customer_number 3.
+
+Follow up: What if more than one customer has the largest number of orders, can you find all the customer_number in this case?
+*/
+
+SELECT customer_number
+FROM Orders
+GROUP BY customer_number
+ORDER BY COUNT(order_number) DESC
+LIMIT 1;
+
+/*
 1097. Game Play Analysis V (Hard)
 -- https://leetcode.com/problems/game-play-analysis-v
+The install date of a player is the first login day of that player.
+
+We define day one retention of some date x to be the number of players whose install date is x and they logged back in on the day right after x, divided by the number of players whose install date is x, rounded to 2 decimal places.
+
+Write an SQL query to report for each install date, the number of players that installed the game on that day, and the day one retention.
+
+Return the result table in any order.
+
+The query result format is in the following example.
+
+Example 1:
+
+Input:
+Activity table:
++-----------+-----------+------------+--------------+
+| player_id | device_id | event_date | games_played |
++-----------+-----------+------------+--------------+
+| 1         | 2         | 2016-03-01 | 5            |
+| 1         | 2         | 2016-03-02 | 6            |
+| 2         | 3         | 2017-06-25 | 1            |
+| 3         | 1         | 2016-03-01 | 0            |
+| 3         | 4         | 2016-07-03 | 5            |
++-----------+-----------+------------+--------------+
+Output:
++------------+----------+----------------+
+| install_dt | installs | Day1_retention |
++------------+----------+----------------+
+| 2016-03-01 | 2        | 0.50           |
+| 2017-06-25 | 1        | 0.00           |
++------------+----------+----------------+
+Explanation:
+Player 1 and 3 installed the game on 2016-03-01 but only player 1 logged back in on 2016-03-02 so the day 1 retention of 2016-03-01 is 1 / 2 = 0.50
+Player 2 installed the game on 2017-06-25 but didn't log back in on 2017-06-26 so the day 1 retention of 2017-06-25 is 0 / 1 = 0.00
+*/
+
+WITH i AS (
+SELECT player_id
+    , MIN(event_date) AS install_dt
+FROM Activity
+GROUP BY player_id
+)
+SELECT i.install_dt
+    , COUNT(i.install_dt) AS installs
+    , ROUND(SUM(IF(a.event_date, 1, 0)) / COUNT(i.install_dt), 2) AS Day1_retention
+FROM i
+    LEFT JOIN Activity AS a
+        ON i.player_id = a.player_id
+        AND DATEDIFF(a.event_date, i.install_dt) = 1
+GROUP BY i.install_dt
+
 /*
 1613. Find the Missing IDs (Medium)
 -- https://leetcode.com/problems/find-the-missing-ids
