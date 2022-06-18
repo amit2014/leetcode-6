@@ -3316,22 +3316,20 @@ Output:
 Explanation:
 The maximum customer_id present in the table is 5, so in the range [1,5], IDs 2 and 3 are missing from the table.
 */
-WITH RECURSIVE seq AS (
-    SELECT 1 AS value
-        UNION ALL
-    SELECT value + 1
-    FROM seq
-    WHERE value < (select max(customer_id) from Customers)
-    )
-SELECT
-    seq.value AS ids
-    -- , Customers.customer_id
-FROM seq
-    LEFT JOIN Customers
-        ON seq.value = Customers.customer_id
-WHERE Customers.customer_id IS NULL
-ORDER BY ids
 
+WITH RECURSIVE cte AS (
+SELECT 1 AS value
+UNION ALL
+SELECT value + 1
+FROM cte
+WHERE value < (select max(customer_id) from Customers)
+)
+SELECT cte.value AS ids
+FROM cte
+    LEFT JOIN Customers c
+        ON cte.value = c.customer_id
+WHERE c.customer_id IS NULL
+ORDER BY ids;
 
 /*
 1549. The Most Recent Orders for Each Product (Medium)
@@ -3395,6 +3393,7 @@ mouse's most recent order is in 2020-08-03, it was ordered only once this day.
 screen's most recent order is in 2020-08-29, it was ordered only once this day.
 The hard disk was never ordered and we do not include it in the result table.
 */
+
 with T as (
 select product_id, max(order_date) as order_date
 from Orders
@@ -3406,7 +3405,6 @@ from Orders O
         using (product_id)
 where (O.product_id, O.order_date) in (select * from T)
 order by P.product_name, O.product_id, O.order_id
-
 
 /*
 1867. Orders With Maximum Quantity Above Average (Medium)
@@ -3467,6 +3465,7 @@ The maximum quantity of each order is:
 
 Orders 1 and 3 are imbalanced because they have a maximum quantity that exceeds the average quantity of every order.
 */
+
 with cte1 as(
     select
         *
