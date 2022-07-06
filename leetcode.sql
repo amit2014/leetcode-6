@@ -3395,13 +3395,17 @@ The hard disk was never ordered and we do not include it in the result table.
 */
 
 with T as (
-select product_id, max(order_date) as order_date
+select product_id
+    , max(order_date) as order_date
 from Orders
 group by product_id
 )
-select P.product_name, O.product_id, O.order_id, O.order_date
+select P.product_name
+    , O.product_id
+    , O.order_id
+    , O.order_date
 from Orders O
-    join Products P
+    inner join Products P
         using (product_id)
 where (O.product_id, O.order_date) in (select * from T)
 order by P.product_name, O.product_id, O.order_id
@@ -3466,39 +3470,75 @@ The maximum quantity of each order is:
 Orders 1 and 3 are imbalanced because they have a maximum quantity that exceeds the average quantity of every order.
 */
 
-with cte1 as(
-    select
-        *
-        , avg(quantity) over w `avg_quantity`
-        , max(quantity) over w `max_quantity`
-    from OrdersDetails
-    window w as (partition by order_id)
-    )
-    , cte2 as (
-    select max(`avg_quantity`) `max_avg_quantity`
-    from cte1
-    )
-select distinct order_id
-from cte1
-where max_quantity > (select `max_avg_quantity` from cte2)
-;
-
--- cheeky max(avg(quantity)) over() with group by solution
 with cte as (
-    select
-        order_id
-        , max(avg(quantity)) over() `mx_avg_qty`
-        , max(quantity) `mx_qty`
-    from OrdersDetails
-    group by order_id
-    )
+select order_id
+    , max(avg(quantity)) over() max_avg_quantity
+    , max(quantity) max_quantity
+from OrdersDetails
+group by order_id
+)
 select order_id
 from cte
-where `mx_qty` > `mx_avg_qty`
-;
+where max_quantity > max_avg_quantity;
 
+/*
 1205. Monthly Transactions II (Medium)
 -- https://leetcode.com/problems/monthly-transactions-ii
+Write an SQL query to find for each month and country: the number of approved transactions and their total amount, the number of chargebacks, and their total amount.
+
+Note: In your query, given the month and country, ignore rows with all zeros.
+
+Return the result table in any order.
+
+The query result format is in the following example.
+
+Example 1:
+
+Input:
+Transactions table:
++-----+---------+----------+--------+------------+
+| id  | country | state    | amount | trans_date |
++-----+---------+----------+--------+------------+
+| 101 | US      | approved | 1000   | 2019-05-18 |
+| 102 | US      | declined | 2000   | 2019-05-19 |
+| 103 | US      | approved | 3000   | 2019-06-10 |
+| 104 | US      | declined | 4000   | 2019-06-13 |
+| 105 | US      | approved | 5000   | 2019-06-15 |
++-----+---------+----------+--------+------------+
+Chargebacks table:
++----------+------------+
+| trans_id | trans_date |
++----------+------------+
+| 102      | 2019-05-29 |
+| 101      | 2019-06-30 |
+| 105      | 2019-09-18 |
++----------+------------+
+Output:
++---------+---------+----------------+-----------------+------------------+-------------------+
+| month   | country | approved_count | approved_amount | chargeback_count | chargeback_amount |
++---------+---------+----------------+-----------------+------------------+-------------------+
+| 2019-05 | US      | 1              | 1000            | 1                | 2000              |
+| 2019-06 | US      | 2              | 8000            | 1                | 1000              |
+| 2019-09 | US      | 0              | 0               | 1                | 5000              |
++---------+---------+----------------+-----------------+------------------+-------------------+
+*/
+
+-- TODO work in progress:
+
+-- SELECT LEFT(t.trans_date, 7) month
+--     , t.country
+--     , COUNT(*) approved_count
+--     , SUM(t.amount) approved_amount
+--     , COUNT(c.trans_date)
+--     , SUM(
+--         CASE WHEN c.trans_date IS NOT NULL THEN t.amount END
+--     ) chargeback_amount
+-- FROM Transactions t
+--     LEFT JOIN Chargebacks c
+--         ON t.id = c.trans_id
+-- WHERE t.state = 'approved'
+-- GROUP BY 1, t.country;
+
 511. Game Play Analysis I (Easy)
 -- https://leetcode.com/problems/game-play-analysis-i
 /*

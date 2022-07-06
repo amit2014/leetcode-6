@@ -914,7 +914,19 @@ class _253:
     Output: 1
     """
 
-    ...
+    def minMeetingRooms(self, intervals: List[List[int]]) -> int:
+        """O(nlogn) time O(n) space"""
+        if not intervals:
+            return 0
+
+        free_rooms = []  # heaps
+        intervals.sort(key=lambda x: x[0])
+        heappush(free_rooms, intervals[0][1])
+        for i in intervals[1:]:
+            if free_rooms[0] <= i[0]:
+                heappop(free_rooms)
+            heappush(free_rooms, i[1])
+        return len(free_rooms)
 
 
 class _680:
