@@ -3523,21 +3523,33 @@ Output:
 +---------+---------+----------------+-----------------+------------------+-------------------+
 */
 
--- TODO work in progress:
-
--- SELECT LEFT(t.trans_date, 7) month
---     , t.country
---     , COUNT(*) approved_count
---     , SUM(t.amount) approved_amount
---     , COUNT(c.trans_date)
---     , SUM(
---         CASE WHEN c.trans_date IS NOT NULL THEN t.amount END
---     ) chargeback_amount
--- FROM Transactions t
---     LEFT JOIN Chargebacks c
---         ON t.id = c.trans_id
--- WHERE t.state = 'approved'
--- GROUP BY 1, t.country;
+WITH CTE AS (
+SELECT id
+    , country
+    , state
+    , amount
+    , DATE_FORMAT(trans_date, '%Y-%m') AS month
+FROM Transactions
+WHERE state = 'approved'
+UNION
+SELECT c.trans_id
+    , t.country
+    , 'chargeback' AS state
+    , t.amount
+    , DATE_FORMAT(c.trans_date, '%Y-%m') AS month
+FROM Chargebacks c
+    LEFT JOIN Transactions t
+        ON c.trans_id = t.id
+)
+SELECT month
+    , country
+    , SUM(IF(state = 'approved', 1, 0)) AS approved_count
+    , SUM(IF(state = 'approved', amount, 0)) AS approved_amount
+    , SUM(IF(state = 'chargeback', 1, 0)) AS chargeback_count
+    , SUM(IF(state = 'chargeback', amount, 0)) AS chargeback_amount
+FROM CTE
+GROUP BY month, country
+ORDER BY month, country;
 
 511. Game Play Analysis I (Easy)
 -- https://leetcode.com/problems/game-play-analysis-i
