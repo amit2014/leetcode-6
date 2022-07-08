@@ -3551,49 +3551,22 @@ FROM CTE
 GROUP BY month, country
 ORDER BY month, country;
 
+/*
 511. Game Play Analysis I (Easy)
 -- https://leetcode.com/problems/game-play-analysis-i
+
+*/
+
+-- TODO
+
 /*
 1677. Products Worth Over Invoices (Easy)
-Table: Product
-
-+-------------+---------+
-| Column Name | Type    |
-+-------------+---------+
-| product_id  | int     |
-| name        | varchar |
-+-------------+---------+
-product_id is the primary key for this table.
-This table contains the ID and the name of the product. The name consists of only lowercase English letters. No two products have the same name.
-
-
-Table: Invoice
-
-+-------------+------+
-| Column Name | Type |
-+-------------+------+
-| invoice_id  | int  |
-| product_id  | int  |
-| rest        | int  |
-| paid        | int  |
-| canceled    | int  |
-| refunded    | int  |
-+-------------+------+
-invoice_id is the primary key for this table and the id of this invoice.
-product_id is the id of the product for this invoice.
-rest is the amount left to pay for this invoice.
-paid is the amount paid for this invoice.
-canceled is the amount canceled for this invoice.
-refunded is the amount refunded for this invoice.
-
-
+-- TODO
 Write an SQL query that will, for all products, return each product name with the total amount due, paid, canceled, and refunded across all invoices.
 
 Return the result table ordered by product_name.
 
 The query result format is in the following example.
-
-
 
 Example 1:
 
@@ -3633,26 +3606,24 @@ Explanation:
 - The amount of money canceled for ham is 5 + 0 = 5
 - The amount of money refunded for ham is 0 + 3 = 3
 */
-select
-    P.name
+
+-- NOTE you should be thinking "oh, i should handle null?" even if the
+-- question doesn't mention it speicifcally
+
+select P.name
     , coalesce(sum(I.rest), 0) rest
     , coalesce(sum(I.paid), 0) paid
     , coalesce(sum(I.canceled), 0) canceled
     , coalesce(sum(I.refunded), 0) refunded
 from Product P
-    -- I think a good trick, is if data is split between two tables
-    -- you should be thinking "oh, i should handle null?" even if the
-    -- question doesn't mention it speicifcally
-    left join Invoice I -- sauce
+    left join Invoice I
         on I.product_id = P.product_id
 group by P.name
 order by P.name
 
-
-
 /*
 602. Friend Requests II: Who Has the Most Friends (Medium)
-
+-- TODO
 Write an SQL query to find the people who have the most friends and the most friends number.
 
 The test cases are generated so that only one person has the most friends.
@@ -3680,22 +3651,20 @@ Output:
 Explanation:
 The person with id 3 is a friend of people 1, 2, and 4, so he has three friends in total, which is the most number than any others.
 
-
 Follow up: In the real world, multiple people could have the same most number of friends. Could you find all these people in this case?
 */
 with cte as(
-    select requester_id id
-    from RequestAccepted
-        union all
-    select accepter_id id
-    from RequestAccepted
+select requester_id id
+from RequestAccepted
+union all
+select accepter_id id
+from RequestAccepted
 )
-select
-    id
+select id
     , count(*) as num
 from cte
 group by id
-order by num desc limit 1;
+order by num desc limit 1; -- TODO how does this work for the general case?
 
 607. Sales Person (Easy)
 1068. Product Sales Analysis I (Easy)
@@ -3743,21 +3712,20 @@ Explanation:
 Candidate B has 2 votes. Candidates C, D, and E have 1 vote each.
 The winner is candidate B.
 */
-select name from(
-select
-    c.name
+select name from (
+select c.name
     , count(v.candidateId) count_votes
 from Candidate c
     inner join Vote v
         on c.id = v.candidateId
 group by v.candidateId, c.name
 order by count_votes desc
-limit 1) _
-;
+limit 1
+) _;
 
+/*
 1212. Team Scores in Football Tournament (Medium)
 -- https://leetcode.com/problems/team-scores-in-football-tournament
-/*
 You would like to compute the scores of all teams after all matches. Points are awarded as follows:
 A team receives three points if they win a match (i.e., Scored more goals than the opponent team).
 A team receives one point if they draw a match (i.e., Scored the same number of goals as the opponent team).
@@ -3805,7 +3773,8 @@ Output:
 SELECT team_id
     , team_name
     , SUM(
-        CASE WHEN team_id = host_team AND host_goals > guest_goals THEN 3
+        CASE
+            WHEN team_id = host_team AND host_goals > guest_goals THEN 3
             WHEN team_id = guest_team AND guest_goals > host_goals THEN 3
             WHEN host_goals = guest_goals THEN 1
             ELSE 0
@@ -3814,7 +3783,7 @@ SELECT team_id
 FROM Teams t
     LEFT JOIN Matches m
         ON t.team_id = m.host_team
-            OR t.team_id = m.guest_team
+        OR t.team_id = m.guest_team
 GROUP BY team_id, team_name
 ORDER BY num_points DESC, team_id;
 
