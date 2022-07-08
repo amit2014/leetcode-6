@@ -4023,17 +4023,15 @@ The followers of 0 are {1}
 The followers of 1 are {0}
 The followers of 2 are {0,1}
 */
-select
-    user_id
+select user_id
     , count(follower_id) followers_count
 from Followers
 group by user_id
 order by user_id
 
-
-
 /*
 1204. Last Person to Fit in the Bus (Medium)
+-- https://leetcode.com/problems/last-person-to-fit-in-the-bus/
 There is a queue of people waiting to board a bus. However, the bus has a weight limit of 1000 kilograms, so there may be some people who cannot board.
 
 Write an SQL query to find the person_name of the last person that can fit on the bus without exceeding the weight limit. The test cases are generated such that the first person does not exceed the weight limit.
@@ -4073,17 +4071,15 @@ Explanation: The folowing table is ordered by the turn for simplicity.
 +------+----+-----------+--------+--------------+
 */
 with cte as(
-    select
-        *
-        , sum(weight) over(order by turn range between unbounded preceding and current row) as running_total
-    from Queue
+select *
+    , sum(weight) over(order by turn range between unbounded preceding and current row) as running_total
+from Queue
 )
 select person_name
 from cte
 where running_total <= 1000
 order by running_total desc
-limit 1
-;
+limit 1;
 
 /*
 534. Game Play Analysis III (Medium)
