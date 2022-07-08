@@ -3561,7 +3561,7 @@ ORDER BY month, country;
 
 /*
 1677. Products Worth Over Invoices (Easy)
--- TODO
+-- https://leetcode.com/problems/products-worth-over-invoices/
 Write an SQL query that will, for all products, return each product name with the total amount due, paid, canceled, and refunded across all invoices.
 
 Return the result table ordered by product_name.
@@ -3623,7 +3623,8 @@ order by P.name
 
 /*
 602. Friend Requests II: Who Has the Most Friends (Medium)
--- TODO
+-- https://leetcode.com/problems/friend-requests-ii:-who-has-the-most-friends/
+
 Write an SQL query to find the people who have the most friends and the most friends number.
 
 The test cases are generated so that only one person has the most friends.
