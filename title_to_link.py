@@ -19,3 +19,10 @@ if __name__ == "__main__":
         == "https://leetcode.com/problems/median-employee-salary/"
     )
     print(title_to_link(sys.argv[1:]))
+
+
+"""
+TODO check the following case:
+602. Friend Requests II: Who Has the Most Friends (Medium)
+https://leetcode.com/problems/friend-requests-ii:-who-has-the-most-friends/
+"""
