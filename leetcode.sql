@@ -3674,6 +3674,7 @@ order by num desc limit 1; -- TODO how does this work for the general case?
 -- https://leetcode.com/problems/find-users-with-valid-e-mails
 /*
 574. Winning Candidate (Medium)
+-- https://leetcode.com/problems/winning-candidate/
 Write an SQL query to report the name of the winning candidate (i.e., the candidate who got the largest number of votes).
 
 The test cases are generated so that exactly one candidate wins the elections.
@@ -3828,7 +3829,6 @@ select product_id, 'store2' store, store2 price from Products where store2 is no
 union all
 select product_id, 'store3' store, store3 price from Products where store3 is not null
 
-
 /*
 1527. Patients With a Condition (Easy)
 -- https://leetcode.com/problems/patients-with-a-condition
@@ -3867,7 +3867,6 @@ from Patients
 where conditions rlike '^DIAB1| DIAB1'
 -- where conditions LIKE 'DIAB1%' OR conditions like '% DIAB1%'
 -- https://stackoverflow.com/a/67500315/13660563
-
 
 /*
 1532. The Most Recent Three Orders (Medium)
@@ -3927,38 +3926,10 @@ Jonathan has exactly 3 orders.
 Marwan ordered only one time.
 We sort the result table by customer_name in ascending order, by customer_id in ascending order, and by order_date in descending order in case of a tie.
 */
-with order_dense_and_count as(
-select
-    o.order_id, o.order_date, o.customer_id, o.cost, c.name
-    , row_number() over(partition by o.customer_id order by o.order_date) dense_order
-    , count(1) over(partition by o.customer_id) count_order
-from Orders o
-    inner join Customers c
-        on o.customer_id = c.customer_id
-order by o.customer_id, o.order_date
-)
-, case_include as(
-select
-    *
-    , count_order - dense_order `a`
-    , case
-        when count_order < 3 then 1
-        when count_order >= 3 and (count_order - dense_order) < 3 then 1
-        else 0
-    end case_include
-from order_dense_and_count
-)
-select name customer_name, customer_id, order_id, order_date
-from case_include
-where case_include.case_include = 1
-order by customer_name, customer_id, order_date desc;
-
-
 -- to get top n most recent dates
 -- rank order by date desc -> rank <= 3
 with temp as(
-select
-    name customer_name
+select name customer_name
     , c.customer_id
     , order_id
     , order_date
@@ -3967,15 +3938,13 @@ from Customers c
     inner join Orders o
         on c.customer_id = o.customer_id
 )
-select
-    customer_name
+select customer_name
     , customer_id
     , order_id
     , order_date
 from temp
 where `rank` <= 3
 order by customer_name, customer_id, order_date desc
-
 
 /*
 1777. Products Price for Each Store (Easy)
