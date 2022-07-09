@@ -4172,17 +4172,15 @@ The other days had no spam reports so the average is (50 + 100) / 2 = 75%
 Note that the output is only one number and that we do not care about the remove dates.
 */
 WITH cte AS(
-    SELECT (COUNT(DISTINCT r.post_id)/ COUNT(DISTINCT a.post_id)) * 100  AS `cnt`
-    FROM Actions a
-        LEFT JOIN Removals r
-            ON a.post_id = r.post_id
-    WHERE extra = 'spam'
-    GROUP BY action_date
+SELECT (COUNT(DISTINCT r.post_id)/ COUNT(DISTINCT a.post_id)) * 100  AS `cnt`
+FROM Actions a
+    LEFT JOIN Removals r
+        ON a.post_id = r.post_id
+WHERE extra = 'spam'
+GROUP BY action_date
 )
-SELECT
-    ROUND(AVG(`cnt`), 2) AS `average_daily_percent`
-FROM cte
-;
+SELECT ROUND(AVG(`cnt`), 2) AS `average_daily_percent`
+FROM cte;
 
 /*
 1211. Queries Quality and Percentage (Easy)
