@@ -4090,8 +4090,6 @@ Return the result table in any order.
 
 The query result format is in the following example.
 
-
-
 Example 1:
 
 Input:
@@ -4120,13 +4118,11 @@ For the player with id 1, 5 + 6 = 11 games played by 2016-05-02, and 5 + 6 + 1 =
 For the player with id 3, 0 + 5 = 5 games played by 2018-07-03.
 Note that for each player we only care about the days when the player logged in.
 */
-select
-    player_id
+select player_id
     , event_date
     , sum(games_played) over (partition by player_id order by event_date range between unbounded preceding and current row) as games_played_so_far
 from Activity
-order by player_id, event_date
-;
+order by player_id, event_date;
 
 /*
 1132. Reported Posts II (Medium)
@@ -4134,8 +4130,6 @@ order by player_id, event_date
 Write an SQL query to find the average daily percentage of posts that got removed after being reported as spam, rounded to 2 decimal places.
 
 The query result format is in the following example.
-
-
 
 Example 1:
 
