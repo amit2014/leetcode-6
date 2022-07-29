@@ -263,6 +263,8 @@ class _56:
     def merge(self, intervals: List[List[int]]) -> List[List[int]]:
         ans: List[List[int]] = []
         for x, y in sorted(intervals, key=lambda x: x[1]):
+            # think: "if the ends are sorted,
+            # just worry about the starts"
             while ans and x <= ans[-1][1]:  # e.g. [[1,2],[3,6]] <-merge- [4,7]
                 x = min(x, ans.pop()[0])
             ans.append([x, y])
