@@ -1,3 +1,4 @@
+.DS_Store
 .leetcode*
 temp.py
 node_module*
