@@ -4505,9 +4505,39 @@ class _46:
     """
     # - Permutations -
     # https://leetcode.com/problems/permutations/
+    Given an array nums of distinct integers, return all the possible
+    permutations. You can return the answer in any order.
+
+    Example 1:
+    Input: nums = [1,2,3]
+    Output: [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+
+    Example 2:
+    Input: nums = [0,1]
+    Output: [[0,1],[1,0]]
+
+    Example 3:
+    Input: nums = [1]
+    Output: [[1]]
+
+    NOTE All the integers of nums are unique.
     """
 
-    ...
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        def backtrack(first=0):
+            # if all integers are used up
+            if first == n:
+                ans.append(nums[:])  # NOTE you want to copy the array with [:]
+                # otherwise it's object references
+            for i in range(first, n):
+                nums[first], nums[i] = nums[i], nums[first]
+                backtrack(first + 1)
+                nums[first], nums[i] = nums[i], nums[first]  # backtrack
+
+        n = len(nums)
+        ans = []
+        backtrack()
+        return ans
 
 
 class _1861:

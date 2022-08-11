@@ -11,13 +11,19 @@ from structures import LinkedList, ListNode
 
 
 class _:
-    def summaryRanges(self, nums):
-        ans: List[str] = []
-        i = 0
-        while i < len(nums):
-            begin = end = i
-            while end < len(nums) - 1 and nums[end] + 1 == nums[end + 1]:
-                end += 1
-            ans.append(str(nums[begin]) + (("->" + str(nums[end])) * (begin != end)))
-            i = end + 1
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        def backtrack(first=0):
+            if first == n:
+                ans.append(nums)
+            for i in range(first, n):
+                nums[first], nums[i] = nums[i], nums[first]
+                backtrack(first + 1)
+                nums[first], nums[i] = nums[i], nums[first]  # backtrack
+
+        n = len(nums)
+        ans = []
+        backtrack()
         return ans
+
+
+print(_().permute([1, 2, 3]))
