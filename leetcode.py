@@ -5345,9 +5345,31 @@ class _356:
     """
     # - Line Reflection -
     # https://leetcode.com/problems/line-reflection/
+    Given n points on a 2D plane, find if there is such a line parallel to
+    the y-axis that reflects the given points symmetrically.
+
+    In other words, answer whether or not if there exists a line that after
+    reflecting all points over the given line, the original points' set is
+    the same as the reflected ones.
+
+    Note that there can be repeated points.
+
+    Example 1:
+    Input: points = [[1,1],[-1,1]]
+    Output: true
+    Explanation: We can choose the line x = 0.
+
+    Example 2:
+    Input: points = [[1,1],[-1,-1]]
+    Output: false
+    Explanation: We can't choose a line.
     """
 
-    ...
+    def isReflected(self, points: List[List[int]]) -> bool:
+        points_set = set(tuple(p) for p in points)
+        xs = [x for x, _ in points_set]
+        x0 = (min(xs) + max(xs)) / 2
+        return all(((2 * x0 - x, y) in points_set) for x, y in points_set)
 
 
 class _1015:
