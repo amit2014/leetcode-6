@@ -11,19 +11,17 @@ from structures import LinkedList, ListNode
 
 
 class _:
-    def permute(self, nums: List[int]) -> List[List[int]]:
-        def backtrack(first=0):
-            if first == n:
-                ans.append(nums)
-            for i in range(first, n):
-                nums[first], nums[i] = nums[i], nums[first]
-                backtrack(first + 1)
-                nums[first], nums[i] = nums[i], nums[first]  # backtrack
+    def check(self, s: str, w: str) -> bool:
+        i, j = 0, 0
+        for i in range(len(s)):
+            if j < len(w) and s[i] == w[j]:
+                j += 1
+            elif s[i - 1 : i + 2] != s[i] * 3 != s[i - 2 : i + 1]:
+                return False
+        return j == len(w)
 
-        n = len(nums)
-        ans = []
-        backtrack()
-        return ans
+    def expressiveWords(self, s: str, words: List[str]) -> int:
+        return sum(self.check(s, w) for w in words)
 
 
-print(_().permute([1, 2, 3]))
+print(_().expressiveWords("aaa", ["aaaa"]))
