@@ -6562,3 +6562,41 @@ class _867:
             for c, val in enumerate(row):
                 ans[c][r] = val
         return ans
+
+
+class _1260:
+    """
+    # - Shift 2D Grid -
+    # https://leetcode.com/problems/shift-2d-grid/
+    Given a 2D grid of size m x n and an integer k. You need to shift the grid k times.
+
+    In one shift operation:
+
+    Element at grid[i][j] moves to grid[i][j + 1].
+    Element at grid[i][n - 1] moves to grid[i + 1][0].
+    Element at grid[m - 1][n - 1] moves to grid[0][0].
+    Return the 2D grid after applying shift operation k times.
+
+    Example 1:
+    Input: grid = [[1,2,3],[4,5,6],[7,8,9]], k = 1
+    Output: [[9,1,2],[3,4,5],[6,7,8]]
+
+    Example 2:
+    Input: grid = [[3,8,1,9],[19,7,2,5],[4,6,11,10],[12,0,21,13]], k = 4
+    Output: [[12,0,21,13],[3,8,1,9],[19,7,2,5],[4,6,11,10]]
+
+    Example 3:
+    Input: grid = [[1,2,3],[4,5,6],[7,8,9]], k = 9
+    Output: [[1,2,3],[4,5,6],[7,8,9]]
+    """
+
+    def shiftGrid(self, grid: List[List[int]], k: int) -> List[List[int]]:
+        new_grid = [[0] * len(grid[0]) for _ in range(len(grid))]
+        m, n = len(grid), len(grid[0])
+        for r in range(m):
+            for c in range(n):
+                new_col = (c + k) % n
+                wrap_around_count = (c + k) // n
+                new_row = (r + wrap_around_count) % m
+                new_grid[new_row][new_col] = grid[r][c]
+        return new_grid
