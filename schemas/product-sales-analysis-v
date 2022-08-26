@@ -1,0 +1,12 @@
+Create table If Not Exists Sales (sale_id int, product_id int, user_id int, quantity int)
+Create table If Not Exists Product (product_id int, price int)
+Truncate table Sales
+insert into Sales (sale_id, product_id, user_id, quantity) values ('1', '1', '101', '10')
+insert into Sales (sale_id, product_id, user_id, quantity) values ('2', '2', '101', '1')
+insert into Sales (sale_id, product_id, user_id, quantity) values ('3', '3', '102', '3')
+insert into Sales (sale_id, product_id, user_id, quantity) values ('4', '3', '102', '2')
+insert into Sales (sale_id, product_id, user_id, quantity) values ('5', '2', '103', '3')
+Truncate table Product
+insert into Product (product_id, price) values ('1', '10')
+insert into Product (product_id, price) values ('2', '25')
+insert into Product (product_id, price) values ('3', '15')
