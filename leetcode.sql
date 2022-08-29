@@ -9433,6 +9433,46 @@ ORDER BY bus_id;
 
 
 /*
+
+-- https://leetcode.com/problems/order-two-columns-independently/
+Write an SQL query to independently:
+    order first_col in ascending order.
+    order second_col in descending order.
+The query result format is in the following example.
+
+Example 1:
+
+Input:
+Data table:
++-----------+------------+
+| first_col | second_col |
++-----------+------------+
+| 4         | 2          |
+| 2         | 3          |
+| 3         | 1          |
+| 1         | 4          |
++-----------+------------+
+Output:
++-----------+------------+
+| first_col | second_col |
++-----------+------------+
+| 1         | 4          |
+| 2         | 3          |
+| 3         | 2          |
+| 4         | 1          |
++-----------+------------+
+*/
+
+SELECT first_col, second_col
+FROM
+    (SELECT first_col, ROW_NUMBER() OVER(ORDER BY first_col ASC) AS r
+    FROM Data) a
+    INNER JOIN
+    (SELECT second_col, ROW_NUMBER() OVER(ORDER BY second_col DESC) AS r
+    FROM Data) b
+        ON a.r = b.r
+
+/*
 2329. Product Sales Analysis V
 -- https://leetcode.com/problems/product-sales-analysis-v/
 Write an SQL query that reports the spending of each user.
