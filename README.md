@@ -41,7 +41,7 @@ The `config.ini` should look like this:
 ---
 
 # testcase.py
-Paste failed SQL testcase JSON into testcase.json, then run this script.
+Loads failed SQL testcase JSON into your MySQL database.
 
     Typical usage example:
 
