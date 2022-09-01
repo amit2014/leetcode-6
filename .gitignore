@@ -1,4 +1,5 @@
 .DS_Store
+testcase.json
 .leetcode*
 temp.py
 node_module*
