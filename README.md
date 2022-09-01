@@ -40,6 +40,20 @@ The `config.ini` should look like this:
 
 ---
 
+# testcase.py
+Paste failed SQL testcase JSON into testcase.json, then run this script.
+
+    Typical usage example:
+
+    Step 0) Have the appropriate schema loaded for the failed testcase. I
+    assume you already have the schema loaded, or else why would you have
+    the testcase!
+    Step 1) Save failed testcase JSON in a file named 'testcase.json'.
+    Step 2) $ py testcase.py
+
+
+---
+
 # make_tree.py
 Display a binary tree from a BFS serialized array (LeetCode style).
 

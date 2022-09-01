@@ -1,5 +1,6 @@
 FILES = [
     "load_schema",
+    "testcase",
     "make_tree",
     "title_to_link",
 ]
