@@ -9490,7 +9490,7 @@ ORDER BY bus_id;
 
 
 /*
-
+2159. Order Two Columns Independently
 -- https://leetcode.com/problems/order-two-columns-independently/
 Write an SQL query to independently:
     order first_col in ascending order.
@@ -9581,6 +9581,48 @@ FROM Sales s
         USING (product_id)
 GROUP BY s.user_id
 ORDER BY 2 DESC, 1 ASC
+
+/*
+2339. All the Matches of the League
+-- https://leetcode.com/problems/all-the-matches-of-the-league/
+Write an SQL query that reports all the possible matches of the league. Note that every two teams play two matches with each other, with one team being the home_team once and the other time being the away_team.
+
+Return the result table in any order.
+
+The query result format is in the following example.
+
+Example 1:
+
+Input:
+Teams table:
++-------------+
+| team_name   |
++-------------+
+| Leetcode FC |
+| Ahly SC     |
+| Real Madrid |
++-------------+
+Output:
++-------------+-------------+
+| home_team   | away_team   |
++-------------+-------------+
+| Real Madrid | Leetcode FC |
+| Real Madrid | Ahly SC     |
+| Leetcode FC | Real Madrid |
+| Leetcode FC | Ahly SC     |
+| Ahly SC     | Real Madrid |
+| Ahly SC     | Leetcode FC |
++-------------+-------------+
+Explanation: All the matches of the league are shown in the table.
+*/
+
+-- NOTE Teams t1, Teams t2 ON t1.team_name <> t2.team_name; IS NOT VALID MySQL!
+
+SELECT t1.team_name home_team
+    , t2.team_name away_team
+FROM Teams t1
+    CROSS JOIN Teams t2
+        ON t1.team_name <> t2.team_name;
 
 /*
 2356. Number of Unique Subjects Taught by Each Teacher

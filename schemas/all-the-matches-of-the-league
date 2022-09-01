@@ -1,0 +1,5 @@
+Create table If Not Exists Teams (team_name varchar(50))
+Truncate table Teams
+insert into Teams (team_name) values ('Leetcode FC')
+insert into Teams (team_name) values ('Ahly SC')
+insert into Teams (team_name) values ('Real Madrid')
