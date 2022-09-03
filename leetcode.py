@@ -6677,3 +6677,70 @@ class _1822:
             if x < 0:
                 ans *= -1
         return ans
+
+
+class _383:
+    """
+    # - 383. Ransom Note -
+    # https://leetcode.com/problems/ransom-note/
+    Given two strings ransomNote and magazine, return true if ransomNote can be
+    constructed by using the letters from magazine and false otherwise.
+
+    Each letter in magazine can only be used once in ransomNote.
+
+    Example 1:
+    Input: ransomNote = "a", magazine = "b"
+    Output: false
+
+    Example 2:
+    Input: ransomNote = "aa", magazine = "ab"
+    Output: false
+
+    Example 3:
+    Input: ransomNote = "aa", magazine = "aab"
+    Output: true
+    """
+
+    def canConstruct(self, ransomNote: str, magazine: str) -> bool:
+        """O(n) time, O(k)/O(1) space, k is a constant 26"""
+        if len(ransomNote) > len(magazine):
+            return False
+        letters = Counter(magazine)
+        for c in ransomNote:
+            if letters[c] <= 0:
+                return False
+            letters[c] -= 1
+        return True
+
+        # NOTE there is a time complexity solutions but...
+
+
+class _243:
+    """
+    # - 243. Shortest Word Distance -
+    # https://leetcode.com/problems/shortest-word-distance/
+    Given an array of strings wordsDict and two different strings that already
+    exist in the array word1 and word2, return the shortest distance between
+    these two words in the list.
+
+    Example 1:
+    Input: wordsDict = ["practice", "makes", "perfect", "coding", "makes"],
+    word1 = "coding", word2 = "practice"
+    Output: 3
+
+    Example 2:
+    Input: wordsDict = ["practice", "makes", "perfect", "coding", "makes"],
+    word1 = "makes", word2 = "coding"
+    Output: 1
+    """
+
+    def shortestDistance(self, wordsDict: List[str], word1: str, word2: str) -> int:
+        """O(n) time O(1) space"""
+        ans = i1 = i2 = inf
+        for i, word in enumerate(wordsDict):
+            if word == word1:
+                i1 = i
+            elif word == word2:
+                i2 = i
+            ans = min(ans, abs(i1 - i2))
+        return ans  # type: ignore
