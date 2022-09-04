@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import datetime
 import re
 from bisect import bisect_left
 from collections import Counter, OrderedDict, defaultdict, deque
@@ -6744,3 +6745,70 @@ class _243:
                 i2 = i
             ans = min(ans, abs(i1 - i2))
         return ans  # type: ignore
+
+
+class _204:
+    """
+    # - 205. Isomorphic Strings -
+    # https://leetcode.com/problems/isomorphic-strings/
+    Given two strings s and t, determine if they are isomorphic.
+
+    Two strings s and t are isomorphic if the characters in s can be replaced
+    to get t.
+
+    All occurrences of a character must be replaced with another character
+    while preserving the order of characters. No two characters may map to
+    the same character, but a character may map to itself.
+
+    Example 1:
+    Input: s = "egg", t = "add"
+    Output: true
+
+    Example 2:
+    Input: s = "foo", t = "bar"
+    Output: false
+
+    Example 3:
+    Input: s = "paper", t = "title"
+    Output: true
+    """
+
+    def isIsomorphic(self, s: str, t: str) -> bool:
+        """O(n) time O(1) space"""
+        return len(set(s)) == len(set(t)) == len(set(zip(s, t)))
+
+    def _isIsomorphic(self, s: str, t: str) -> bool:
+        """O(n) time O(n) space"""
+
+        def fn(s: str) -> List[str]:
+            index_mp = {}
+            ans = []
+            for i, c in enumerate(s):
+                if c not in index_mp:
+                    index_mp[c] = i
+                ans.append(str(index_mp[c]))
+            return ans
+
+        return fn(s) == fn(t)
+
+
+class _1360:
+    """
+    Write a program to count the number of days between two dates.
+
+    The two dates are given as strings, their format is YYYY-MM-DD as shown in the examples.
+
+    Example 1:
+    Input: date1 = "2019-06-29", date2 = "2019-06-30"
+    Output: 1
+
+    Example 2:
+    Input: date1 = "2020-01-15", date2 = "2019-12-31"
+    Output: 15
+    """
+
+    def daysBetweenDates(self, date1: str, date2: str) -> int:
+        d1 = datetime.datetime.strptime(date1, "%Y-%m-%d")
+        d2 = datetime.datetime.strptime(date2, "%Y-%m-%d")
+        ans = abs((d2 - d1).days)
+        return ans
