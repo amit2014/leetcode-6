@@ -8,7 +8,7 @@ from bisect import bisect_left
 from collections import Counter, OrderedDict, defaultdict, deque
 from functools import lru_cache, reduce
 from heapq import heapify, heappop, heappush, nlargest
-from itertools import chain, groupby, product, zip_longest
+from itertools import chain, groupby, permutations, product, zip_longest
 from math import comb, inf, sqrt
 from random import choice, random, shuffle
 from typing import Callable, Deque, Dict, Final, List, Optional, Set, Tuple, Union
@@ -6850,3 +6850,35 @@ class _231:
     def _isPowerOfTwo(self, n: int) -> bool:
         """O(1) time O(1) space"""
         return n > 0 and bin(n).count("1") == 1
+
+
+class _869:
+    """
+    # - 869. Reordered Power of 2 -
+    # https://leetcode.com/problems/reordered-power-of-2/
+    You are given an integer n. We reorder the digits in any order (including the
+    original order) such that the leading digit is not zero.
+
+    Return true if and only if we can do this so that the resulting number is a
+    power of two.
+
+    Example 1:
+    Input: n = 1
+    Output: true
+
+    Example 2:
+    Input: n = 10
+    Output: false
+    """
+
+    def reorderedPowerOf2(self, n: int) -> bool:
+        """O((logn)! * logn) time O(logn) space, simple solution"""
+        return any(
+            x[0] != "0" and bin(int("".join(x))).count("1") == 1
+            for x in permutations(str(n))
+        )
+
+    def _reorderedPowerOf2(self, n: int) -> bool:
+        """O(log^2n) time O(logn) space, cheeky solution"""
+        count = Counter(str(n))
+        return any(count == Counter(str(1 << x)) for x in range(31))
