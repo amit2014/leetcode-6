@@ -6794,6 +6794,8 @@ class _204:
 
 class _1360:
     """
+    # - 1360. Number of Days Between Two Dates -
+    # https://leetcode.com/problems/number-of-days-between-two-dates/
     Write a program to count the number of days between two dates.
 
     The two dates are given as strings, their format is YYYY-MM-DD as shown in the examples.
@@ -6812,3 +6814,39 @@ class _1360:
         d2 = datetime.datetime.strptime(date2, "%Y-%m-%d")
         ans = abs((d2 - d1).days)
         return ans
+
+
+class _231:
+    """
+    # - 231. Power of Two -
+    # https://leetcode.com/problems/power-of-two/
+    Given an integer n, return true if it is a power of two. Otherwise, return false.
+
+    An integer n is a power of two, if there exists an integer x such that n == 2x.
+
+    Example 1:
+    Input: n = 1
+    Output: true
+    Explanation: 20 = 1
+
+    Example 2:
+    Input: n = 16
+    Output: true
+    Explanation: 24 = 16
+
+    Example 3:
+    Input: n = 3
+    Output: false
+    """
+
+    def isPowerOfTwo(self, n: int) -> bool:
+        """O(1) time O(1) space"""
+        if n == 0:
+            return False
+            # remember in two's complement -x is ~x + 1
+            # now remember binary is powers of twos
+        return n & (-n) == n
+
+    def _isPowerOfTwo(self, n: int) -> bool:
+        """O(1) time O(1) space"""
+        return n > 0 and bin(n).count("1") == 1
