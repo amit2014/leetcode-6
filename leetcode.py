@@ -6882,3 +6882,46 @@ class _869:
         """O(log^2n) time O(logn) space, cheeky solution"""
         count = Counter(str(n))
         return any(count == Counter(str(1 << x)) for x in range(31))
+
+
+class _905:
+    """
+    # - 905. Sort Array By Parity -
+    # https://leetcode.com/problems/sort-array-by-parity/
+    Given an integer array nums, move all the even integers at the beginning
+    of the array followed by all the odd integers.
+
+    Return any array that satisfies this condition.
+
+    Example 1:
+    Input: nums = [3,1,2,4]
+    Output: [2,4,3,1]
+    Explanation: The outputs [4,2,3,1], [2,4,1,3], and [4,2,1,3] would
+    also be accepted.
+
+    Example 2:
+    Input: nums = [0]
+    Output: [0]
+    """
+
+    def sortArrayByParity(self, A: List[int]) -> List[int]:
+        """O(n) time O(n) space, one pass"""
+        i, j = 0, len(A) - 1
+        while i < j:
+            if A[i] % 2 > A[j] % 2:
+                A[i], A[j] = A[j], A[i]
+
+            if A[i] % 2 == 0:
+                i += 1
+            else:
+                j -= 1
+        return A
+
+    def _sortArrayByParity(self, A: List[int]) -> List[int]:
+        """O(n) time O(n) space, two pass"""
+        return [x for x in A if x % 2 == 0] + [x for x in A if x % 2 == 1]
+
+    def __sortArrayByParity(self, A: List[int]) -> List[int]:
+        """O(nlogn) time O(n) space"""
+        A.sort(key=lambda x: x % 2)
+        return A
